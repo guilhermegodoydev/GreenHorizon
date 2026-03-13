@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="48">
+ <tileset firstgid="1" name="CP_V1.0.4" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
+  <image source="CP_V1.0.4.png" width="1024" height="1024"/>
+ </tileset>
+ <layer id="1" name="Chão" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzVkzEOwyAMRT1FAjpGnI/DRBXKGEWdOQpTz1UMJgVDBVWnDk8hBD6fb2cTABuxyvcYOQS48p3WeC3btT3+TW9N+1yJDHPLD/72wD2MOWHej/R06wcsnqPAP2/xm4koMPazp2u/Zv7OrCdrL6htRZsFwrPu6eF+ngvOhxwN58HuWO1TfX9Zr3ffXtYsd8zMn+npYo7q8uc45M/guoV8UD+YDNUCylrjOUfqgQqswQjqw1zrpgZ0XvT2jd4+kc+sXtl/eVz1JNV2Vm/0L2ReLmGZhw==
+  </data>
+ </layer>
+ <layer id="5" name="Construções" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzN0ctqwkAUxvGTRKOJy16g0KcxCZi407bQbZ+koIK69AbFPk0TIbr0BsU+TP9hRmhrbVNw0QM/xpnM+TAnXRHpoS+qWmijo/cvpkiMBDM0bJGmrZ4NMMQIY0yQYo6F7o+RYKb3piVioYAiBmQN8WzL4xQr7qyxwRZlQ8SBa6h+j9VHoPdVMjz4CLAka4U3snY44945LnCJGkJEur/F2kZH73+qBneauMEt7tBFD33dH7MmmOXIG3BniBHGmCDFHIsc/V9rSc8Ka2yw/ZAxVTOWlG84x8JU59fM6Ldcp8T8UcFrUZ3t1IylzMwduFb+/xmSE6GOK/vzsxo5IaI/5P3Hui8dnmWzezAUk/e2UEARDlxU7MO+rJ6+yctmt8+r8tuDjwAhItSP5B2rfd6p6tR570XiPlM=
+  </data>
+ </layer>
+ <layer id="6" name="Carros 1" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4C+gJOdgYELiLnZqWOeJ9AcLyD2ppJ5QxGghymlYYwcpkxAzAzELEDMSoUwdgKa4QzELkDsSqJ5AH1IA9Q=
+  </data>
+ </layer>
+ <layer id="7" name="Carros 2" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0LkJACAQBdHFE7Urj0Dtvx+nBcVE8MMLd4IV+ft7e8GJRCR3p9fpDMxLvRcXPD9FgoKGgfVnvc7dwERGQUXb7C2Q4AOb
+  </data>
+ </layer>
+ <objectgroup id="8" name="WayPoints">
+  <object id="21" name="p1" x="8" y="157.333">
+   <point/>
+  </object>
+  <object id="22" name="p2" x="120.667" y="156">
+   <point/>
+  </object>
+  <object id="23" name="p3" x="136.667" y="140.667">
+   <point/>
+  </object>
+  <object id="24" name="p4" x="136" y="94.6667">
+   <point/>
+  </object>
+  <object id="25" name="p5" x="152" y="75.3333">
+   <point/>
+  </object>
+  <object id="26" name="p6" x="217.333" y="75.3333">
+   <point/>
+  </object>
+  <object id="27" name="p7" x="232" y="90">
+   <point/>
+  </object>
+  <object id="28" name="p8" x="232" y="158">
+   <point/>
+  </object>
+  <object id="29" name="p9" x="200" y="170.667">
+   <point/>
+  </object>
+  <object id="30" name="p10" x="184.667" y="189.333">
+   <point/>
+  </object>
+  <object id="31" name="p11" x="200.667" y="205.333">
+   <point/>
+  </object>
+  <object id="32" name="p12" x="313.333" y="202">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="SlotsTorres">
+  <object id="33" name="slot1" x="32" y="160" width="15.75" height="15.875"/>
+  <object id="34" name="slot2" x="144" y="160" width="15.6667" height="15.3333"/>
+  <object id="35" name="slot3" x="143.667" y="112.333" width="16.6667" height="15.6667"/>
+  <object id="41" name="slot4" x="160" y="79.6667" width="16.6667" height="15.6667"/>
+  <object id="42" name="slot5" x="208" y="95.6667" width="15.3333" height="15.6667"/>
+  <object id="43" name="slot6" x="192" y="144" width="15.6667" height="15.3333"/>
+  <object id="44" name="slot7" x="160.333" y="208" width="15.3333" height="15.3333"/>
+  <object id="45" name="slot8" x="208" y="208.667" width="16.3333" height="14.6667"/>
+  <object id="46" name="slot9" x="240" y="208.333" width="15.6667" height="16"/>
+  <object id="47" name="slot10" x="272" y="176" width="16.6667" height="14.6667"/>
+ </objectgroup>
+</map>
