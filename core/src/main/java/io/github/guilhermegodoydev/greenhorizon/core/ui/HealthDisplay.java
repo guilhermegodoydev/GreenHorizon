@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
 
 public class HealthDisplay extends Actor {
     private final Texture imgBarra;

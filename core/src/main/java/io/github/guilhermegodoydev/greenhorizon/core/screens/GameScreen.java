@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.input.InputHandler;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
@@ -49,8 +49,9 @@ public class GameScreen extends BaseScreen {
 
         // --- TESTE DE DANO TEMPORÁRIO ---
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            System.out.println("ANTES DE CHAMAR PERDER VIDA");
             lifeManager.perderVida(1);
-            System.out.println("Vidas restantes: " + lifeManager.getVidasAtuais());
+            System.out.println("DEPOIS DE CHAMAR PERDER VIDA");
         }
 
     }

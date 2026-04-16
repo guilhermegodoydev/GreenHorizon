@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.HealthDisplay;
+import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
 
 public class ManagerUI implements Disposable {
     private Stage stage;

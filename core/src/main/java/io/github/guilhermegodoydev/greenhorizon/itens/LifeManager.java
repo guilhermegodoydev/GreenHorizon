@@ -12,12 +12,18 @@ public class LifeManager {
 
     // metodo para quando um inimigo passar pelas torres
     public void perderVida(int quantidade) {
-        vidasAtuais -= quantidade;
-        System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
+        try {
+            vidasAtuais -= quantidade;
+            System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
+            System.out.println("DEBUG: vidasAtuais = " + vidasAtuais + ", Condicao (vidasAtuais <= 0) = " + (vidasAtuais <= 0));
 
-        if (vidasAtuais <= 0) {
-            vidasAtuais = 0;
-            darGameOver();
+            if (vidasAtuais <= 0) {
+                vidasAtuais = 0;
+                darGameOver();
+            }
+        } catch (Exception e) {
+            System.out.println("EXCEÇÃO CAPTURADA: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     // metodo que vai ser chamado qunado zerar a vida
