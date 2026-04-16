@@ -1,10 +1,10 @@
 package io.github.guilhermegodoydev.greenhorizon.core.input;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
+import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot; // Importado
 import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
 
 public class InputHandler extends InputAdapter {
@@ -25,19 +25,22 @@ public class InputHandler extends InputAdapter {
         touchPoint.set(screenX, screenY, 0);
         viewport.unproject(touchPoint);
 
-        if (managerUI.isVisivel()) {
+        boolean menuEstavaAberto = managerUI.isVisivel();
+
+        TowerSlot slotClicado = mapHandler.getClickedSlot(touchPoint.x, touchPoint.y);
+
+        if (menuEstavaAberto) {
             managerUI.fecharMenu();
-            return true;
-        }
 
-        MapObject slot = mapHandler.checkClickInSlot(touchPoint.x, touchPoint.y);
-
-        if (slot != null) {
-            boolean ocupado = slot.getProperties().get("ocupado", false, Boolean.class);
-            if (!ocupado) {
-                managerUI.abrirMenu(slot);
+            if (slotClicado != null && !slotClicado.isOccupied()) {
+                managerUI.abrirMenu(slotClicado);
+            }
+        } else {
+            if (slotClicado != null && !slotClicado.isOccupied()) {
+                managerUI.abrirMenu(slotClicado);
             }
         }
+
         return true;
     }
 }

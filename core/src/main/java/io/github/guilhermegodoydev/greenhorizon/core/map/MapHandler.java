@@ -5,23 +5,32 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 public class MapHandler {
     private TiledMap tiledMap;
+    private final Array<TowerSlot> slots;
     private final String OBJECT_LAYER_NAME = "SlotsTorres";
 
     public MapHandler(String path) {
         this.tiledMap = new TmxMapLoader().load(path);
+        this.slots = new Array<>();
+        loadSlots();
     }
 
-    public MapObject checkClickInSlot(float worldX, float worldY) {
+    private void loadSlots() {
         for (MapObject object : tiledMap.getLayers().get(OBJECT_LAYER_NAME).getObjects()) {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                slots.add(new TowerSlot(rect));
+            }
+        }
+    }
 
-                if (rect.contains(worldX, worldY)) {
-                    return object;
-                }
+    public TowerSlot getClickedSlot(float worldX, float worldY) {
+        for (TowerSlot slot : slots) {
+            if (slot.isHit(worldX, worldY)) {
+                return slot;
             }
         }
         return null;
