@@ -1,5 +1,7 @@
 package io.github.guilhermegodoydev.greenhorizon.core.map;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -12,9 +14,15 @@ public class MapHandler {
     private final Array<TowerSlot> slots;
     private final String OBJECT_LAYER_NAME = "SlotsTorres";
 
+    private final Texture slotTexture;
+
     public MapHandler(String path) {
         this.tiledMap = new TmxMapLoader().load(path);
         this.slots = new Array<>();
+
+        this.slotTexture = new Texture("slot_base.png");
+        this.slotTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
         loadSlots();
     }
 
@@ -23,6 +31,15 @@ public class MapHandler {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 slots.add(new TowerSlot(rect));
+            }
+        }
+    }
+
+    public void renderSlots(SpriteBatch batch) {
+        for (TowerSlot slot : slots) {
+            if (!slot.isOccupied()) {
+                Rectangle bounds = slot.getBounds();
+                batch.draw(slotTexture, bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
     }
@@ -42,5 +59,6 @@ public class MapHandler {
 
     public void dispose() {
         tiledMap.dispose();
+        slotTexture.dispose();
     }
 }

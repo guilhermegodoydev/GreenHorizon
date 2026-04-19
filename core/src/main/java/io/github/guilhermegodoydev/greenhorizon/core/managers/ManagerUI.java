@@ -6,36 +6,55 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
+import io.github.guilhermegodoydev.greenhorizon.core.ui.ConstructionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.HealthDisplay;
+import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
 
-public class ManagerUI implements Disposable {
-    private Stage stage;
-    private Image menuConstrucao;
-    private HealthDisplay healthDisplay;
+public class ManagerUI implements TowerSelectionListener,Disposable {
+    private final Stage stage;
+    private final HealthDisplay healthDisplay;
+    private final ConstructionMenu constructionMenu;
+    private TowerManager towerManager;
+    private TowerSlot slotAlvo;
 
-    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager) {
+    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, TowerManager towerManager) {
         this.stage = new Stage(viewport, batch);
-
+        this.towerManager = towerManager;
         this.healthDisplay = new HealthDisplay(lifeManager);
-        healthDisplay.setPosition(250, 210);
-        stage.addActor(healthDisplay);
 
-        menuConstrucao = new Image(new com.badlogic.gdx.graphics.Texture("menu_construcao.png"));
-        menuConstrucao.setVisible(false);
-        stage.addActor(menuConstrucao);
+        this.constructionMenu = new ConstructionMenu(this);
+
+
+        stage.addActor(healthDisplay);
+        stage.addActor(constructionMenu);
+    }
+
+    @Override
+    public void onTowerSelected(String tipo) {
+        if (slotAlvo != null) {
+            towerManager.buildTower(slotAlvo, tipo);
+        }
     }
 
     public void abrirMenu(TowerSlot slot) {
-        float xCentral = slot.getCenterX() - (menuConstrucao.getWidth() / 2f);
-        float yTopo = slot.getBounds().y + slot.getBounds().height;
+        this.slotAlvo = slot;
 
-        menuConstrucao.setPosition(xCentral, yTopo);
-        menuConstrucao.setVisible(true);
+        float xBase = slot.getCenterX() - (constructionMenu.getWidth() / 2f);
+        float yBase = slot.getBounds().y + slot.getBounds().height ;
+
+        constructionMenu.setPosition(xBase, yBase);
+        constructionMenu.setVisible(true);
+    }
+
+    public void confirmarConstrucao(String tipo) {
+        if (slotAlvo != null) {
+            towerManager.buildTower(slotAlvo, tipo);
+        }
     }
 
     public void fecharMenu() {
-        menuConstrucao.setVisible(false);
+        constructionMenu.setVisible(false);
     }
 
     public void render(float delta) {
@@ -49,7 +68,7 @@ public class ManagerUI implements Disposable {
     }
 
     public boolean isVisivel() {
-        return menuConstrucao.isVisible();
+        return constructionMenu.isVisible();
     }
 
     public Stage getStage() { return stage; }

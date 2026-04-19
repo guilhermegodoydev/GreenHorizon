@@ -1,6 +1,7 @@
 package io.github.guilhermegodoydev.greenhorizon.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
@@ -11,11 +12,11 @@ import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 
 public class GameScreen extends BaseScreen {
-    private MapHandler mapHandler;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    private ManagerUI managerUI;
-    private TowerManager towerManager;
-    private LifeManager lifeManager;
+    private final MapHandler mapHandler;
+    private final OrthogonalTiledMapRenderer mapRenderer;
+    private final ManagerUI managerUI;
+    private final TowerManager towerManager;
+    private final LifeManager lifeManager;
 
     public GameScreen(Main game) {
         super(game);
@@ -23,11 +24,17 @@ public class GameScreen extends BaseScreen {
         lifeManager = new LifeManager(10);
         mapHandler = new MapHandler("mapa.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
-        managerUI = new ManagerUI(viewport, game.batch, lifeManager);
+
         towerManager = new TowerManager();
+        managerUI = new ManagerUI(viewport, game.batch, lifeManager, towerManager);
 
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI);
-        Gdx.input.setInputProcessor(inputHandler);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(managerUI.getStage());
+        multiplexer.addProcessor(inputHandler);
+
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -42,18 +49,19 @@ public class GameScreen extends BaseScreen {
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+
+        mapHandler.renderSlots(game.batch);
+
         towerManager.render(game.batch);
+
         game.batch.end();
 
         managerUI.render(delta);
 
-        // --- TESTE DE DANO TEMPORÁRIO ---
+        // Teste de Dano
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            System.out.println("ANTES DE CHAMAR PERDER VIDA");
             lifeManager.perderVida(1);
-            System.out.println("DEPOIS DE CHAMAR PERDER VIDA");
         }
-
     }
 
     @Override

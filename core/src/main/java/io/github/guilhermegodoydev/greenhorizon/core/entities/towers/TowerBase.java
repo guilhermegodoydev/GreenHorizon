@@ -24,10 +24,11 @@ public abstract class TowerBase {
     }
 
     public void update(float delta) {
-        cooldownTimer += delta;
-        if (cooldownTimer >= fireRate) {
-            attack();
-        }
+        //cooldownTimer += delta;
+        //if (cooldownTimer >= fireRate) {
+        //    attack();
+        //    cooldownTimer = 0;
+        //}
     }
 
     public abstract void attack();

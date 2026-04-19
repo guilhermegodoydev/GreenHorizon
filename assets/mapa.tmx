@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="48">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="48">
+ <editorsettings>
+  <export target="mapa.tmx" format="tmx"/>
+ </editorsettings>
  <tileset firstgid="1" name="CP_V1.0.4" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
   <image source="CP_V1.0.4.png" width="1024" height="1024"/>
  </tileset>
+ <tileset firstgid="4097" name="slot" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="slot_base.png" width="16" height="16"/>
+ </tileset>
  <layer id="1" name="Chão" width="20" height="15">
   <data encoding="base64" compression="zlib">
-   eJzVkzEOwyAMRT1FAjpGnI/DRBXKGEWdOQpTz1UMJgVDBVWnDk8hBD6fb2cTABuxyvcYOQS48p3WeC3btT3+TW9N+1yJDHPLD/72wD2MOWHej/R06wcsnqPAP2/xm4koMPazp2u/Zv7OrCdrL6htRZsFwrPu6eF+ngvOhxwN58HuWO1TfX9Zr3ffXtYsd8zMn+npYo7q8uc45M/guoV8UD+YDNUCylrjOUfqgQqswQjqw1zrpgZ0XvT2jd4+kc+sXtl/eVz1JNV2Vm/0L2ReLmGZhw==
+   eJzVUzEOwyAMZKoEQyfEe/IUHhNVUYYMKMrMU/K02sG0lmMEUqcOJ5EDjvPZma0xM8G77xqRrMn8m86cwd3Pavg3PV/uZQ4H3OMHfyvgBWsJ4M+eXrj7MQvwW9HGvYjYbeEbnj73g1LvQpk1+CzRyw/vPRs85BglDlbjZps+VF6rV8ta5B7ZjGTIcYL8JvKXJchfTGX/8kHzECvqvPFe4zuJ+sSBZ3ugObxqRH+yB5U7BrS43jqQz6heYBnUWeQz6am3o3q9f6HiDYzClJY=
   </data>
  </layer>
  <layer id="5" name="Construções" width="20" height="15">
@@ -61,16 +67,16 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="SlotsTorres">
-  <object id="33" name="slot1" x="32" y="160" width="15.75" height="15.875"/>
-  <object id="34" name="slot2" x="144" y="160" width="15.6667" height="15.3333"/>
-  <object id="35" name="slot3" x="143.667" y="112.333" width="16.6667" height="15.6667"/>
-  <object id="41" name="slot4" x="160" y="79.6667" width="16.6667" height="15.6667"/>
-  <object id="42" name="slot5" x="208" y="95.6667" width="15.3333" height="15.6667"/>
-  <object id="43" name="slot6" x="192" y="144" width="15.6667" height="15.3333"/>
-  <object id="44" name="slot7" x="160.333" y="208" width="15.3333" height="15.3333"/>
-  <object id="45" name="slot8" x="208" y="208.667" width="16.3333" height="14.6667"/>
-  <object id="46" name="slot9" x="240" y="208.333" width="15.6667" height="16"/>
-  <object id="47" name="slot10" x="272" y="176" width="16.6667" height="14.6667"/>
+ <objectgroup id="9" name="SlotsTorres" visible="0">
+  <object id="33" name="slot1" type="slot" x="32" y="160" width="15.75" height="15.875"/>
+  <object id="34" name="slot2" type="slot" x="144" y="160" width="15.6667" height="15.3333"/>
+  <object id="35" name="slot3" type="slot" x="143.667" y="112.333" width="16.6667" height="15.6667"/>
+  <object id="41" name="slot4" type="slot" x="160" y="79.6667" width="16.6667" height="15.6667"/>
+  <object id="42" name="slot5" type="slot" x="208" y="95.6667" width="15.3333" height="15.6667"/>
+  <object id="43" name="slot6" type="slot" x="192" y="144" width="15.6667" height="15.3333"/>
+  <object id="44" name="slot7" type="slot" x="160.333" y="208" width="15.3333" height="15.3333"/>
+  <object id="45" name="slot8" type="slot" x="208" y="208.667" width="16.3333" height="14.6667"/>
+  <object id="46" name="slot9" type="slot" x="240" y="208.333" width="15.6667" height="16"/>
+  <object id="47" name="slot10" type="slot" x="272" y="176" width="16.6667" height="14.6667"/>
  </objectgroup>
 </map>

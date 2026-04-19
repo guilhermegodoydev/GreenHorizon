@@ -13,12 +13,21 @@ public class TowerManager {
         this.towers = new Array<>();
     }
 
-    public void buildTower(TowerSlot slot) {
+    public void buildTower(TowerSlot slot, String tipo) {
         if (!slot.isOccupied()) {
-            TowerTree newTower = new TowerTree(slot.getCenterX(), slot.getCenterY());
-            towers.add(newTower);
+            TowerBase newTower = null;
 
-            slot.setOccupied(true);
+            if (tipo.equalsIgnoreCase("Arvore")) {
+                newTower = new TowerTree(slot.getCenterX(), slot.getCenterY());
+            }
+            // Adicione aqui as outras quando criar as classes:
+            // else if (tipo.equalsIgnoreCase("Eolica")) { newTower = new TowerEolica(...); }
+
+            if (newTower != null) {
+                towers.add(newTower);
+                slot.setOccupied(true);
+                System.out.println("Torre " + tipo + " construída com sucesso!");
+            }
         }
     }
 
