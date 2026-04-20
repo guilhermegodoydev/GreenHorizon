@@ -6,8 +6,13 @@ public class TowerActionMenu extends MenuBase {
     public TowerActionMenu(TowerSelectionListener listener) {
         super(listener, "background_menu.png");
 
-        adicionarBotao("menuBtnVender.png", "Vender");
-        adicionarBotao("menuBtnUpgrade.png", "Upgrade");
+
+        adicionarBotao("menuBtnUpgrade.png", "Upgrade").colspan(2).center();
+
+        this.row();
+
+        adicionarBotao("menuBtnInfo.png", "Info").left().expandX();
+        adicionarBotao("menuBtnVender.png", "Vender").right().expandX();
 
         this.pack();
     }

@@ -55,7 +55,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         this.torreSelecionada = torre;
         fecharTodosMenus();
 
-        Utils.setCenteredPosition(actionMenu, torre.getPosition().x, torre.getPosition().y);
+        Utils.setCenteredPosition(actionMenu, torre.getPosition().x, torre.getPosition().y + 8);
 
         actionMenu.setVisible(true);
     }
