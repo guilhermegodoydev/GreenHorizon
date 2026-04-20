@@ -3,6 +3,7 @@ package io.github.guilhermegodoydev.greenhorizon;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.GameScreen;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class Main extends Game {
     public SpriteBatch batch;
@@ -20,6 +21,8 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        if (batch != null) batch.dispose();
+        super.dispose();
+        batch.dispose();
+        Assets.dispose();
     }
 }
