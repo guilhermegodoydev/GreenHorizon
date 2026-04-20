@@ -8,25 +8,29 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class MapHandler {
     private TiledMap tiledMap;
     private final Array<TowerSlot> slots;
     private final String OBJECT_LAYER_NAME = "SlotsTorres";
-
     private final Texture slotTexture;
 
     public MapHandler(String path) {
         this.tiledMap = new TmxMapLoader().load(path);
         this.slots = new Array<>();
 
-        this.slotTexture = new Texture("slot_base.png");
-        this.slotTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        this.slotTexture = Assets.getTexture("slot_base.png");
 
         loadSlots();
     }
 
     private void loadSlots() {
+        if (tiledMap.getLayers().get(OBJECT_LAYER_NAME) == null) {
+            System.err.println("ERRO: Camada de objetos '" + OBJECT_LAYER_NAME + "' não encontrada no Tiled!");
+            return;
+        }
+
         for (MapObject object : tiledMap.getLayers().get(OBJECT_LAYER_NAME).getObjects()) {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -59,6 +63,5 @@ public class MapHandler {
 
     public void dispose() {
         tiledMap.dispose();
-        slotTexture.dispose();
     }
 }
