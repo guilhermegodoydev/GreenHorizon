@@ -15,14 +15,12 @@ public class LifeManager {
         try {
             vidasAtuais -= quantidade;
             System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
-            System.out.println("DEBUG: vidasAtuais = " + vidasAtuais + ", Condicao (vidasAtuais <= 0) = " + (vidasAtuais <= 0));
 
             if (vidasAtuais <= 0) {
                 vidasAtuais = 0;
                 darGameOver();
             }
         } catch (Exception e) {
-            System.out.println("EXCEÇÃO CAPTURADA: " + e.getMessage());
             e.printStackTrace();
         }
     }

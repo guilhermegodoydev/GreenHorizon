@@ -28,7 +28,7 @@ public class GameScreen extends BaseScreen {
         towerManager = new TowerManager();
         managerUI = new ManagerUI(viewport, game.batch, lifeManager, towerManager);
 
-        InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI);
+        InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(managerUI.getStage());

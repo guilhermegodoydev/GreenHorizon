@@ -13,6 +13,15 @@ public class TowerManager {
         this.towers = new Array<>();
     }
 
+    public TowerBase getTowerAt(float x, float y) {
+        for (TowerBase tower : towers) {
+            if (tower.getPosition().dst(x, y) < 1f) {
+                return tower;
+            }
+        }
+        return null;
+    }
+
     public void buildTower(TowerSlot slot, String tipo) {
         if (!slot.isOccupied()) {
             TowerBase newTower = null;
