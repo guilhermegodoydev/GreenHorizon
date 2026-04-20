@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 
 public class HealthDisplay extends Actor {
     private final Texture imgBarra;
-    private final Texture spriteSheetAnimacao;
     private final TextureRegion[] framesCoracao;
     private final BitmapFont fonte;
     private final LifeManager lifeManager;
@@ -22,18 +22,16 @@ public class HealthDisplay extends Actor {
         this.lifeManager = lifeManager;
         this.vidasAnteriores = lifeManager.getVidasAtuais();
 
-        imgBarra = new Texture("apenas_barra.png");
-        spriteSheetAnimacao = new Texture("animacao_perdendo_vida.png");
-        fonte = new BitmapFont();
+        this.imgBarra = Assets.getTexture("apenas_barra.png");
+        Texture spriteSheet = Assets.getTexture("animacao_perdendo_vida.png");
 
-        imgBarra.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        spriteSheetAnimacao.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        this.fonte = new BitmapFont();
 
-        int larguraFrame = spriteSheetAnimacao.getWidth() / 4;
-        int alturaFrame = spriteSheetAnimacao.getHeight();
-        framesCoracao = new TextureRegion[4];
+        int larguraFrame = spriteSheet.getWidth() / 4;
+        int alturaFrame = spriteSheet.getHeight();
+        this.framesCoracao = new TextureRegion[4];
         for (int i = 0; i < 4; i++) {
-            framesCoracao[i] = new TextureRegion(spriteSheetAnimacao, i * larguraFrame, 0, larguraFrame, alturaFrame);
+            framesCoracao[i] = new TextureRegion(spriteSheet, i * larguraFrame, 0, larguraFrame, alturaFrame);
         }
 
         setSize(60, 25);
@@ -42,7 +40,6 @@ public class HealthDisplay extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
         if (lifeManager.getVidasAtuais() < vidasAnteriores) {
             estaSofrendoDano = true;
             tempoAnimacao = 0;
@@ -72,8 +69,6 @@ public class HealthDisplay extends Actor {
     }
 
     public void dispose() {
-        imgBarra.dispose();
-        spriteSheetAnimacao.dispose();
         fonte.dispose();
     }
 }

@@ -13,7 +13,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
-import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 
 public class GameScreen extends BaseScreen implements GameEventListener {
     private final MapHandler mapHandler;

@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.itens;
+package io.github.guilhermegodoydev.greenhorizon.core.itens;
 
 public class LifeManager {
     private int vidasAtuais;

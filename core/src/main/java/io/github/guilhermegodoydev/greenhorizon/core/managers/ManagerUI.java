@@ -13,7 +13,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.ui.HealthDisplay;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.TowerActionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
-import io.github.guilhermegodoydev.greenhorizon.itens.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 
 public class ManagerUI implements TowerSelectionListener, Disposable {
     private final Stage stage;
