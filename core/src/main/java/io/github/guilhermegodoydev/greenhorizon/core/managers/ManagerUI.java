@@ -15,9 +15,14 @@ import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 
+// 1. IMPORTAÇÕES DAS MOEDAS
+import io.github.guilhermegodoydev.greenhorizon.core.ui.CoinsDisplay;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+
 public class ManagerUI implements TowerSelectionListener, Disposable {
     private final Stage stage;
     private final HealthDisplay healthDisplay;
+    private final CoinsDisplay coinsDisplay; // 2. NOVO ATRIBUTO DAS MOEDAS
     private final ConstructionMenu constructionMenu;
     private final TowerActionMenu actionMenu;
     private final GameEventListener eventListener;
@@ -25,17 +30,25 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private TowerSlot slotAlvo;
     private TowerBase torreSelecionada;
 
-    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, GameEventListener listener) {
+    // 3. CONSTRUTOR ATUALIZADO PARA RECEBER O CoinsManager
+    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, CoinsManager coinsManager, GameEventListener listener) {
         this.stage = new Stage(viewport, batch);
         this.eventListener = listener;
 
         this.healthDisplay = new HealthDisplay(lifeManager);
+        this.coinsDisplay = new CoinsDisplay(coinsManager); // 4. INSTANCIANDO AS MOEDAS
+
         this.actionMenu = new TowerActionMenu(this);
         this.constructionMenu = new ConstructionMenu(this);
 
         stage.addActor(healthDisplay);
+        stage.addActor(coinsDisplay); // 5. ADICIONANDO AS MOEDAS NA TELA
         stage.addActor(constructionMenu);
         stage.addActor(actionMenu);
+
+        // 6. DEFININDO AS POSIÇÕES
+        healthDisplay.setPosition(20, viewport.getWorldHeight() - 30);
+        coinsDisplay.setPosition(20, viewport.getWorldHeight() - 60);
     }
 
     @Override
@@ -81,6 +94,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
     @Override
     public void dispose() {
+        healthDisplay.dispose(); // Limpa as fontes da vida da memória
+        coinsDisplay.dispose();  // Limpa as fontes das moedas da memória
         stage.dispose();
     }
 

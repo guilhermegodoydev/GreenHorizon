@@ -14,6 +14,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager; // ← ADICIONE ESTE IMPORT
 
 public class GameScreen extends BaseScreen implements GameEventListener {
     private final MapHandler mapHandler;
@@ -21,16 +22,18 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private final ManagerUI managerUI;
     private final TowerManager towerManager;
     private final LifeManager lifeManager;
+    private final CoinsManager coinsManager; // ← ADICIONE ESTE ATRIBUTO
 
     public GameScreen(Main game) {
         super(game);
 
         lifeManager = new LifeManager(10);
+        coinsManager = new CoinsManager(500); // ← ADICIONE ESTA LINHA (500 moedas iniciais)
         mapHandler = new MapHandler("mapa.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
 
-        managerUI = new ManagerUI(viewport, game.batch, lifeManager, this);
+        managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this); // ← MODIFIQUE ESTA LINHA
 
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
 
@@ -81,6 +84,18 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         game.batch.end();
 
         managerUI.render(delta);
+
+        // Teste: Pressione 'C' para adicionar 100 moedas, 'V' para remover 50
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.C)) {
+            coinsManager.acrescentar(100);
+        }
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.V)) {
+            try {
+                coinsManager.remover(50);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
 
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
             lifeManager.perderVida(1);
