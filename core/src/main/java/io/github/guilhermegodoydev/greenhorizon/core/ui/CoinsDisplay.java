@@ -13,7 +13,7 @@ public class CoinsDisplay extends Actor {
     private final BitmapFont fonte;
     private final CoinsManager coinsManager;
 
-    public CoinsDisplay(CoinsManager coinsManager) {
+    public CoinsDisplay(CoinsManager coinsManager, float x, float y) {
         this.coinsManager = coinsManager;
 
         // Carrega as imagens
@@ -24,6 +24,8 @@ public class CoinsDisplay extends Actor {
 
         // Tamanho da HUD (largura, altura)
         setSize(80, 25);
+
+        setPosition(x,y);
     }
 
     @Override

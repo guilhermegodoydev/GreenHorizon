@@ -15,6 +15,8 @@ import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager; // ← ADICIONE ESTE IMPORT
+import com.badlogic.gdx.audio.Music;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class GameScreen extends BaseScreen implements GameEventListener {
     private final MapHandler mapHandler;
@@ -42,6 +44,11 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         multiplexer.addProcessor(inputHandler);
 
         Gdx.input.setInputProcessor(multiplexer);
+
+        Music bgm = Assets.getMusic("bgm.mp3");
+        bgm.setLooping(true);  // Para a música não parar
+        bgm.setVolume(0.5f);   // Volume médio
+        bgm.play();            // SOLTA O SOM!
     }
 
     @Override
@@ -53,6 +60,10 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 String tipo = (String) data[1];
 
                 towerManager.buildTower(slot, tipo);
+                // ==========================================
+                // PASSO 3: TOCAR SOM AO CONSTRUIR
+                // ==========================================
+                Assets.getSound("plant.wav").play();
                 break;
 
             case SELL_TOWER:

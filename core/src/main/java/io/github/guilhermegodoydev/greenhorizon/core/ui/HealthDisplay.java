@@ -18,7 +18,7 @@ public class HealthDisplay extends Actor {
     private boolean estaSofrendoDano = false;
     private int vidasAnteriores;
 
-    public HealthDisplay(LifeManager lifeManager) {
+    public HealthDisplay(LifeManager lifeManager, float x, float y) {
         this.lifeManager = lifeManager;
         this.vidasAnteriores = lifeManager.getVidasAtuais();
 
@@ -35,6 +35,8 @@ public class HealthDisplay extends Actor {
         }
 
         setSize(60, 25);
+
+        setPosition(x,y);
     }
 
     @Override

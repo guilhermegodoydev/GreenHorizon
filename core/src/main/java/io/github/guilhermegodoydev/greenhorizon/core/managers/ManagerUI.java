@@ -35,8 +35,10 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         this.stage = new Stage(viewport, batch);
         this.eventListener = listener;
 
-        this.healthDisplay = new HealthDisplay(lifeManager);
-        this.coinsDisplay = new CoinsDisplay(coinsManager); // 4. INSTANCIANDO AS MOEDAS
+        float topo = viewport.getWorldHeight();
+
+        this.healthDisplay = new HealthDisplay(lifeManager, 20, topo - 40);
+        this.coinsDisplay = new CoinsDisplay(coinsManager, 20, topo - 75); // 4. INSTANCIANDO AS MOEDAS
 
         this.actionMenu = new TowerActionMenu(this);
         this.constructionMenu = new ConstructionMenu(this);
@@ -47,8 +49,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.addActor(actionMenu);
 
         // 6. DEFININDO AS POSIÇÕES
-        healthDisplay.setPosition(20, viewport.getWorldHeight() - 30);
-        coinsDisplay.setPosition(20, viewport.getWorldHeight() - 60);
+
     }
 
     @Override
