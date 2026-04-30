@@ -1,6 +1,7 @@
 package io.github.guilhermegodoydev.greenhorizon.core.itens;
 
 import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 
@@ -22,7 +23,7 @@ public class CoinsManager {
      */
     public void acrescentar(int valor) {
         this.saldoAtual += valor;
-        Assets.getSound("getCoin.wav").play();
+        Assets.getSound("getCoin.wav").play(SettingsManager.getSfxVolume());
 
         System.out.println("Moedas adicionadas! Novo saldo: " + saldoAtual);
     }
@@ -41,7 +42,7 @@ public class CoinsManager {
             );
         }
         this.saldoAtual -= valor;
-        Assets.getSound("payCoin.wav").play();
+        Assets.getSound("payCoin.wav").play(SettingsManager.getSfxVolume());
 
         System.out.println("Moedas removidas! Novo saldo: " + saldoAtual);
     }

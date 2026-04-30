@@ -1,5 +1,6 @@
 package io.github.guilhermegodoydev.greenhorizon.core.itens;
 
+import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class LifeManager {
@@ -16,12 +17,12 @@ public class LifeManager {
     public void perderVida(int quantidade) {
         try {
             vidasAtuais -= quantidade;
-            Assets.getSound("hit.wav").play();
+            Assets.getSound("hit.wav").play(SettingsManager.getSfxVolume());
             System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
 
             if (vidasAtuais <= 0) {
                 vidasAtuais = 0;
-                Assets.getSound("gameOver.wav").play();
+                Assets.getSound("gameOver.wav").play(SettingsManager.getSfxVolume());
                 darGameOver();
             }
         } catch (Exception e) {
