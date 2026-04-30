@@ -81,7 +81,4 @@ public class TowerManager {
             System.err.println(e.getMessage());
         }
     }
-
-    public void buildTower(TowerSlot slot, String tipo) {
-    }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
 import io.github.guilhermegodoydev.greenhorizon.core.input.InputHandler;
@@ -25,6 +26,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private final TowerManager towerManager;
     private final LifeManager lifeManager;
     private final CoinsManager coinsManager;
+    private boolean paused = false;
+    private InputMultiplexer multiplexer;
 
     public GameScreen(Main game) {
         super(game);
@@ -35,12 +38,11 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
 
-        // 1. CORREÇÃO DA LINHA 38 (Adicionado o 'this' no final para o Menu de Pausa funcionar)
         managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this);
 
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(managerUI.getStage());
         multiplexer.addProcessor(inputHandler);
 
@@ -53,6 +55,17 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     }
 
     @Override
+    public void show() {
+        super.show();
+        Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    public void togglePause() {
+        this.paused = !this.paused;
+        managerUI.setPauseVisible(paused);
+    }
+
+    @Override
     public void onEvent(GameEvent event) {
         switch (event.type) {
             case BUILD_TOWER:
@@ -60,34 +73,45 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 TowerSlot slot = (TowerSlot) data[0];
                 String tipo = (String) data[1];
 
-                // 2. O ERRO DA LINHA 62 ESTÁ AQUI ABAIXO!
-                // O seu amigo mudou o método buildTower para pedir 4 coisas.
-                // Coloque o cursor do mouse dentro dos parênteses no IntelliJ e aperte Ctrl + P
-                // Ele vai te dizer quais são os 2 parâmetros que faltam (provavelmente coinsManager).
-                // Por enquanto, deixei assim para você ver:
-                // towerManager.buildTower(slot, tipo, /* FALTA ALGO AQUI */, /* FALTA ALGO AQUI */);
-                towerManager.buildTower(slot, tipo);
+                int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
+                towerManager.buildTower(slot, tipo, custo, coinsManager);
 
                 Assets.getSound("plant.wav").play();
                 break;
 
             case SELL_TOWER:
-                TowerBase torreParaVender = (TowerBase) event.data;
-                System.out.println("Lógica de venda iniciada para: " + torreParaVender);
+                if (event.data instanceof TowerBase) {
+                    TowerBase torre = (TowerBase) event.data;
+
+                    coinsManager.acrescentar(torre.getValorVenda());
+
+                    towerManager.sellTower(torre);
+
+                    System.out.println("Torre vendida com sucesso!");
+                }
                 break;
 
             case UPGRADE_TOWER:
-                System.out.println("Lógica de upgrade iniciada...");
+                if (event.data instanceof TowerBase) {
+                    TowerBase torre = (TowerBase) event.data;
+                    towerManager.upgradeTower(torre, coinsManager);
+                }
                 break;
         }
+    }
+
+    public Main getGame() {
+        return game;
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        camera.update();
-        towerManager.update(delta);
+        if (!paused) {
+            camera.update();
+            towerManager.update(delta);
+        }
 
         mapRenderer.setView(camera);
         mapRenderer.render();
@@ -99,21 +123,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         game.batch.end();
 
         managerUI.render(delta);
-
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.C)) {
-            coinsManager.acrescentar(100);
-        }
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.V)) {
-            try {
-                coinsManager.remover(50);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            lifeManager.perderVida(1);
-        }
     }
 
     @Override
