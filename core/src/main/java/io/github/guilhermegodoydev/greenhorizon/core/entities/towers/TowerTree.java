@@ -23,4 +23,27 @@ public class TowerTree extends TowerBase {
     public void attack() {
         System.out.println("TowerTree está disparando folhas!");
     }
+
+    @Override
+    public int getCustoUpgrade() {
+        if (nivel == 1) return 30;
+        if (nivel == 2) return 60;
+        return 9999;
+    }
+
+    @Override
+    public void aplicarMelhoriaStatus() {
+        this.damage *= 1.5f;
+        this.range += 10f;
+
+        if (this.nivel == 2) {
+            this.sprite.setRegion(Assets.getTexture("torre_arvore_nivel2.png"));
+        } else if (this.nivel == 3) {
+            this.sprite.setRegion(Assets.getTexture("torre_arvore_nivel3.png"));
+        }
+
+        this.sprite.setSize(this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
+
+        System.out.println("Upgrade visual concluído para o nível " + nivel);
+    }
 }

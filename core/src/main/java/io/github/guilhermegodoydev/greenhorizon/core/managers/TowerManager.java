@@ -67,4 +67,18 @@ public class TowerManager {
             System.out.println("Torre removida do Manager.");
         }
     }
+
+    public void upgradeTower(TowerBase tower, CoinsManager coinsManager) {
+        if (tower == null || tower.getNivel() >= TowerBase.NIVEL_MAXIMO) return;
+
+        int custo = tower.getCustoUpgrade();
+
+        try {
+            coinsManager.remover(custo);
+            tower.subirNivel();
+            tower.aplicarMelhoriaStatus();
+        } catch (InsufficientFundsException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

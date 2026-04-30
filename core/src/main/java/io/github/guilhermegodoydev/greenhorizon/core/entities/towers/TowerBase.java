@@ -14,6 +14,8 @@ public abstract class TowerBase {
     protected float cooldownTimer;
     protected TowerSlot currentSlot;
     protected int valorVenda;
+    protected int nivel = 1;
+    public static final int NIVEL_MAXIMO = 3;
 
     public TowerBase(Sprite sprite, float x, float y, float damage, float range, float fireRate, TowerSlot slot) {
         this.sprite = sprite;
@@ -46,4 +48,10 @@ public abstract class TowerBase {
 
     public TowerSlot getCurrentSlot() { return currentSlot; }
     public int getValorVenda() { return valorVenda; }
+
+    public int getNivel() { return nivel; }
+    public void subirNivel() { this.nivel++; }
+
+    public abstract int getCustoUpgrade();
+    public abstract void aplicarMelhoriaStatus();
 }

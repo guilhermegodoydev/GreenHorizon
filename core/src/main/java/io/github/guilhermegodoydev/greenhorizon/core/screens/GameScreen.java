@@ -26,6 +26,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private final TowerManager towerManager;
     private final LifeManager lifeManager;
     private final CoinsManager coinsManager; // ← ADICIONE ESTE ATRIBUTO
+    private TowerBase selectedTower;
 
     public GameScreen(Main game) {
         super(game);
@@ -89,7 +90,12 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 break;
 
             case UPGRADE_TOWER:
-                System.out.println("Lógica de upgrade iniciada...");
+                TowerBase torreAlvo = (event.data instanceof TowerBase) ? (TowerBase) event.data : this.selectedTower;
+
+                if (torreAlvo != null) {
+                    towerManager.upgradeTower(torreAlvo, coinsManager);
+                    //Assets.getSound("upgrade.wav").play();
+                }
                 break;
         }
     }
