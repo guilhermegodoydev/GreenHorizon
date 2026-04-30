@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
+import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 
 public class TowerManager {
@@ -22,21 +24,25 @@ public class TowerManager {
         return null;
     }
 
-    public void buildTower(TowerSlot slot, String tipo) {
-        if (!slot.isOccupied()) {
+    public void buildTower(TowerSlot slot, String tipo, int custo, CoinsManager coinsManager) {
+        if (slot.isOccupied()) return;
+
+        try {
+            coinsManager.remover(custo);
+
             TowerBase newTower = null;
 
             if (tipo.equalsIgnoreCase("Arvore")) {
                 newTower = new TowerTree(slot.getCenterX(), slot.getCenterY());
             }
-            // Adicione aqui as outras quando criar as classes:
-            // else if (tipo.equalsIgnoreCase("Eolica")) { newTower = new TowerEolica(...); }
 
             if (newTower != null) {
                 towers.add(newTower);
                 slot.setOccupied(true);
-                System.out.println("Torre " + tipo + " construída com sucesso!");
+                System.out.println("Torre " + tipo + " construída! Custo: " + custo);
             }
+        } catch(InsufficientFundsException e ) {
+            System.err.println(e.getMessage());
         }
     }
 

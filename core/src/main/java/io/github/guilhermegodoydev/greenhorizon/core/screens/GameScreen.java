@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
 import io.github.guilhermegodoydev.greenhorizon.core.input.InputHandler;
@@ -30,7 +31,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         super(game);
 
         lifeManager = new LifeManager(10);
-        coinsManager = new CoinsManager(500); // ← ADICIONE ESTA LINHA (500 moedas iniciais)
+        coinsManager = new CoinsManager(200); // ← ADICIONE ESTA LINHA (500 moedas iniciais)
         mapHandler = new MapHandler("mapa.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
@@ -59,7 +60,13 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 TowerSlot slot = (TowerSlot) data[0];
                 String tipo = (String) data[1];
 
-                towerManager.buildTower(slot, tipo);
+                int custo = 0;
+
+                if (tipo.equalsIgnoreCase("Arvore")) {
+                    custo = TowerTree.CUSTO;
+                }
+
+                towerManager.buildTower(slot, tipo, custo, coinsManager);
                 // ==========================================
                 // PASSO 3: TOCAR SOM AO CONSTRUIR
                 // ==========================================
@@ -96,18 +103,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         managerUI.render(delta);
 
-        // Teste: Pressione 'C' para adicionar 100 moedas, 'V' para remover 50
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.C)) {
-            coinsManager.acrescentar(100);
-        }
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.V)) {
-            try {
-                coinsManager.remover(50);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
-        }
-
+        //Teste: perder via precione espaço
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
             lifeManager.perderVida(1);
         }
