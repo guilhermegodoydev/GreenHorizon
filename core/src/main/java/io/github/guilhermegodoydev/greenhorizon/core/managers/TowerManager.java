@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
+import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 
 public class TowerManager {
@@ -22,21 +24,25 @@ public class TowerManager {
         return null;
     }
 
-    public void buildTower(TowerSlot slot, String tipo) {
-        if (!slot.isOccupied()) {
+    public void buildTower(TowerSlot slot, String tipo, int custo, CoinsManager coinsManager) {
+        if (slot.isOccupied()) return;
+
+        try {
+            coinsManager.remover(custo);
+
             TowerBase newTower = null;
 
             if (tipo.equalsIgnoreCase("Arvore")) {
-                newTower = new TowerTree(slot.getCenterX(), slot.getCenterY());
+                newTower = new TowerTree(slot.getCenterX(), slot.getCenterY(), slot);
             }
-            // Adicione aqui as outras quando criar as classes:
-            // else if (tipo.equalsIgnoreCase("Eolica")) { newTower = new TowerEolica(...); }
 
             if (newTower != null) {
                 towers.add(newTower);
                 slot.setOccupied(true);
-                System.out.println("Torre " + tipo + " construída com sucesso!");
+                System.out.println("Torre " + tipo + " construída! Custo: " + custo);
             }
+        } catch(InsufficientFundsException e ) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -50,5 +56,32 @@ public class TowerManager {
         for (TowerBase tower : towers) {
             tower.render(batch);
         }
+    }
+
+    public void sellTower(TowerBase tower) {
+        if (tower != null) {
+            if (tower.getCurrentSlot() != null) {
+                tower.getCurrentSlot().setOccupied(false);
+            }
+            towers.removeValue(tower, true);
+            System.out.println("Torre removida do Manager.");
+        }
+    }
+
+    public void upgradeTower(TowerBase tower, CoinsManager coinsManager) {
+        if (tower == null || tower.getNivel() >= TowerBase.NIVEL_MAXIMO) return;
+
+        int custo = tower.getCustoUpgrade();
+
+        try {
+            coinsManager.remover(custo);
+            tower.subirNivel();
+            tower.aplicarMelhoriaStatus();
+        } catch (InsufficientFundsException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void buildTower(TowerSlot slot, String tipo) {
     }
 }
