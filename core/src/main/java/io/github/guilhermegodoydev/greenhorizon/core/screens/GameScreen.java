@@ -75,8 +75,17 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
             case SELL_TOWER:
                 TowerBase torreParaVender = (TowerBase) event.data;
-                System.out.println("Lógica de venda iniciada para: " + torreParaVender);
-                // Futuramente: towerManager.remove(torreParaVender);
+
+                if (torreParaVender != null) {
+                    int valorReembolso = torreParaVender.getValorVenda();
+                    coinsManager.acrescentar(valorReembolso);
+
+
+                    towerManager.sellTower(torreParaVender);
+                    Assets.getSound("getCoin.wav").play();
+
+                    System.out.println("Venda concluída! + " + valorReembolso + " moedas.");
+                }
                 break;
 
             case UPGRADE_TOWER:

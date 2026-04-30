@@ -33,7 +33,7 @@ public class TowerManager {
             TowerBase newTower = null;
 
             if (tipo.equalsIgnoreCase("Arvore")) {
-                newTower = new TowerTree(slot.getCenterX(), slot.getCenterY());
+                newTower = new TowerTree(slot.getCenterX(), slot.getCenterY(), slot);
             }
 
             if (newTower != null) {
@@ -55,6 +55,16 @@ public class TowerManager {
     public void render(SpriteBatch batch) {
         for (TowerBase tower : towers) {
             tower.render(batch);
+        }
+    }
+
+    public void sellTower(TowerBase tower) {
+        if (tower != null) {
+            if (tower.getCurrentSlot() != null) {
+                tower.getCurrentSlot().setOccupied(false);
+            }
+            towers.removeValue(tower, true);
+            System.out.println("Torre removida do Manager.");
         }
     }
 }
