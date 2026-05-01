@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="48">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="51">
  <editorsettings>
   <export target="mapa.tmx" format="tmx"/>
  </editorsettings>
@@ -11,7 +11,7 @@
  </tileset>
  <layer id="1" name="Chão" width="20" height="15">
   <data encoding="base64" compression="zlib">
-   eJzVUzEOwyAMZKoEQyfEe/IUHhNVUYYMKMrMU/K02sG0lmMEUqcOJ5EDjvPZma0xM8G77xqRrMn8m86cwd3Pavg3PV/uZQ4H3OMHfyvgBWsJ4M+eXrj7MQvwW9HGvYjYbeEbnj73g1LvQpk1+CzRyw/vPRs85BglDlbjZps+VF6rV8ta5B7ZjGTIcYL8JvKXJchfTGX/8kHzECvqvPFe4zuJ+sSBZ3ugObxqRH+yB5U7BrS43jqQz6heYBnUWeQz6am3o3q9f6HiDYzClJY=
+   eJzNUjEOwyAMZKoEQ6co78lTeEuFqihDBlRl5ik8rXawW8uFgjp1OAUOuJzPDtaYQJjce42I1iS5D1/ujtz5dz3cA5KEA+7ifve3Ae6w1gA+9/TmTz9mBX4v2njmEQ9b+Ian1/u5Uu9avrnBJ41efvju2uAhR69xiBp32/RR5Wv11rJWuWNmmbOFHBfIbyF/SYP8+VjOTx80D55BWkb2Gv8TqU8S7PNG/WVU5vCsEf3pHjB3qHc1Lam3DeTTm0nWm0UGPItyJifq7ajeyD3EE6wNohs=
   </data>
  </layer>
  <layer id="5" name="Construções" width="20" height="15">
@@ -30,41 +30,8 @@
   </data>
  </layer>
  <objectgroup id="8" name="WayPoints">
-  <object id="21" name="p1" x="8" y="157.333">
-   <point/>
-  </object>
-  <object id="22" name="p2" x="120.667" y="156">
-   <point/>
-  </object>
-  <object id="23" name="p3" x="136.667" y="140.667">
-   <point/>
-  </object>
-  <object id="24" name="p4" x="136" y="94.6667">
-   <point/>
-  </object>
-  <object id="25" name="p5" x="152" y="75.3333">
-   <point/>
-  </object>
-  <object id="26" name="p6" x="217.333" y="75.3333">
-   <point/>
-  </object>
-  <object id="27" name="p7" x="232" y="90">
-   <point/>
-  </object>
-  <object id="28" name="p8" x="232" y="158">
-   <point/>
-  </object>
-  <object id="29" name="p9" x="200" y="170.667">
-   <point/>
-  </object>
-  <object id="30" name="p10" x="184.667" y="189.333">
-   <point/>
-  </object>
-  <object id="31" name="p11" x="200.667" y="205.333">
-   <point/>
-  </object>
-  <object id="32" name="p12" x="313.333" y="202">
-   <point/>
+  <object id="50" name="rota" x="-0.5" y="152">
+   <polyline points="0,0 137,0 136.5,-80.5 231.5,-80 232,16 183,16 182.5,49 320.5,49.5"/>
   </object>
  </objectgroup>
  <objectgroup id="9" name="SlotsTorres" visible="0">

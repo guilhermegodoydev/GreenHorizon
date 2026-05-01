@@ -3,10 +3,12 @@ package io.github.guilhermegodoydev.greenhorizon.core.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
@@ -59,6 +61,20 @@ public class MapHandler {
 
     public TiledMap getTiledMap() {
         return tiledMap;
+    }
+
+    public Array<Vector2> getWaypoints() {
+        Array<Vector2> points = new Array<>();
+        if (tiledMap.getLayers().get("WayPoints") != null) {
+            MapObject path = tiledMap.getLayers().get("WayPoints").getObjects().get("rota");
+            if (path instanceof PolylineMapObject) {
+                float[] vertices = ((PolylineMapObject) path).getPolyline().getTransformedVertices();
+                for (int i = 0; i < vertices.length; i += 2) {
+                    points.add(new Vector2(vertices[i], vertices[i + 1]));
+                }
+            }
+        }
+        return points;
     }
 
     public void dispose() {

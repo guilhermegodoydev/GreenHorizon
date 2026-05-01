@@ -10,8 +10,10 @@ import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
 import io.github.guilhermegodoydev.greenhorizon.core.input.InputHandler;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.EnemyManager;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.WaveManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
@@ -28,6 +30,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private final CoinsManager coinsManager;
     private boolean paused = false;
     private InputMultiplexer multiplexer;
+    private EnemyManager enemyManager;
+    private WaveManager waveManager;
 
     public GameScreen(Main game) {
         super(game);
@@ -38,7 +42,12 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
 
-        managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this);
+        // IMPORTANTE: Primeiro instancie o EnemyManager, DEPOIS o WaveManager
+        enemyManager = new EnemyManager(mapHandler.getWaypoints(), lifeManager);
+        waveManager = new WaveManager(enemyManager);
+
+        // Agora passamos o waveManager para o ManagerUI
+        this.managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this, waveManager);
 
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
 
@@ -111,6 +120,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         if (!paused) {
             camera.update();
             towerManager.update(delta);
+            waveManager.update(delta);
+            enemyManager.update(delta);
         }
 
         mapRenderer.setView(camera);
@@ -120,6 +131,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         game.batch.begin();
         mapHandler.renderSlots(game.batch);
         towerManager.render(game.batch);
+        enemyManager.render(game.batch);
         game.batch.end();
 
         managerUI.render(delta);

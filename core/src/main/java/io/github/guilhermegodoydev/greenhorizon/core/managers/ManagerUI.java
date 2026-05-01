@@ -3,6 +3,7 @@ package io.github.guilhermegodoydev.greenhorizon.core.managers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,8 +26,6 @@ import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.TowerActionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
-
-// IMPORTAÇÕES DAS MOEDAS
 import io.github.guilhermegodoydev.greenhorizon.core.ui.CoinsDisplay;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 
@@ -37,19 +36,33 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private final ConstructionMenu constructionMenu;
     private final TowerActionMenu actionMenu;
     private final GameEventListener eventListener;
+    private WaveManager waveManager;
+    private TextButton btnStartWave;
+    private Texture blackBackground;
 
-    // Variáveis do Menu de Pausa
+    // FONTE GLOBAL PARA CONTROLE DE TAMANHO
+    private final BitmapFont uiFont;
+
     private Table pauseTable;
     private GameScreen gameScreen;
-
     private TowerSlot slotAlvo;
     private TowerBase torreSelecionada;
 
-    // CONSTRUTOR ATUALIZADO
-    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, CoinsManager coinsManager, GameEventListener listener, GameScreen gameScreen) {
+    public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, CoinsManager coinsManager, GameEventListener listener, GameScreen gameScreen, WaveManager waveManager) {
+        this.waveManager = waveManager;
         this.stage = new Stage(viewport, batch);
         this.eventListener = listener;
         this.gameScreen = gameScreen;
+
+        // INICIALIZA A FONTE E DEFINE A ESCALA (0.7f = 70% do tamanho original)
+        this.uiFont = new BitmapFont();
+        this.uiFont.getData().setScale(0.7f);
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(0, 0, 0, 0.6f)); // Preto com 60% de transparência
+        pixmap.fill();
+        this.blackBackground = new Texture(pixmap);
+        pixmap.dispose();
 
         float topo = viewport.getWorldHeight();
 
@@ -64,18 +77,33 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.addActor(constructionMenu);
         stage.addActor(actionMenu);
 
-        // CHAMADAS PARA CRIAR A UI DE PAUSA
         criarBotaoEngrenagem();
         criarMenuPausa();
+        criarBotaoStartWave();
     }
 
-    // --- MÉTODOS DO MENU DE PAUSA ---
+    private void criarBotaoStartWave() {
+        TextButton.TextButtonStyle style = createProgrammerArtStyle(Color.ORANGE);
+        btnStartWave = new TextButton("INICIAR WAVE", style);
+
+        // Aumentei um pouco o tamanho do botão para caber o texto com a fonte menor
+        btnStartWave.setSize(100, 30);
+        btnStartWave.setPosition(20, 20);
+
+        btnStartWave.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waveManager.startNextWave();
+            }
+        });
+
+        stage.addActor(btnStartWave);
+    }
 
     private void criarBotaoEngrenagem() {
         TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle(Color.GRAY);
         TextButton btnPause = new TextButton("||", btnStyle);
 
-        // Posição no canto superior direito
         btnPause.setPosition(stage.getViewport().getWorldWidth() - 50, stage.getViewport().getWorldHeight() - 40);
         btnPause.setSize(30, 30);
 
@@ -137,14 +165,16 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(cor);
         pixmap.fill();
+
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.up = new TextureRegionDrawable(new Texture(pixmap));
-        style.font = new com.badlogic.gdx.graphics.g2d.BitmapFont();
+
+        // USA A FONTE COM ESCALA REDUZIDA NO ESTILO DO BOTÃO
+        style.font = uiFont;
+
         pixmap.dispose();
         return style;
     }
-
-    // --- MÉTODOS ORIGINAIS DO MANAGER UI ---
 
     @Override
     public void onTowerSelected(String tipo) {
@@ -162,18 +192,14 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     public void abrirMenuAcao(TowerBase torre) {
         this.torreSelecionada = torre;
         fecharTodosMenus();
-
         Utils.setCenteredPosition(actionMenu, torre.getPosition().x, torre.getPosition().y + 8);
-
         actionMenu.setVisible(true);
     }
 
     public void abrirMenu(TowerSlot slot) {
         this.slotAlvo = slot;
         fecharTodosMenus();
-
         Utils.setCenteredPosition(constructionMenu, slot.getCenterX(), slot.getBounds().y + slot.getBounds().height);
-
         constructionMenu.setVisible(true);
     }
 
@@ -183,15 +209,39 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     public void render(float delta) {
+        if (btnStartWave != null) {
+            btnStartWave.setVisible(!waveManager.isWaveActive());
+        }
+
         stage.act(delta);
         stage.draw();
+
+        if (!waveManager.isWaveActive()) {
+            stage.getBatch().begin();
+            String texto = "PROXIMA WAVE EM: " + (int)waveManager.getWaveTimer() + "s";
+
+            // USA A FONTE GLOBAL JÁ ESCALADA PARA O DESENHO DO TIMER
+            float x = stage.getViewport().getWorldWidth() / 2 - 80;
+            float y = stage.getViewport().getWorldHeight() - 20;
+
+            // DESENHA A MOLDURA (Fundo do texto)
+            // O +100 e +20 são para cobrir a área do texto, ajuste se necessário
+            stage.getBatch().draw(blackBackground, x - 5, y - 15, 170, 25);
+
+            // DESENHA O TEXTO POR CIMA
+            uiFont.draw(stage.getBatch(), texto, x, y);
+
+            stage.getBatch().end();
+        }
     }
 
     @Override
     public void dispose() {
         healthDisplay.dispose();
         coinsDisplay.dispose();
+        uiFont.dispose(); // IMPORTANTE LIMPAR A FONTE
         stage.dispose();
+        blackBackground.dispose();
     }
 
     public boolean isVisivel() {
