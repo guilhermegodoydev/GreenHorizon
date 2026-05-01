@@ -159,6 +159,10 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
     public void setPauseVisible(boolean visivel) {
         pauseTable.setVisible(visivel);
+        if (visivel) {
+            // Move a tabela de pausa para ser o último elemento do desenho (ficar no topo)
+            pauseTable.toFront();
+        }
     }
 
     private TextButton.TextButtonStyle createProgrammerArtStyle(Color cor) {
@@ -209,14 +213,16 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     public void render(float delta) {
+        boolean pausado = pauseTable.isVisible();
+
         if (btnStartWave != null) {
-            btnStartWave.setVisible(!waveManager.isWaveActive());
+            btnStartWave.setVisible(!waveManager.isWaveActive() && !pausado);
         }
 
         stage.act(delta);
         stage.draw();
 
-        if (!waveManager.isWaveActive()) {
+        if (!waveManager.isWaveActive() && !pausado) {
             stage.getBatch().begin();
             String texto = "PROXIMA WAVE EM: " + (int)waveManager.getWaveTimer() + "s";
 
