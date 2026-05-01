@@ -1,6 +1,9 @@
 package io.github.guilhermegodoydev.greenhorizon.core.entities.towers;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Array; // IMPORTANTE
+import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase; // IMPORTANTE
+import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile; // IMPORTANTE
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
@@ -19,9 +22,16 @@ public class TowerTree extends TowerBase {
         );
     }
 
+    // Corrigido: Removido o attack() antigo e mantido apenas o que segue a assinatura da TowerBase
     @Override
-    public void attack() {
-        System.out.println("TowerTree está disparando folhas!");
+    public void attack(EnemyBase target, Array<Projectile> projectiles) {
+        // Criamos o sprite do projétil (sua folha diagonal)
+        Sprite leafSprite = new Sprite(Assets.getTexture("tiro_folha.png"));
+
+        // Adicionamos o novo projétil à lista para que o TowerManager o atualize
+        projectiles.add(new Projectile(leafSprite, position.x, position.y, damage, target));
+
+        System.out.println("TowerTree disparou folha contra: " + target.getClass().getSimpleName());
     }
 
     @Override
@@ -43,7 +53,5 @@ public class TowerTree extends TowerBase {
         }
 
         this.sprite.setSize(this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
-
-        System.out.println("Upgrade visual concluído para o nível " + nivel);
     }
 }

@@ -41,6 +41,17 @@ public abstract class EnemyBase {
 
     protected abstract void reachedEnd();
 
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (this.health <= 0) {
+            this.health = 0;
+            this.active = false; // Isso fará com que o EnemyManager o remova no próximo update
+            System.out.println(this.getClass().getSimpleName() + " foi destruído!");
+
+            // Aqui você pode adicionar lógica de recompensa depois, ex: coinsManager.add(10);
+        }
+    }
+
     public boolean isActive() { return active; }
     public void setHealth(int health) { this.health = health; }
     public Vector2 getPosition() { return position; }

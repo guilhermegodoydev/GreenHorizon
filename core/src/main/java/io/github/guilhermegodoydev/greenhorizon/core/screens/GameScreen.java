@@ -119,7 +119,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         if (!paused) {
             camera.update();
-            towerManager.update(delta);
+            towerManager.update(delta, enemyManager.getEnemies());
             waveManager.update(delta);
             enemyManager.update(delta);
         }

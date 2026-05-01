@@ -2,6 +2,8 @@ package io.github.guilhermegodoydev.greenhorizon.core.managers;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
@@ -10,9 +12,11 @@ import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 
 public class TowerManager {
     private Array<TowerBase> towers;
+    private Array<Projectile> projectiles;
 
     public TowerManager() {
         this.towers = new Array<>();
+        this.projectiles = new Array<>();
     }
 
     public TowerBase getTowerAt(float x, float y) {
@@ -46,15 +50,28 @@ public class TowerManager {
         }
     }
 
-    public void update(float delta) {
+    public void update(float delta, Array<EnemyBase> enemies) {
         for (TowerBase tower : towers) {
-            tower.update(delta);
+            // Agora 'enemies' e 'projectiles' existem neste escopo!
+            tower.update(delta, enemies, projectiles);
+        }
+
+        // Projéteis atualizam e se removem se estiverem inativos
+        for (int i = projectiles.size - 1; i >= 0; i--) {
+            Projectile p = projectiles.get(i);
+            p.update(delta);
+            if (!p.isActive()) {
+                projectiles.removeIndex(i);
+            }
         }
     }
 
     public void render(SpriteBatch batch) {
         for (TowerBase tower : towers) {
             tower.render(batch);
+        }
+        for (Projectile p : projectiles) {
+            p.render(batch);
         }
     }
 

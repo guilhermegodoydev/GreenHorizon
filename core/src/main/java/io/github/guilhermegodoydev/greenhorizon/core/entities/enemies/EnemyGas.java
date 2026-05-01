@@ -11,7 +11,7 @@ public class EnemyGas extends EnemyBase {
         super(waypoints);
         this.texture = Assets.getTexture("gas.png"); // Nome do arquivo nos seus assets
         this.speed = 80f;
-        this.health = 100;
+        this.health = 20;
     }
 
     @Override

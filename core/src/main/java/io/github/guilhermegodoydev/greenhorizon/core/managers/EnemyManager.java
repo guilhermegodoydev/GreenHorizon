@@ -29,11 +29,16 @@ public class EnemyManager {
             EnemyBase e = enemies.get(i);
             e.update(delta);
 
-            // Se o inimigo chegou ao fim E ainda não causou dano
-            if (!e.isActive() && !e.isDanoCausado()) {
-                e.setDanoCausado(true); // Marca que ele já deu o dano dele
-                lifeManager.perderVida(1);
-                enemies.removeIndex(i); // Remove imediatamente
+            // Se o inimigo não está mais ativo (morreu OU chegou ao fim)
+            if (!e.isActive()) {
+                // Se chegou ao fim sem morrer, tira vida do jogador
+                if (!e.isDanoCausado() && e.getPosition().dst(waypoints.get(waypoints.size - 1)) < 5f) {
+                    e.setDanoCausado(true);
+                    lifeManager.perderVida(1);
+                }
+
+                // Independente do motivo (morte ou fim do mapa), remove da lista
+                enemies.removeIndex(i);
             }
         }
     }
