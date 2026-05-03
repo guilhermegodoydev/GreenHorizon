@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class SettingsScreen extends BaseScreen {
     private final Stage stage;
@@ -35,12 +37,11 @@ public class SettingsScreen extends BaseScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle();
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
         // Linha da MÚSICA
-        TextButton btnMusicMinus = new TextButton("-", btnStyle);
-        TextButton btnMusicPlus = new TextButton("+", btnStyle);
+        ImageButton btnMusicMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
+        ImageButton btnMusicPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
         musicLabel = new Label("Musica: " + (int) (SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
         btnMusicMinus.addListener(new ClickListener() {
@@ -57,8 +58,8 @@ public class SettingsScreen extends BaseScreen {
         });
 
         // Linha do SFX
-        TextButton btnSfxMinus = new TextButton("-", btnStyle);
-        TextButton btnSfxPlus = new TextButton("+", btnStyle);
+        ImageButton btnSfxMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
+        ImageButton btnSfxPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
         sfxLabel = new Label("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
         btnSfxMinus.addListener(new ClickListener() {
@@ -75,7 +76,7 @@ public class SettingsScreen extends BaseScreen {
         });
 
         // Botão Voltar
-        TextButton btnBack = new TextButton("VOLTAR", btnStyle);
+        ImageButton btnBack = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_voltar.png")));
         btnBack.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 // Agora o Java sabe quem é a telaAnterior!
@@ -84,15 +85,15 @@ public class SettingsScreen extends BaseScreen {
         });
 
         // Montando o Layout
-        table.add(btnMusicMinus).size(50).pad(10);
-        table.add(musicLabel).width(150).center();
-        table.add(btnMusicPlus).size(50).pad(10).row();
+        table.add(btnMusicMinus).pad(10);
+        table.add(musicLabel).center();
+        table.add(btnMusicPlus).pad(10).row();
 
-        table.add(btnSfxMinus).size(50).pad(10);
-        table.add(sfxLabel).width(150).center();
-        table.add(btnSfxPlus).size(50).pad(10).row();
+        table.add(btnSfxMinus).pad(10);
+        table.add(sfxLabel).center();
+        table.add(btnSfxPlus).pad(10).row();
 
-        table.add(btnBack).colspan(3).width(200).height(50).padTop(30);
+        table.add(btnBack).colspan(3).padTop(30);
     }
 
     private void atualizarTextos() {
