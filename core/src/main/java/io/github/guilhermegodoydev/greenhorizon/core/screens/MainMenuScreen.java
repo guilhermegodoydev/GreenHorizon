@@ -62,9 +62,21 @@ public class MainMenuScreen extends BaseScreen {
             }
         });
 
+        ImageButton btnConfig = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_configuracoes.png")));
+        btnConfig.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // 1. Certifique-se de que a classe SettingsScreen existe
+                // 2. Passe a instância do 'game' para ela, assim como na GameScreen
+                game.setScreen(new SettingsScreen(game, MainMenuScreen.this));
+            }
+        });
+
+
         animatedTitle.setScaling(Scaling.fit);
         table.add(animatedTitle).row();
-        table.add(btnPlay).pad(5).row();
+        table.add(btnPlay).padBottom(5).row();
+        table.add(btnConfig).row();
     }
 
     @Override
