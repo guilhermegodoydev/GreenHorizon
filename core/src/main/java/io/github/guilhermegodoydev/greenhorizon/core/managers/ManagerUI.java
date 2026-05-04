@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,6 +26,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.ConstructionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.HealthDisplay;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.TowerActionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.CoinsDisplay;
@@ -101,11 +104,12 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     private void criarBotaoEngrenagem() {
-        TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle(Color.GRAY);
-        TextButton btnPause = new TextButton("||", btnStyle);
+        //TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle(Color.GRAY);
+        //TextButton btnPause = new TextButton("||", btnStyle);
+        ImageButton btnPause = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_pause.png")));
+
 
         btnPause.setPosition(stage.getViewport().getWorldWidth() - 50, stage.getViewport().getWorldHeight() - 40);
-        btnPause.setSize(30, 30);
 
         btnPause.addListener(new ClickListener() {
             @Override
@@ -127,32 +131,30 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         pauseTable.setBackground(new TextureRegionDrawable(new Texture(bgPixmap)));
         bgPixmap.dispose();
 
-        TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle(Color.DARK_GRAY);
-
-        TextButton btnContinuar = new TextButton("CONTINUAR", btnStyle);
+        ImageButton btnContinuar = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_continuar.png")));
         btnContinuar.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.togglePause();
             }
         });
 
-        TextButton btnConfig = new TextButton("CONFIGURACOES", btnStyle);
+        ImageButton btnConfig = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_configuracoes.png")));
         btnConfig.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new SettingsScreen(gameScreen.getGame(), gameScreen));
             }
         });
 
-        TextButton btnSair = new TextButton("SAIR PARA MENU", btnStyle);
+        ImageButton btnSair = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_sair.png")));
         btnSair.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new MainMenuScreen(gameScreen.getGame()));
             }
         });
 
-        pauseTable.add(btnContinuar).width(200).height(50).pad(10).row();
-        pauseTable.add(btnConfig).width(200).height(50).pad(10).row();
-        pauseTable.add(btnSair).width(200).height(50).pad(10);
+        pauseTable.add(btnContinuar).pad(5).row();
+        pauseTable.add(btnConfig).pad(5).row();
+        pauseTable.add(btnSair).pad(5);
 
         stage.addActor(pauseTable);
     }
