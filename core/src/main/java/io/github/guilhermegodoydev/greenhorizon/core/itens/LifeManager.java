@@ -17,12 +17,12 @@ public class LifeManager {
     public void perderVida(int quantidade) {
         try {
             vidasAtuais -= quantidade;
-            Assets.getSound("hit.wav").play(SettingsManager.getSfxVolume());
+            Assets.getSound("sfx/hit.wav").play(SettingsManager.getSfxVolume());
             System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
 
             if (vidasAtuais <= 0) {
                 vidasAtuais = 0;
-                Assets.getSound("gameOver.wav").play(SettingsManager.getSfxVolume());
+                Assets.getSound("sfx/gameOver.wav").play(SettingsManager.getSfxVolume());
                 darGameOver();
             }
         } catch (Exception e) {

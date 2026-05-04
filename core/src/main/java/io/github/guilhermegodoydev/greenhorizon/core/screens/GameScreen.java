@@ -57,7 +57,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         Gdx.input.setInputProcessor(multiplexer);
 
-        Music bgm = Assets.getMusic("bgm.mp3");
+        Music bgm = Assets.getMusic("sfx/bgm.mp3");
         bgm.setLooping(true);
         bgm.setVolume(0.5f);
         bgm.play();
@@ -85,7 +85,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
                 towerManager.buildTower(slot, tipo, custo, coinsManager);
 
-                Assets.getSound("plant.wav").play();
+                Assets.getSound("sfx/plant.wav").play();
                 break;
 
             case SELL_TOWER:
