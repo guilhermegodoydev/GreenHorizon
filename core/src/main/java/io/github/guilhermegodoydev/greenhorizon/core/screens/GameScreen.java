@@ -19,7 +19,6 @@ import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
-import com.badlogic.gdx.audio.Music;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class GameScreen extends BaseScreen implements GameEventListener {
@@ -33,9 +32,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private InputMultiplexer multiplexer;
     private EnemyManager enemyManager;
     private WaveManager waveManager;
-
-    // Atributo de classe para manter referência da música
-    private Music bgm;
 
     public GameScreen(Main game) {
         super(game);
@@ -59,28 +55,14 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         Gdx.input.setInputProcessor(multiplexer);
 
-        bgm = Assets.getMusic("sfx/bgm.mp3");
-        bgm.setLooping(true);
-        // Inicializa com o volume salvo nas configurações
-        bgm.setVolume(SettingsManager.getMusicVolume());
-        bgm.play();
+        // Solicita a transição para a música do jogo
+        game.fadeToMusic("sfx/bgm.mp3");
     }
 
     @Override
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(multiplexer);
-        // Atualiza o volume ao retornar para esta tela
-        if (bgm != null) {
-            bgm.setVolume(SettingsManager.getMusicVolume());
-        }
-    }
-
-    // Método para sincronização em tempo real com a tela de configurações
-    public void updateMusicVolume(float volume) {
-        if (bgm != null) {
-            bgm.setVolume(volume);
-        }
     }
 
     public void togglePause() {
@@ -99,7 +81,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
                 towerManager.buildTower(slot, tipo, custo, coinsManager);
 
-                // Dispara o SFX utilizando o volume salvo
                 Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
                 break;
 

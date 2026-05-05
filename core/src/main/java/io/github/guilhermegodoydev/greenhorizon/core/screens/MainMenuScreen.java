@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import io.github.guilhermegodoydev.greenhorizon.Main;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.AnimatedImage;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
@@ -24,17 +24,18 @@ public class MainMenuScreen extends BaseScreen {
     private float currentOffsetX = 0;
     private float currentOffsetY = 0;
 
+    // Flag para controlar se o som de introdução já tocou
+    private boolean introPlayed = false;
+
     public MainMenuScreen(final Main game) {
         super(game);
         this.stage = new Stage(viewport, game.batch);
 
-        // Carregamento
         layerSky = Assets.getTexture("fundo/ceu.png");
         layerRoad = Assets.getTexture("fundo/chao_rua.png");
         layerBushes = Assets.getTexture("fundo/arbustos.png");
         layerAllBuildings = Assets.getTexture("fundo/predios.png");
 
-        // UI (Mantive sua lógica original de botões)
         setupUI();
     }
 
@@ -66,12 +67,9 @@ public class MainMenuScreen extends BaseScreen {
         btnConfig.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // 1. Certifique-se de que a classe SettingsScreen existe
-                // 2. Passe a instância do 'game' para ela, assim como na GameScreen
                 game.setScreen(new SettingsScreen(game, MainMenuScreen.this));
             }
         });
-
 
         animatedTitle.setScaling(Scaling.fit);
         table.add(animatedTitle).row();
@@ -81,43 +79,25 @@ public class MainMenuScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-        // Limpa a tela
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // 1. Captura a posição do mouse e normaliza (-1 a 1)
         float relX = (Gdx.input.getX() / (float)Gdx.graphics.getWidth()) * 2 - 1;
         float relY = ((Gdx.graphics.getHeight() - Gdx.input.getY()) / (float)Gdx.graphics.getHeight()) * 2 - 1;
 
-        // 2. Suavização (Lerp) para o movimento ser fluido
         currentOffsetX += (relX - currentOffsetX) * 0.05f;
         currentOffsetY += (relY - currentOffsetY) * 0.05f;
 
-        // 3. Define a linha do horizonte (onde a rua termina e os prédios começam)
         float horizonY = viewport.getWorldHeight() * 0.45f;
         float skyHeight = viewport.getWorldHeight() - horizonY;
 
-
-
         game.batch.begin();
-
-        // --- CAMADA 1: CÉU (Estático) ---
         game.batch.draw(layerSky, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-
-        // --- CAMADA 2: PRÉDIOS UNIFICADOS (Estático) ---
-        // Como agora é uma imagem só, ela fica travada no horizonte
         game.batch.draw(layerAllBuildings, 0, horizonY, viewport.getWorldWidth(), skyHeight);
-
-        // --- CAMADA 3: ESTRADA (Estática) ---
-        // Desenhada depois dos prédios para dar o acabamento na base
         game.batch.draw(layerRoad, 0, 0, viewport.getWorldWidth(), horizonY);
 
-        // --- CAMADA 4: ARBUSTOS (Com "sangria" para baixo) ---
-        // Em vez de começar no Y = 0, começamos um pouco abaixo (ex: -15)
-        // Assim, quando o currentOffsetY empurrar para cima, ainda teremos desenho ali.
-
-        float margemSegurancaY = -15; // O quanto a imagem fica "enterrada" no chão
-        float forcaMovimentoY = 8f;   // O quanto ela sobe com o mouse
+        float margemSegurancaY = -15;
+        float forcaMovimentoY = 8f;
 
         float arbustoPosX = Math.round(-50 + (currentOffsetX * 20f));
         float arbustoPosY = Math.round(margemSegurancaY + (currentOffsetY * forcaMovimentoY));
@@ -126,28 +106,26 @@ public class MainMenuScreen extends BaseScreen {
             arbustoPosX,
             arbustoPosY,
             viewport.getWorldWidth() + 100,
-            horizonY + 25 // Aumentamos um pouco a altura total para compensar o que foi enterrado
+            horizonY + 25
         );
-
         game.batch.end();
 
-        // Desenha os botões e interface por cima de tudo
         stage.act(delta);
         stage.draw();
     }
 
-    // Função drawParallax atualizada para aceitar o Y variável dos arbustos
-    private void drawMouseParallax(Texture texture, float xOffset, float yOffset, float height) {
-        game.batch.draw(texture,
-            Math.round(-50 + xOffset),
-            Math.round(yOffset), // Aqui o yOffset pode ser o horizonY fixo ou o cálculo com o mouse
-            viewport.getWorldWidth() + 100,
-            height
-        );
-    }
-
     @Override
-    public void show() { Gdx.input.setInputProcessor(stage); }
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        // Toca apenas na primeira vez que a tela é exibida nesta instância
+        if (!introPlayed) {
+            Assets.getSound("sfx/mainmenurootsgrowingsound.wav").play(SettingsManager.getSfxVolume());
+            introPlayed = true;
+        }
+
+        game.fadeToMusic("sfx/mainmenumusicloop.mp3");
+    }
 
     @Override
     public void dispose() { stage.dispose(); }

@@ -3,17 +3,14 @@ package io.github.guilhermegodoydev.greenhorizon.core.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
@@ -45,14 +42,15 @@ public class SettingsScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() - 0.1f);
                 atualizarTextos();
-                sincronizarAudioEmTempoReal();
+                game.syncConfigVolume();
             }
         });
+
         btnMusicPlus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() + 0.1f);
                 atualizarTextos();
-                sincronizarAudioEmTempoReal();
+                game.syncConfigVolume();
             }
         });
 
@@ -66,6 +64,7 @@ public class SettingsScreen extends BaseScreen {
                 atualizarTextos();
             }
         });
+
         btnSfxPlus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setSfxVolume(SettingsManager.getSfxVolume() + 0.1f);
@@ -94,12 +93,6 @@ public class SettingsScreen extends BaseScreen {
     private void atualizarTextos() {
         musicLabel.setText("Musica: " + (int) (SettingsManager.getMusicVolume() * 100) + "%");
         sfxLabel.setText("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%");
-    }
-
-    private void sincronizarAudioEmTempoReal() {
-        if (telaAnterior instanceof GameScreen) {
-            ((GameScreen) telaAnterior).updateMusicVolume(SettingsManager.getMusicVolume());
-        }
     }
 
     @Override
