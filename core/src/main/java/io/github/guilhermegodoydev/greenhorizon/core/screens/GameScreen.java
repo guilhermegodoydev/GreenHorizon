@@ -117,6 +117,12 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
+        if (lifeManager.getVidasAtuais() <= 0) {
+            game.setScreen(new GameOverScreen(game));
+            this.dispose();
+            return;
+        }
+
         if (!paused) {
             camera.update();
             towerManager.update(delta, enemyManager.getEnemies());
