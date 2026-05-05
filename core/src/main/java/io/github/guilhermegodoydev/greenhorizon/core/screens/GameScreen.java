@@ -12,6 +12,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
 import io.github.guilhermegodoydev.greenhorizon.core.input.InputHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.EnemyManager;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.WaveManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
@@ -33,6 +34,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private EnemyManager enemyManager;
     private WaveManager waveManager;
 
+    // Atributo de classe para manter referência da música
+    private Music bgm;
+
     public GameScreen(Main game) {
         super(game);
 
@@ -42,11 +46,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
 
-        // IMPORTANTE: Primeiro instancie o EnemyManager, DEPOIS o WaveManager
         enemyManager = new EnemyManager(mapHandler.getWaypoints(), lifeManager);
         waveManager = new WaveManager(enemyManager);
 
-        // Agora passamos o waveManager para o ManagerUI
         this.managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this, waveManager);
 
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
@@ -57,9 +59,10 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         Gdx.input.setInputProcessor(multiplexer);
 
-        Music bgm = Assets.getMusic("sfx/bgm.mp3");
+        bgm = Assets.getMusic("sfx/bgm.mp3");
         bgm.setLooping(true);
-        bgm.setVolume(0.5f);
+        // Inicializa com o volume salvo nas configurações
+        bgm.setVolume(SettingsManager.getMusicVolume());
         bgm.play();
     }
 
@@ -67,6 +70,17 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(multiplexer);
+        // Atualiza o volume ao retornar para esta tela
+        if (bgm != null) {
+            bgm.setVolume(SettingsManager.getMusicVolume());
+        }
+    }
+
+    // Método para sincronização em tempo real com a tela de configurações
+    public void updateMusicVolume(float volume) {
+        if (bgm != null) {
+            bgm.setVolume(volume);
+        }
     }
 
     public void togglePause() {
@@ -85,18 +99,15 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
                 towerManager.buildTower(slot, tipo, custo, coinsManager);
 
-                Assets.getSound("sfx/plant.wav").play();
+                // Dispara o SFX utilizando o volume salvo
+                Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
                 break;
 
             case SELL_TOWER:
                 if (event.data instanceof TowerBase) {
                     TowerBase torre = (TowerBase) event.data;
-
                     coinsManager.acrescentar(torre.getValorVenda());
-
                     towerManager.sellTower(torre);
-
-                    System.out.println("Torre vendida com sucesso!");
                 }
                 break;
 

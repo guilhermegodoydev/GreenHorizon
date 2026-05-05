@@ -22,12 +22,10 @@ public class SettingsScreen extends BaseScreen {
     private final Stage stage;
     private Label musicLabel;
     private Label sfxLabel;
-    private final com.badlogic.gdx.Screen telaAnterior; // Variável final
+    private final com.badlogic.gdx.Screen telaAnterior;
 
     public SettingsScreen(final Main game, com.badlogic.gdx.Screen telaAnterior) {
         super(game);
-
-        // --- AQUI ESTAVA O ERRO! VOCÊ PRECISA ATRIBUIR O VALOR ---
         this.telaAnterior = telaAnterior;
 
         stage = new Stage(viewport, game.batch);
@@ -39,7 +37,6 @@ public class SettingsScreen extends BaseScreen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        // Linha da MÚSICA
         ImageButton btnMusicMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnMusicPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
         musicLabel = new Label("Musica: " + (int) (SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
@@ -48,16 +45,17 @@ public class SettingsScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() - 0.1f);
                 atualizarTextos();
+                sincronizarAudioEmTempoReal();
             }
         });
         btnMusicPlus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() + 0.1f);
                 atualizarTextos();
+                sincronizarAudioEmTempoReal();
             }
         });
 
-        // Linha do SFX
         ImageButton btnSfxMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnSfxPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
         sfxLabel = new Label("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
@@ -75,16 +73,13 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        // Botão Voltar
         ImageButton btnBack = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_voltar.png")));
         btnBack.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                // Agora o Java sabe quem é a telaAnterior!
                 game.setScreen(telaAnterior);
             }
         });
 
-        // Montando o Layout
         table.add(btnMusicMinus).pad(10);
         table.add(musicLabel).center();
         table.add(btnMusicPlus).pad(10).row();
@@ -101,17 +96,10 @@ public class SettingsScreen extends BaseScreen {
         sfxLabel.setText("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%");
     }
 
-    private TextButton.TextButtonStyle createProgrammerArtStyle() {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.DARK_GRAY);
-        pixmap.fill();
-        TextureRegionDrawable drawableBg = new TextureRegionDrawable(new Texture(pixmap));
-        pixmap.dispose();
-
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.up = drawableBg;
-        style.font = new BitmapFont();
-        return style;
+    private void sincronizarAudioEmTempoReal() {
+        if (telaAnterior instanceof GameScreen) {
+            ((GameScreen) telaAnterior).updateMusicVolume(SettingsManager.getMusicVolume());
+        }
     }
 
     @Override
