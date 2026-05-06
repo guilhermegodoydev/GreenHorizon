@@ -36,7 +36,9 @@ public class SettingsScreen extends BaseScreen {
 
         ImageButton btnMusicMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnMusicPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
-        musicLabel = new Label("Musica: " + (int) (SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
+
+        // CORREÇÃO: Usando Math.round em vez de (int)
+        musicLabel = new Label("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
         btnMusicMinus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -56,7 +58,9 @@ public class SettingsScreen extends BaseScreen {
 
         ImageButton btnSfxMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnSfxPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
-        sfxLabel = new Label("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
+
+        // CORREÇÃO: Usando Math.round em vez de (int)
+        sfxLabel = new Label("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
         btnSfxMinus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -91,8 +95,9 @@ public class SettingsScreen extends BaseScreen {
     }
 
     private void atualizarTextos() {
-        musicLabel.setText("Musica: " + (int) (SettingsManager.getMusicVolume() * 100) + "%");
-        sfxLabel.setText("Efeitos: " + (int) (SettingsManager.getSfxVolume() * 100) + "%");
+        // CORREÇÃO: Atualizando também o texto dinâmico com Math.round
+        musicLabel.setText("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%");
+        sfxLabel.setText("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%");
     }
 
     @Override

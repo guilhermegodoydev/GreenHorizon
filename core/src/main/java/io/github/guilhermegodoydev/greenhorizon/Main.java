@@ -97,16 +97,15 @@ public class Main extends Game {
                 currentMusic.setVolume(volumeAtual);
             }
 
-            // CORREÇÃO AQUI: Só processa a parada se o objetivo for chegar no zero (volumeAlvo == 0)
             if (volumeAtual <= 0f && volumeAlvo == 0f) {
                 if (nextMusicPath != null) {
-                    // Se tem uma próxima música na fila, inicia ela
                     startNextMusic();
-                } else if (currentMusic != null && currentMusic.isPlaying()) {
-                    // Se não tem próxima música, apenas para o que está tocando (Caso do Game Over)
-                    currentMusic.stop();
-                    currentMusic = null;
-                    currentMusicPath = null;
+                } else if (currentMusicPath == null) {
+                    // CORREÇÃO AQUI: Só destrói a música se o caminho foi intencionalmente apagado (Game Over)
+                    if (currentMusic != null) {
+                        currentMusic.stop();
+                        currentMusic = null;
+                    }
                 }
             }
         }

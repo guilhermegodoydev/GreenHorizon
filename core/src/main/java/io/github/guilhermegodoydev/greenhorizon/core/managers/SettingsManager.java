@@ -2,6 +2,7 @@ package io.github.guilhermegodoydev.greenhorizon.core.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.math.MathUtils; // Importante para o clamp
 
 public class SettingsManager {
     private static final String PREFS_NAME = "GreenHorizon_Settings";
@@ -18,7 +19,9 @@ public class SettingsManager {
     }
 
     public static void setMusicVolume(float volume) {
-        getPrefs().putFloat(MUSIC_KEY, Math.max(0f, Math.min(1f, volume))); // Trava entre 0 e 1
+        // Arredonda para 1 casa decimal (ex: 0.19999 vira 0.2) e prende entre 0 e 1
+        float volumeLimpo = Math.round(volume * 10f) / 10f;
+        getPrefs().putFloat(MUSIC_KEY, MathUtils.clamp(volumeLimpo, 0f, 1f));
         getPrefs().flush(); // Salva no disco
     }
 
@@ -28,7 +31,9 @@ public class SettingsManager {
     }
 
     public static void setSfxVolume(float volume) {
-        getPrefs().putFloat(SFX_KEY, Math.max(0f, Math.min(1f, volume)));
+        // Arredonda para 1 casa decimal e prende entre 0 e 1
+        float volumeLimpo = Math.round(volume * 10f) / 10f;
+        getPrefs().putFloat(SFX_KEY, MathUtils.clamp(volumeLimpo, 0f, 1f));
         getPrefs().flush();
     }
 }
