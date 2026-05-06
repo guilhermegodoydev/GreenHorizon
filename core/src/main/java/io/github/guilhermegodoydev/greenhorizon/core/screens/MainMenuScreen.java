@@ -39,6 +39,14 @@ public class MainMenuScreen extends BaseScreen {
         setupUI();
     }
 
+    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER
+    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
+        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
+        return new ImageButton(style);
+    }
+
     private void setupUI() {
         Table table = new Table();
         table.setFillParent(true);
@@ -55,7 +63,8 @@ public class MainMenuScreen extends BaseScreen {
         Animation<TextureRegion> titleAnimation = new Animation<>(0.35f, titleFrames);
         AnimatedImage animatedTitle = new AnimatedImage(titleAnimation);
 
-        ImageButton btnPlay = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_jogar.png")));
+        // BOTÃO JOGAR COM HOVER
+        ImageButton btnPlay = criarBotaoComHover("botao_jogar.png", "botao_jogar_hover.png");
         btnPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -63,7 +72,8 @@ public class MainMenuScreen extends BaseScreen {
             }
         });
 
-        ImageButton btnConfig = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_configuracoes.png")));
+        // BOTÃO CONFIGURAÇÕES COM HOVER
+        ImageButton btnConfig = criarBotaoComHover("botao_configuracoes.png", "botao_configuracoes_hover.png");
         btnConfig.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -118,7 +128,6 @@ public class MainMenuScreen extends BaseScreen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        // Toca apenas na primeira vez que a tela é exibida nesta instância
         if (!introPlayed) {
             Assets.getSound("sfx/mainmenurootsgrowingsound.wav").play(SettingsManager.getSfxVolume());
             introPlayed = true;

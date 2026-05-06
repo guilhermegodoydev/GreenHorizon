@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable; // Importante para desligar o clique
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -43,7 +43,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private TextButton btnStartWave;
     private Texture blackBackground;
 
-    // FONTE GLOBAL PARA CONTROLE DE TAMANHO
     private final BitmapFont uiFont;
 
     private Table pauseTable;
@@ -51,18 +50,20 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private TowerSlot slotAlvo;
     private TowerBase torreSelecionada;
 
+    // Transformado em atributo da classe para podermos manipular depois
+    private ImageButton btnPause;
+
     public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, CoinsManager coinsManager, GameEventListener listener, GameScreen gameScreen, WaveManager waveManager) {
         this.waveManager = waveManager;
         this.stage = new Stage(viewport, batch);
         this.eventListener = listener;
         this.gameScreen = gameScreen;
 
-        // INICIALIZA A FONTE E DEFINE A ESCALA (0.7f = 70% do tamanho original)
         this.uiFont = new BitmapFont();
         this.uiFont.getData().setScale(0.7f);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(new Color(0, 0, 0, 0.6f)); // Preto com 60% de transparência
+        pixmap.setColor(new Color(0, 0, 0, 0.6f));
         pixmap.fill();
         this.blackBackground = new Texture(pixmap);
         pixmap.dispose();
@@ -85,11 +86,17 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         criarBotaoStartWave();
     }
 
+    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
+        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
+        return new ImageButton(style);
+    }
+
     private void criarBotaoStartWave() {
         TextButton.TextButtonStyle style = createProgrammerArtStyle(Color.ORANGE);
         btnStartWave = new TextButton("INICIAR WAVE", style);
 
-        // Aumentei um pouco o tamanho do botão para caber o texto com a fonte menor
         btnStartWave.setSize(100, 30);
         btnStartWave.setPosition(20, 20);
 
@@ -104,11 +111,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     private void criarBotaoEngrenagem() {
-        //TextButton.TextButtonStyle btnStyle = createProgrammerArtStyle(Color.GRAY);
-        //TextButton btnPause = new TextButton("||", btnStyle);
-        ImageButton btnPause = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_pause.png")));
-
-
+        // Agora inicializamos o atributo da classe em vez de uma variável local
+        btnPause = criarBotaoComHover("botao_pause.png", "botao_pause_hover.png");
         btnPause.setPosition(stage.getViewport().getWorldWidth() - 50, stage.getViewport().getWorldHeight() - 40);
 
         btnPause.addListener(new ClickListener() {
@@ -131,21 +135,21 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         pauseTable.setBackground(new TextureRegionDrawable(new Texture(bgPixmap)));
         bgPixmap.dispose();
 
-        ImageButton btnContinuar = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_continuar.png")));
+        ImageButton btnContinuar = criarBotaoComHover("botao_continuar.png", "botao_continuar_hover.png");
         btnContinuar.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.togglePause();
             }
         });
 
-        ImageButton btnConfig = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_configuracoes.png")));
+        ImageButton btnConfig = criarBotaoComHover("botao_configuracoes.png", "botao_configuracoes_hover.png");
         btnConfig.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new SettingsScreen(gameScreen.getGame(), gameScreen));
             }
         });
 
-        ImageButton btnSair = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_sair.png")));
+        ImageButton btnSair = criarBotaoComHover("botao_sair.png", "botao_sair_hover.png");
         btnSair.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new MainMenuScreen(gameScreen.getGame()));
@@ -162,8 +166,12 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     public void setPauseVisible(boolean visivel) {
         pauseTable.setVisible(visivel);
         if (visivel) {
-            // Move a tabela de pausa para ser o último elemento do desenho (ficar no topo)
             pauseTable.toFront();
+            // Desliga a sensibilidade do botão de pause (tira hover e clique)
+            btnPause.setTouchable(Touchable.disabled);
+        } else {
+            // Liga a sensibilidade de volta quando o jogo continua
+            btnPause.setTouchable(Touchable.enabled);
         }
     }
 
@@ -174,8 +182,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.up = new TextureRegionDrawable(new Texture(pixmap));
-
-        // USA A FONTE COM ESCALA REDUZIDA NO ESTILO DO BOTÃO
         style.font = uiFont;
 
         pixmap.dispose();
@@ -228,15 +234,10 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
             stage.getBatch().begin();
             String texto = "PROXIMA WAVE EM: " + (int)waveManager.getWaveTimer() + "s";
 
-            // USA A FONTE GLOBAL JÁ ESCALADA PARA O DESENHO DO TIMER
             float x = stage.getViewport().getWorldWidth() / 2 - 80;
             float y = stage.getViewport().getWorldHeight() - 20;
 
-            // DESENHA A MOLDURA (Fundo do texto)
-            // O +100 e +20 são para cobrir a área do texto, ajuste se necessário
             stage.getBatch().draw(blackBackground, x - 5, y - 15, 170, 25);
-
-            // DESENHA O TEXTO POR CIMA
             uiFont.draw(stage.getBatch(), texto, x, y);
 
             stage.getBatch().end();
@@ -247,7 +248,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     public void dispose() {
         healthDisplay.dispose();
         coinsDisplay.dispose();
-        uiFont.dispose(); // IMPORTANTE LIMPAR A FONTE
+        uiFont.dispose();
         stage.dispose();
         blackBackground.dispose();
     }

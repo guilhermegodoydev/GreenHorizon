@@ -37,7 +37,6 @@ public class SettingsScreen extends BaseScreen {
         ImageButton btnMusicMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnMusicPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
 
-        // CORREÇÃO: Usando Math.round em vez de (int)
         musicLabel = new Label("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
         btnMusicMinus.addListener(new ClickListener() {
@@ -59,7 +58,6 @@ public class SettingsScreen extends BaseScreen {
         ImageButton btnSfxMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
         ImageButton btnSfxPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
 
-        // CORREÇÃO: Usando Math.round em vez de (int)
         sfxLabel = new Label("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
         btnSfxMinus.addListener(new ClickListener() {
@@ -76,7 +74,8 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        ImageButton btnBack = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_voltar.png")));
+        // BOTÃO VOLTAR COM HOVER
+        ImageButton btnBack = criarBotaoComHover("botao_voltar.png", "botao_voltar_hover.png");
         btnBack.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(telaAnterior);
@@ -94,8 +93,15 @@ public class SettingsScreen extends BaseScreen {
         table.add(btnBack).colspan(3).padTop(30);
     }
 
+    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER
+    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
+        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
+        return new ImageButton(style);
+    }
+
     private void atualizarTextos() {
-        // CORREÇÃO: Atualizando também o texto dinâmico com Math.round
         musicLabel.setText("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%");
         sfxLabel.setText("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%");
     }

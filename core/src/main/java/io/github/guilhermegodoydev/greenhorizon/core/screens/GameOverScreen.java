@@ -3,17 +3,16 @@ package io.github.guilhermegodoydev.greenhorizon.core.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.guilhermegodoydev.greenhorizon.Main;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class GameOverScreen extends BaseScreen {
     private final Stage stage;
@@ -30,9 +29,8 @@ public class GameOverScreen extends BaseScreen {
         Label lblGameOver = new Label("FIM DE JOGO", titleStyle);
         lblGameOver.setFontScale(2.0f);
 
-        TextButton.TextButtonStyle buttonStyle = createButtonStyle();
-
-        TextButton btnRestart = new TextButton("TENTAR NOVAMENTE", buttonStyle);
+        // BOTÃO NOVAMENTE COM HOVER
+        ImageButton btnRestart = criarBotaoComHover("botao_novamente.png", "botao_novamente_hover.png");
         btnRestart.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -40,7 +38,8 @@ public class GameOverScreen extends BaseScreen {
             }
         });
 
-        TextButton btnMenu = new TextButton("MENU PRINCIPAL", buttonStyle);
+        // BOTÃO MENU PRINCIPAL COM HOVER
+        ImageButton btnMenu = criarBotaoComHover("botao_menuprincipal.png", "botao_menuprincipal_hover.png");
         btnMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -49,19 +48,18 @@ public class GameOverScreen extends BaseScreen {
         });
 
         table.add(lblGameOver).padBottom(50).row();
-        table.add(btnRestart).width(250).height(50).padBottom(10).row();
-        table.add(btnMenu).width(250).height(50);
+
+        // Removemos o width() e height() manuais porque a imagem original da sua UI já dá o tamanho perfeito
+        table.add(btnRestart).padBottom(10).row();
+        table.add(btnMenu);
     }
 
-    private TextButton.TextButtonStyle createButtonStyle() {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.DARK_GRAY);
-        pixmap.fill();
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.up = new TextureRegionDrawable(new Texture(pixmap));
-        style.font = new BitmapFont();
-        pixmap.dispose();
-        return style;
+    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER
+    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
+        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
+        return new ImageButton(style);
     }
 
     @Override
