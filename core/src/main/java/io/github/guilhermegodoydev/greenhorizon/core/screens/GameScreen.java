@@ -110,6 +110,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         ScreenUtils.clear(0, 0, 0, 1);
 
         if (lifeManager.getVidasAtuais() <= 0) {
+            // Gatilho do silêncio chamado ANTES de mudar a tela
+            game.fadeToMusic(null);
+
             game.setScreen(new GameOverScreen(game));
             this.dispose();
             return;
