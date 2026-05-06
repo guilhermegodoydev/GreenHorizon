@@ -47,7 +47,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         this.managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this, waveManager);
 
-        InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager);
+        // Passando "this" (a própria GameScreen) para o InputHandler
+        InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager, this);
 
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(managerUI.getStage());
@@ -68,6 +69,11 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void togglePause() {
         this.paused = !this.paused;
         managerUI.setPauseVisible(paused);
+    }
+
+    // Novo getter para o InputHandler conseguir consultar o estado do jogo
+    public boolean isPaused() {
+        return paused;
     }
 
     @Override

@@ -8,6 +8,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.screens.GameScreen;
 
 public class InputHandler extends InputAdapter {
     private Viewport viewport;
@@ -15,17 +16,24 @@ public class InputHandler extends InputAdapter {
     private Vector3 touchPoint;
     private ManagerUI managerUI;
     private TowerManager towerManager;
+    private GameScreen gameScreen; // Referência da tela do jogo
 
-    public InputHandler(Viewport viewport, MapHandler mapHandler, ManagerUI managerUI,TowerManager towerManager) {
+    public InputHandler(Viewport viewport, MapHandler mapHandler, ManagerUI managerUI, TowerManager towerManager, GameScreen gameScreen) {
         this.viewport = viewport;
         this.mapHandler = mapHandler;
         this.touchPoint = new Vector3();
         this.managerUI = managerUI;
         this.towerManager = towerManager;
+        this.gameScreen = gameScreen; // Atribui a referência
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // A Barreira: Se o jogo estiver pausado, consome o clique imediatamente e não interage com o mapa
+        if (gameScreen.isPaused()) {
+            return true;
+        }
+
         touchPoint.set(screenX, screenY, 0);
         viewport.unproject(touchPoint);
 
