@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable; // Importante para desligar o clique
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -50,7 +52,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private TowerSlot slotAlvo;
     private TowerBase torreSelecionada;
 
-    // Transformado em atributo da classe para podermos manipular depois
     private ImageButton btnPause;
 
     public ManagerUI(Viewport viewport, SpriteBatch batch, LifeManager lifeManager, CoinsManager coinsManager, GameEventListener listener, GameScreen gameScreen, WaveManager waveManager) {
@@ -86,11 +87,33 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         criarBotaoStartWave();
     }
 
+    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER E CLIQUE
     private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
         style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
-        return new ImageButton(style);
+
+        final ImageButton btn = new ImageButton(style);
+
+        // Listener do Hover
+        btn.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (pointer == -1 && btn.isTouchable()) {
+                    Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
+                }
+            }
+        });
+
+        // Listener do Clique (Adicionado)
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
+            }
+        });
+
+        return btn;
     }
 
     private void criarBotaoStartWave() {
@@ -111,7 +134,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     private void criarBotaoEngrenagem() {
-        // Agora inicializamos o atributo da classe em vez de uma variável local
         btnPause = criarBotaoComHover("botao_pause.png", "botao_pause_hover.png");
         btnPause.setPosition(stage.getViewport().getWorldWidth() - 50, stage.getViewport().getWorldHeight() - 40);
 
@@ -167,10 +189,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         pauseTable.setVisible(visivel);
         if (visivel) {
             pauseTable.toFront();
-            // Desliga a sensibilidade do botão de pause (tira hover e clique)
             btnPause.setTouchable(Touchable.disabled);
         } else {
-            // Liga a sensibilidade de volta quando o jogo continua
             btnPause.setTouchable(Touchable.enabled);
         }
     }

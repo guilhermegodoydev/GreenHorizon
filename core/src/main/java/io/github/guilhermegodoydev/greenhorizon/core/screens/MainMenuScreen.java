@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import io.github.guilhermegodoydev.greenhorizon.Main;
@@ -24,7 +26,6 @@ public class MainMenuScreen extends BaseScreen {
     private float currentOffsetX = 0;
     private float currentOffsetY = 0;
 
-    // Flag para controlar se o som de introdução já tocou
     private boolean introPlayed = false;
 
     public MainMenuScreen(final Main game) {
@@ -39,12 +40,33 @@ public class MainMenuScreen extends BaseScreen {
         setupUI();
     }
 
-    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER
+    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER E CLIQUE
     private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
         style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
-        return new ImageButton(style);
+
+        final ImageButton btn = new ImageButton(style);
+
+        // Listener do Hover
+        btn.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (pointer == -1 && btn.isTouchable()) {
+                    Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
+                }
+            }
+        });
+
+        // Listener do Clique (Adicionado)
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
+            }
+        });
+
+        return btn;
     }
 
     private void setupUI() {
@@ -63,7 +85,6 @@ public class MainMenuScreen extends BaseScreen {
         Animation<TextureRegion> titleAnimation = new Animation<>(0.35f, titleFrames);
         AnimatedImage animatedTitle = new AnimatedImage(titleAnimation);
 
-        // BOTÃO JOGAR COM HOVER
         ImageButton btnPlay = criarBotaoComHover("botao_jogar.png", "botao_jogar_hover.png");
         btnPlay.addListener(new ClickListener() {
             @Override
@@ -72,7 +93,6 @@ public class MainMenuScreen extends BaseScreen {
             }
         });
 
-        // BOTÃO CONFIGURAÇÕES COM HOVER
         ImageButton btnConfig = criarBotaoComHover("botao_configuracoes.png", "botao_configuracoes_hover.png");
         btnConfig.addListener(new ClickListener() {
             @Override
