@@ -42,6 +42,13 @@ public class Main extends Game {
             return;
         }
 
+        // CORREÇÃO: Atalho para o silêncio. Se já estamos no volume 0, troca a música imediatamente!
+        if (volumeAtual <= 0f) {
+            nextMusicPath = path;
+            startNextMusic();
+            return;
+        }
+
         // 3. Transição ou Inicialização
         if (currentMusic == null) {
             nextMusicPath = path;
@@ -70,6 +77,8 @@ public class Main extends Game {
 
             currentMusic = Assets.getMusic(currentMusicPath);
             currentMusic.setLooping(true);
+
+            // Garante que a nova música nasça no 0, pronta para subir se o volumeAlvo for maior que 0
             currentMusic.setVolume(0f);
             currentMusic.play();
 
@@ -96,16 +105,18 @@ public class Main extends Game {
             if (currentMusic != null) {
                 currentMusic.setVolume(volumeAtual);
             }
+        }
 
-            if (volumeAtual <= 0f && volumeAlvo == 0f) {
-                if (nextMusicPath != null) {
-                    startNextMusic();
-                } else if (currentMusicPath == null) {
-                    // CORREÇÃO AQUI: Só destrói a música se o caminho foi intencionalmente apagado (Game Over)
-                    if (currentMusic != null) {
-                        currentMusic.stop();
-                        currentMusic = null;
-                    }
+        // CORREÇÃO: Gatilho de troca e destruição tirado de dentro do if (volumeAtual != volumeAlvo).
+        // Agora ele avalia a necessidade de trocar ou parar a música em TODOS os frames que o volume estiver zerado.
+        if (volumeAtual <= 0f) {
+            if (nextMusicPath != null) {
+                startNextMusic();
+            } else if (volumeAlvo == 0f && currentMusicPath == null) {
+                // Só destrói a música se o caminho foi intencionalmente apagado (Game Over)
+                if (currentMusic != null) {
+                    currentMusic.stop();
+                    currentMusic = null;
                 }
             }
         }
