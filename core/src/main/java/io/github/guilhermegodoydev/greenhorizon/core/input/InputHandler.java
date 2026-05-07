@@ -1,5 +1,6 @@
 package io.github.guilhermegodoydev.greenhorizon.core.input;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,6 +26,16 @@ public class InputHandler extends InputAdapter {
         this.managerUI = managerUI;
         this.towerManager = towerManager;
         this.gameScreen = gameScreen; // Atribui a referência
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        // Verifica se a tecla pressionada foi o ESC
+        if (keycode == Input.Keys.ESCAPE) {
+            gameScreen.togglePause();
+            return true; // Indica que o evento foi tratado
+        }
+        return false; // Passa o evento adiante caso não seja o ESC
     }
 
     @Override
