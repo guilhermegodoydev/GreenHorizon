@@ -1,5 +1,6 @@
 package io.github.guilhermegodoydev.greenhorizon.core.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,7 +23,7 @@ public abstract class BaseScreen implements Screen {
     }
 
     @Override public void show() {}
-    @Override public void hide() {}
+    @Override public void hide() { Gdx.graphics.setCursor(Main.cursorPadrao); }
     @Override public void pause() {}
     @Override public void resume() {}
 

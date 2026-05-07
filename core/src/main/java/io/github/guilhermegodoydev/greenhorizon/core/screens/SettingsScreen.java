@@ -36,8 +36,8 @@ public class SettingsScreen extends BaseScreen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        ImageButton btnMusicMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
-        ImageButton btnMusicPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
+        ImageButton btnMusicMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir.png");
+        ImageButton btnMusicPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar.png");
 
         musicLabel = new Label("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
@@ -57,8 +57,8 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        ImageButton btnSfxMinus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_diminuir.png")));
-        ImageButton btnSfxPlus = new ImageButton(new TextureRegionDrawable(Assets.getTexture("botao_aumentar.png")));
+        ImageButton btnSfxMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir.png");
+        ImageButton btnSfxPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar.png");
 
         sfxLabel = new Label("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
@@ -79,6 +79,7 @@ public class SettingsScreen extends BaseScreen {
         ImageButton btnBack = criarBotaoComHover("botao_voltar.png", "botao_voltar_hover.png");
         btnBack.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setCursor(Main.cursorPadrao); // Segurança extra
                 game.setScreen(telaAnterior);
             }
         });
@@ -102,17 +103,23 @@ public class SettingsScreen extends BaseScreen {
 
         final ImageButton btn = new ImageButton(style);
 
-        // Listener do Hover
         btn.addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 if (pointer == -1 && btn.isTouchable()) {
+                    Gdx.graphics.setCursor(Main.cursorClick); // Troca para a mão
                     Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
+                }
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if (pointer == -1) {
+                    Gdx.graphics.setCursor(Main.cursorPadrao); // Volta ao normal
                 }
             }
         });
 
-        // Listener do Clique (Adicionado)
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

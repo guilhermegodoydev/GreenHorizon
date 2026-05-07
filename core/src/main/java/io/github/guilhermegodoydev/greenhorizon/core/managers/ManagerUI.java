@@ -1,5 +1,6 @@
 package io.github.guilhermegodoydev.greenhorizon.core.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
@@ -99,8 +101,17 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         btn.addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                // pointer == -1 garante que só mude no PC (mouse), ignorando toques no celular
                 if (pointer == -1 && btn.isTouchable()) {
+                    Gdx.graphics.setCursor(Main.cursorClick);
                     Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
+                }
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if (pointer == -1) {
+                    Gdx.graphics.setCursor(Main.cursorPadrao);
                 }
             }
         });

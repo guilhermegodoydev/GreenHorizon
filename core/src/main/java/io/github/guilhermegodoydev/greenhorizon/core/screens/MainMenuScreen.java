@@ -48,20 +48,28 @@ public class MainMenuScreen extends BaseScreen {
 
         final ImageButton btn = new ImageButton(style);
 
-        // Listener do Hover
         btn.addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 if (pointer == -1 && btn.isTouchable()) {
+                    Gdx.graphics.setCursor(Main.cursorClick); // TROCA AQUI
                     Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
+                }
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if (pointer == -1) {
+                    Gdx.graphics.setCursor(Main.cursorPadrao); // RESET AQUI
                 }
             }
         });
 
-        // Listener do Clique (Adicionado)
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                // Antes de mudar de tela, forçamos o reset para evitar a "inversão"
+                Gdx.graphics.setCursor(Main.cursorPadrao);
                 Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
             }
         });
@@ -147,6 +155,7 @@ public class MainMenuScreen extends BaseScreen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        Gdx.graphics.setCursor(Main.cursorPadrao);
 
         if (!introPlayed) {
             Assets.getSound("sfx/mainmenurootsgrowingsound.wav").play(SettingsManager.getSfxVolume());

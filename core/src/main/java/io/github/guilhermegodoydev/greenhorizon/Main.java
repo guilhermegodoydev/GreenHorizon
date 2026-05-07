@@ -3,6 +3,8 @@ package io.github.guilhermegodoydev.greenhorizon;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.MainMenuScreen;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
@@ -10,6 +12,8 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class Main extends Game {
     public SpriteBatch batch;
+    public static Cursor cursorPadrao;
+    public static Cursor cursorClick;
 
     // --- GERENCIAMENTO DE ÁUDIO ---
     private Music currentMusic;
@@ -24,7 +28,33 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+
+        // Chamada do cursor customizado antes de entrar no menu
+        configurarCursor();
+
         this.setScreen(new MainMenuScreen(this));
+    }
+
+    private void configurarCursor() {
+        try {
+            // Carrega o cursor normal
+            Pixmap pixNormal = new Pixmap(Gdx.files.internal("cursor.png"));
+            cursorPadrao = Gdx.graphics.newCursor(pixNormal, 0, 0);
+
+            // Carrega o cursor de "mãozinha" (arte nova)
+            // Se a sua mãozinha aponta para o topo, o hotspot costuma ser (8, 0) em 16x16
+            Pixmap pixClick = new Pixmap(Gdx.files.internal("cursor_hand.png"));
+            cursorClick = Gdx.graphics.newCursor(pixClick, 16, 0);
+
+            // Define o inicial
+            Gdx.graphics.setCursor(cursorPadrao);
+
+            // Limpeza obrigatória de memória RAM
+            pixNormal.dispose();
+            pixClick.dispose();
+        } catch (Exception e) {
+            Gdx.app.error("Main", "Erro ao carregar cursores: " + e.getMessage());
+        }
     }
 
     public void fadeToMusic(String path) {
@@ -129,5 +159,8 @@ public class Main extends Game {
         super.dispose();
         batch.dispose();
         Assets.dispose();
+
+        if (cursorPadrao != null) cursorPadrao.dispose();
+        if (cursorClick != null) cursorClick.dispose();
     }
 }
