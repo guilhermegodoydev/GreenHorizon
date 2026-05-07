@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.core.utils; // Ajuste o package se necessário
+package io.github.guilhermegodoydev.greenhorizon.core.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,16 +21,13 @@ public class AnimatedImage extends Image {
 
     @Override
     public void act(float delta) {
-        // O Stage chama o act() de todos os atores a cada frame.
-        // É aqui que atualizamos o tempo da animação.
         super.act(delta);
 
-        if (!animation.isAnimationFinished(stateTime)) {
-            stateTime += delta;
-        }
+        // Adicionamos o delta ao tempo contínuo sempre
+        stateTime += delta;
 
-        // Pega o frame correto para o tempo atual
-        TextureRegion currentFrame = animation.getKeyFrame(stateTime, false); // true = em loop
+        // Pega o frame correto para o tempo atual, respeitando o PlayMode configurado na animação!
+        TextureRegion currentFrame = animation.getKeyFrame(stateTime);
 
         // Atualiza o Drawable da classe Image super
         ((TextureRegionDrawable) getDrawable()).setRegion(currentFrame);
