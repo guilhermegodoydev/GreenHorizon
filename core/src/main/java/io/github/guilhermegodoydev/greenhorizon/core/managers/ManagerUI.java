@@ -42,7 +42,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private final TowerActionMenu actionMenu;
     private final GameEventListener eventListener;
     private WaveManager waveManager;
-    private TextButton btnStartWave;
+    private ImageButton btnStartWave;
     private Texture blackBackground;
 
     private final BitmapFont uiFont;
@@ -117,11 +117,9 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     private void criarBotaoStartWave() {
-        TextButton.TextButtonStyle style = createProgrammerArtStyle(Color.ORANGE);
-        btnStartWave = new TextButton("INICIAR WAVE", style);
+        btnStartWave = criarBotaoComHover("botao_start.png", "botao_start_hover.png");
 
-        btnStartWave.setSize(100, 30);
-        btnStartWave.setPosition(20, 20);
+        btnStartWave.setPosition(3, 100);
 
         btnStartWave.addListener(new ClickListener() {
             @Override
