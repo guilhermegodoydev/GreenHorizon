@@ -42,7 +42,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
 
-        enemyManager = new EnemyManager(mapHandler.getWaypoints(), lifeManager);
+        enemyManager = new EnemyManager(mapHandler.getWaypoints(), lifeManager, coinsManager);
         waveManager = new WaveManager(enemyManager);
 
         this.managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this, waveManager);

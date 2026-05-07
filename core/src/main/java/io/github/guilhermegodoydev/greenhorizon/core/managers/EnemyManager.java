@@ -4,17 +4,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 
 public class EnemyManager {
     private Array<EnemyBase> enemies;
     private Array<Vector2> waypoints;
     private LifeManager lifeManager;
+    private CoinsManager coinsManager;
 
-    public EnemyManager(Array<Vector2> waypoints, LifeManager lifeManager) {
+    public EnemyManager(Array<Vector2> waypoints, LifeManager lifeManager, CoinsManager coinsManager) {
         this.enemies = new Array<>();
         this.waypoints = waypoints;
         this.lifeManager = lifeManager;
+        this.coinsManager = coinsManager; // Inicializa aqui
     }
 
     public void spawnEnemy(String type) {
@@ -29,15 +32,20 @@ public class EnemyManager {
             EnemyBase e = enemies.get(i);
             e.update(delta);
 
-            // Se o inimigo não está mais ativo (morreu OU chegou ao fim)
             if (!e.isActive()) {
-                // Se chegou ao fim sem morrer, tira vida do jogador
-                if (!e.isDanoCausado() && e.getPosition().dst(waypoints.get(waypoints.size - 1)) < 5f) {
+                Vector2 lastWaypoint = waypoints.get(waypoints.size - 1);
+
+                // LÓGICA DE RECOMPENSA:
+                // Se ele morreu (vida <= 0) E NÃO chegou ao fim do mapa
+                if (e.getHealth() <= 0 && e.getPosition().dst(lastWaypoint) > 10f) {
+                    coinsManager.acrescentar(e.getReward());
+                }
+                // LÓGICA DE PERDA DE VIDA (Sua lógica atual melhorada)
+                else if (!e.isDanoCausado() && e.getPosition().dst(lastWaypoint) < 10f) {
                     e.setDanoCausado(true);
                     lifeManager.perderVida(1);
                 }
 
-                // Independente do motivo (morte ou fim do mapa), remove da lista
                 enemies.removeIndex(i);
             }
         }

@@ -14,6 +14,7 @@ public abstract class EnemyBase {
     protected Array<Vector2> waypoints;
     protected boolean active = true;
     private boolean danoCausado = false;
+    protected int reward;
 
     public boolean isDanoCausado() { return danoCausado; }
     public void setDanoCausado(boolean danoCausado) { this.danoCausado = danoCausado; }
@@ -55,4 +56,6 @@ public abstract class EnemyBase {
     public boolean isActive() { return active; }
     public void setHealth(int health) { this.health = health; }
     public Vector2 getPosition() { return position; }
+    public int getReward() { return reward; }
+    public int getHealth() { return health; }
 }
