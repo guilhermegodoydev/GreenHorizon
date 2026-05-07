@@ -36,8 +36,8 @@ public class SettingsScreen extends BaseScreen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        ImageButton btnMusicMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir.png");
-        ImageButton btnMusicPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar.png");
+        ImageButton btnMusicMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir_hover.png");
+        ImageButton btnMusicPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar_hover.png");
 
         musicLabel = new Label("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
@@ -57,8 +57,8 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        ImageButton btnSfxMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir.png");
-        ImageButton btnSfxPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar.png");
+        ImageButton btnSfxMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir_hover.png");
+        ImageButton btnSfxPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar_hover.png");
 
         sfxLabel = new Label("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
