@@ -85,9 +85,14 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 String tipo = (String) data[1];
 
                 int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
-                towerManager.buildTower(slot, tipo, custo, coinsManager);
 
-                Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
+                // CORREÇÃO: Utilizando getSaldoAtual()
+                if (coinsManager.getSaldoAtual() >= custo) {
+                    towerManager.buildTower(slot, tipo, custo, coinsManager);
+                    Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
+                } else {
+                    Assets.getSound("sfx/nofundssound.wav").play(SettingsManager.getSfxVolume());
+                }
                 break;
 
             case SELL_TOWER:
@@ -101,7 +106,13 @@ public class GameScreen extends BaseScreen implements GameEventListener {
             case UPGRADE_TOWER:
                 if (event.data instanceof TowerBase) {
                     TowerBase torre = (TowerBase) event.data;
-                    towerManager.upgradeTower(torre, coinsManager);
+
+                    // CORREÇÃO: Utilizando getSaldoAtual()
+                    if (coinsManager.getSaldoAtual() >= torre.getCustoUpgrade()) {
+                        towerManager.upgradeTower(torre, coinsManager);
+                    } else {
+                        Assets.getSound("sfx/nofundssound.wav").play(SettingsManager.getSfxVolume());
+                    }
                 }
                 break;
         }

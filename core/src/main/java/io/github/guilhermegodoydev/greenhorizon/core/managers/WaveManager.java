@@ -1,5 +1,7 @@
 package io.github.guilhermegodoydev.greenhorizon.core.managers;
 
+import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+
 public class WaveManager {
     private final EnemyManager enemyManager;
     private float waveTimer;
@@ -10,7 +12,7 @@ public class WaveManager {
     // NOVAS VARIÁVEIS PARA O SPAWN ESPAÇADO
     private int inimigosRestantesParaSpawnar = 0;
     private float spawnTimer = 0;
-    private final float SPAWN_DELAY = 1.0f; // 1 segundo entre cada inimigo
+    private final float SPAWN_DELAY = 1.0f; // 1 segundo entre cada inimigo (após o primeiro)
 
     public WaveManager(EnemyManager enemyManager) {
         this.enemyManager = enemyManager;
@@ -20,6 +22,8 @@ public class WaveManager {
     public void update(float delta) {
         if (!waveActive) {
             waveTimer -= delta;
+
+            // A wave começa exatamente no 0
             if (waveTimer <= 0) {
                 startNextWave();
             }
@@ -30,7 +34,7 @@ public class WaveManager {
                 if (spawnTimer <= 0) {
                     enemyManager.spawnEnemy("GAS");
                     inimigosRestantesParaSpawnar--;
-                    spawnTimer = SPAWN_DELAY;
+                    spawnTimer = SPAWN_DELAY; // Os próximos inimigos respeitam o delay padrão de 1s
                 }
             }
 
@@ -45,12 +49,16 @@ public class WaveManager {
     public void startNextWave() {
         if (waveActive) return;
 
+        // Feedback imediato: a wave começou!
+        Assets.getSound("sfx/startwavesound.wav").play(SettingsManager.getSfxVolume());
+
         waveActive = true;
         currentWave++;
 
-        // Define quantos devem nascer, mas não spawna todos de uma vez
         this.inimigosRestantesParaSpawnar = 3 + (currentWave * 2);
-        this.spawnTimer = 0; // Começa o primeiro imediatamente
+
+        // A MÁGICA: O primeiro inimigo vai esperar 0.5 segundos para nascer após o som tocar
+        this.spawnTimer = 1.0f;
     }
 
     public void setWaveActive(boolean active) { this.waveActive = active; }
