@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
@@ -48,6 +48,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private Texture blackBackground;
 
     private final BitmapFont uiFont;
+    private final GlyphLayout layout = new GlyphLayout();
 
     private Table pauseTable;
     private GameScreen gameScreen;
@@ -63,7 +64,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         this.gameScreen = gameScreen;
 
         this.uiFont = new BitmapFont();
-        this.uiFont.getData().setScale(0.7f);
+        // REDUÇÃO DRÁSTICA NA ESCALA DA FONTE DO PAINEL (de 0.7f para 0.45f)
+        this.uiFont.getData().setScale(0.45f);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(new Color(0, 0, 0, 0.6f));
@@ -73,9 +75,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
         float topo = viewport.getWorldHeight();
 
-        // REPOSICIONAMENTO E ESCALA DO HUD
-        // X = 15 para afastar da borda.
-        // Y ajustado considerando o tamanho real e a origem da escala.
         this.healthDisplay = new HealthDisplay(lifeManager, 15, topo - 30);
         this.healthDisplay.setScale(0.7f);
 
@@ -95,7 +94,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         criarBotaoStartWave();
     }
 
-    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER E CLIQUE
     private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
@@ -103,11 +101,9 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
         final ImageButton btn = new ImageButton(style);
 
-        // Listener do Hover
         btn.addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                // pointer == -1 garante que só mude no PC (mouse), ignorando toques no celular
                 if (pointer == -1 && btn.isTouchable()) {
                     Gdx.graphics.setCursor(Main.cursorClick);
                     Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
@@ -122,7 +118,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
             }
         });
 
-        // Listener do Clique
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -136,10 +131,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private void criarBotaoStartWave() {
         btnStartWave = criarBotaoComHover("botao_start.png", "botao_start_hover.png");
 
-        // NOVO POSICIONAMENTO: Canto inferior direito.
-        // Pega a largura da tela, subtrai a largura do botão e afasta um pouco (15px) da borda.
-        float btnWidth = btnStartWave.getWidth() > 0 ? btnStartWave.getWidth() : 100; // fallback caso não tenha width ainda
-        btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 15, 15);
+        float btnWidth = btnStartWave.getWidth() > 0 ? btnStartWave.getWidth() : 100;
+        btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 15, 60);
 
         btnStartWave.addListener(new ClickListener() {
             @Override
@@ -255,40 +248,51 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.act(delta);
         stage.draw();
 
-        if (!waveManager.isWaveActive() && !pausado) {
+        if (!pausado) {
             stage.getBatch().begin();
 
-            // TIMER EM FORMATO DE PÍLULA
-            int timerValue = (int)waveManager.getWaveTimer();
-            String texto = "WAVE EM: " + timerValue + "s";
+            boolean isWaveActive = waveManager.isWaveActive();
+            int displayWave = isWaveActive ? waveManager.getCurrentWave() : waveManager.getCurrentWave() + 1;
+            displayWave = Math.min(displayWave, waveManager.getTotalWaves());
+            String waveText = "WAVE " + displayWave + "/" + waveManager.getTotalWaves();
 
-            // Define a cor de tensão se faltarem menos de 5 segundos
-            if (timerValue <= 5) {
-                uiFont.setColor(Color.RED);
-            } else {
-                uiFont.setColor(Color.WHITE);
-            }
-
-            // Largura e Altura fixas para a "pílula"
-            float bgWidth = 140;
-            float bgHeight = 22;
-
-            // Centralizando no topo da tela (y = topo - margem de 10)
             float centerX = stage.getViewport().getWorldWidth() / 2f;
-            float bgX = Math.round(centerX - (bgWidth / 2f));
-            float bgY = Math.round(stage.getViewport().getWorldHeight() - bgHeight - 10);
 
-            // Desenha a tarja preta pílula
+            // CAIXA MINIMIZADA (Muito menor que antes)
+            float bgWidth = 90f; // Antes era 150f
+            float bgHeight = isWaveActive ? 16f : 30f; // Antes era 25/45
+
+            float bgX = Math.round(centerX - (bgWidth / 2f));
+            float bgY = Math.round(stage.getViewport().getWorldHeight() - bgHeight - 5f); // Mais colado no topo
+
+            // Desenha o fundo
             stage.getBatch().draw(blackBackground, bgX, bgY, bgWidth, bgHeight);
 
-            // Desenha o texto (o texto da fonte é desenhado de cima para baixo, por isso yText difere)
-            float textX = Math.round(centerX - 40);
-            float textY = Math.round(bgY + 16);
+            // Texto da Wave
+            layout.setText(uiFont, waveText);
+            float waveTextX = Math.round(centerX - (layout.width / 2f));
+            // Ajuste vertical milimétrico para caber na nova caixinha
+            float waveTextY = isWaveActive ? Math.round(bgY + 12) : Math.round(bgY + bgHeight - 4);
+            uiFont.draw(stage.getBatch(), waveText, waveTextX, waveTextY);
 
-            uiFont.draw(stage.getBatch(), texto, textX, textY);
+            // Texto do Timer
+            if (!isWaveActive) {
+                int timerValue = (int)waveManager.getWaveTimer();
+                String timerText = "INICIA EM: " + timerValue + "s";
 
-            // Retorna a cor para branco para não bugar outras fontes no futuro
-            uiFont.setColor(Color.WHITE);
+                if (timerValue <= 5) {
+                    uiFont.setColor(Color.RED);
+                } else {
+                    uiFont.setColor(Color.WHITE);
+                }
+
+                layout.setText(uiFont, timerText);
+                float timerTextX = Math.round(centerX - (layout.width / 2f));
+                float timerTextY = Math.round(bgY + 11); // Colado na base da caixinha
+
+                uiFont.draw(stage.getBatch(), timerText, timerTextX, timerTextY);
+                uiFont.setColor(Color.WHITE);
+            }
 
             stage.getBatch().end();
         }

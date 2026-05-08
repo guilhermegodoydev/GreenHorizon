@@ -21,6 +21,9 @@ import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
+// O import para a nova tela de vitória já vai assumir o mesmo pacote
+// import io.github.guilhermegodoydev.greenhorizon.core.screens.WinScreen;
+
 public class GameScreen extends BaseScreen implements GameEventListener {
     private final MapHandler mapHandler;
     private final OrthogonalTiledMapRenderer mapRenderer;
@@ -47,7 +50,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         this.managerUI = new ManagerUI(viewport, game.batch, lifeManager, coinsManager, this, this, waveManager);
 
-        // Passando "this" (a própria GameScreen) para o InputHandler
         InputHandler inputHandler = new InputHandler(viewport, mapHandler, managerUI, towerManager, this);
 
         multiplexer = new InputMultiplexer();
@@ -56,7 +58,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         Gdx.input.setInputProcessor(multiplexer);
 
-        // Solicita a transição para a música do jogo
         game.fadeToMusic("sfx/bgm.mp3");
     }
 
@@ -71,7 +72,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         managerUI.setPauseVisible(paused);
     }
 
-    // Novo getter para o InputHandler conseguir consultar o estado do jogo
     public boolean isPaused() {
         return paused;
     }
@@ -86,7 +86,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
                 int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
 
-                // CORREÇÃO: Utilizando getSaldoAtual()
                 if (coinsManager.getSaldoAtual() >= custo) {
                     towerManager.buildTower(slot, tipo, custo, coinsManager);
                     Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
@@ -107,7 +106,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 if (event.data instanceof TowerBase) {
                     TowerBase torre = (TowerBase) event.data;
 
-                    // CORREÇÃO: Utilizando getSaldoAtual()
                     if (coinsManager.getSaldoAtual() >= torre.getCustoUpgrade()) {
                         towerManager.upgradeTower(torre, coinsManager);
                     } else {
@@ -126,11 +124,18 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
+        // 1. CHECAGEM DE DERROTA
         if (lifeManager.getVidasAtuais() <= 0) {
-            // Gatilho do silêncio chamado ANTES de mudar a tela
             game.fadeToMusic(null);
-
             game.setScreen(new GameOverScreen(game));
+            this.dispose();
+            return;
+        }
+
+        // 2. NOVA CHECAGEM DE VITÓRIA
+        if (waveManager.isGameWon()) {
+            game.fadeToMusic(null);
+            game.setScreen(new WinScreen(game)); // Redireciona para a tela que criamos
             this.dispose();
             return;
         }
