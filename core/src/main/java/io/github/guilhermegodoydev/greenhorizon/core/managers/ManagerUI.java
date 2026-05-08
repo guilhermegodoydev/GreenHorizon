@@ -73,8 +73,14 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
         float topo = viewport.getWorldHeight();
 
-        this.healthDisplay = new HealthDisplay(lifeManager, 20, topo - 40);
-        this.coinsDisplay = new CoinsDisplay(coinsManager, 20, topo - 75);
+        // REPOSICIONAMENTO E ESCALA DO HUD
+        // X = 15 para afastar da borda.
+        // Y ajustado considerando o tamanho real e a origem da escala.
+        this.healthDisplay = new HealthDisplay(lifeManager, 15, topo - 30);
+        this.healthDisplay.setScale(0.7f);
+
+        this.coinsDisplay = new CoinsDisplay(coinsManager, 15, topo - 55);
+        this.coinsDisplay.setScale(0.7f);
 
         this.actionMenu = new TowerActionMenu(this);
         this.constructionMenu = new ConstructionMenu(this);
@@ -116,7 +122,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
             }
         });
 
-        // Listener do Clique (Adicionado)
+        // Listener do Clique
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -130,7 +136,10 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private void criarBotaoStartWave() {
         btnStartWave = criarBotaoComHover("botao_start.png", "botao_start_hover.png");
 
-        btnStartWave.setPosition(3, 100);
+        // NOVO POSICIONAMENTO: Canto inferior direito.
+        // Pega a largura da tela, subtrai a largura do botão e afasta um pouco (15px) da borda.
+        float btnWidth = btnStartWave.getWidth() > 0 ? btnStartWave.getWidth() : 100; // fallback caso não tenha width ainda
+        btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 15, 15);
 
         btnStartWave.addListener(new ClickListener() {
             @Override
@@ -204,19 +213,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         }
     }
 
-    private TextButton.TextButtonStyle createProgrammerArtStyle(Color cor) {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(cor);
-        pixmap.fill();
-
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.up = new TextureRegionDrawable(new Texture(pixmap));
-        style.font = uiFont;
-
-        pixmap.dispose();
-        return style;
-    }
-
     @Override
     public void onTowerSelected(String tipo) {
         if (tipo.equals("Vender")) {
@@ -261,13 +257,38 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
         if (!waveManager.isWaveActive() && !pausado) {
             stage.getBatch().begin();
-            String texto = "PROXIMA WAVE EM: " + (int)waveManager.getWaveTimer() + "s";
 
-            float x = stage.getViewport().getWorldWidth() / 2 - 80;
-            float y = stage.getViewport().getWorldHeight() - 20;
+            // TIMER EM FORMATO DE PÍLULA
+            int timerValue = (int)waveManager.getWaveTimer();
+            String texto = "WAVE EM: " + timerValue + "s";
 
-            stage.getBatch().draw(blackBackground, x - 5, y - 15, 170, 25);
-            uiFont.draw(stage.getBatch(), texto, x, y);
+            // Define a cor de tensão se faltarem menos de 5 segundos
+            if (timerValue <= 5) {
+                uiFont.setColor(Color.RED);
+            } else {
+                uiFont.setColor(Color.WHITE);
+            }
+
+            // Largura e Altura fixas para a "pílula"
+            float bgWidth = 140;
+            float bgHeight = 22;
+
+            // Centralizando no topo da tela (y = topo - margem de 10)
+            float centerX = stage.getViewport().getWorldWidth() / 2f;
+            float bgX = Math.round(centerX - (bgWidth / 2f));
+            float bgY = Math.round(stage.getViewport().getWorldHeight() - bgHeight - 10);
+
+            // Desenha a tarja preta pílula
+            stage.getBatch().draw(blackBackground, bgX, bgY, bgWidth, bgHeight);
+
+            // Desenha o texto (o texto da fonte é desenhado de cima para baixo, por isso yText difere)
+            float textX = Math.round(centerX - 40);
+            float textY = Math.round(bgY + 16);
+
+            uiFont.draw(stage.getBatch(), texto, textX, textY);
+
+            // Retorna a cor para branco para não bugar outras fontes no futuro
+            uiFont.setColor(Color.WHITE);
 
             stage.getBatch().end();
         }

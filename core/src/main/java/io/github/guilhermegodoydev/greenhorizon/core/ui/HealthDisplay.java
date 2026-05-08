@@ -26,6 +26,8 @@ public class HealthDisplay extends Actor {
         Texture spriteSheet = Assets.getTexture("animacao_perdendo_vida.png");
 
         this.fonte = new BitmapFont();
+        // A fonte também precisa ser escalada internamente para acompanhar o tamanho
+        this.fonte.getData().setScale(1.0f);
 
         int larguraFrame = spriteSheet.getWidth() / 4;
         int alturaFrame = spriteSheet.getHeight();
@@ -35,7 +37,6 @@ public class HealthDisplay extends Actor {
         }
 
         setSize(60, 25);
-
         setPosition(x,y);
     }
 
@@ -61,13 +62,18 @@ public class HealthDisplay extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         float x = getX();
         float y = getY();
+        float scaleX = getScaleX();
+        float scaleY = getScaleY();
 
-        batch.draw(imgBarra, x, y, getWidth(), getHeight());
+        // Multiplicando as larguras e alturas pela escala configurada no construtor da ManagerUI
+        batch.draw(imgBarra, x, y, getWidth() * scaleX, getHeight() * scaleY);
 
         int frameAtual = estaSofrendoDano ? (int)(tempoAnimacao / 0.1f) : 0;
-        batch.draw(framesCoracao[frameAtual], x + 5, y + 6, 16, 16);
+        batch.draw(framesCoracao[frameAtual], x + (5 * scaleX), y + (6 * scaleY), 16 * scaleX, 16 * scaleY);
 
-        fonte.draw(batch, "X " + lifeManager.getVidasAtuais(), x + 25, y + 18);
+        // A fonte já está com getData().setScale(scaleX), só ajustamos o posicionamento dela
+        fonte.getData().setScale(scaleX);
+        fonte.draw(batch, "X " + lifeManager.getVidasAtuais(), x + (25 * scaleX), y + (18 * scaleY));
     }
 
     public void dispose() {
