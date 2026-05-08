@@ -10,21 +10,26 @@ public class EnemyPlasticBag extends EnemyBase {
 
     public EnemyPlasticBag(Array<Vector2> waypoints) {
         super(waypoints);
-        this.texture = Assets.getTexture("gas.png");
+        // TEXTURA ATUALIZADA PARA O ASSET OFICIAL
+        this.texture = Assets.getTexture("plasticbag.png");
         this.speed = 50f;
         this.health = 100;
-        this.reward = 20; // RECOMPENSA REDUZIDA (era 35)
+        this.reward = 20;
     }
 
     @Override
     public void render(SpriteBatch batch) {
+        // Lógica de Feedback Visual mantida
         if (blinkTimer > 0) {
             batch.setColor(Color.RED);
         } else {
-            batch.setColor(Color.LIGHT_GRAY);
+            // Removido o filtro cinza de teste, agora exibe a cor natural da imagem
+            batch.setColor(Color.WHITE);
         }
 
         batch.draw(texture, position.x - texture.getWidth()/2f, position.y - texture.getHeight()/2f);
+
+        // Reseta a cor para não pintar o resto do jogo
         batch.setColor(Color.WHITE);
     }
 
