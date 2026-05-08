@@ -21,9 +21,6 @@ import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
-// O import para a nova tela de vitória já vai assumir o mesmo pacote
-// import io.github.guilhermegodoydev.greenhorizon.core.screens.WinScreen;
-
 public class GameScreen extends BaseScreen implements GameEventListener {
     private final MapHandler mapHandler;
     private final OrthogonalTiledMapRenderer mapRenderer;
@@ -40,7 +37,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
         super(game);
 
         lifeManager = new LifeManager(10);
-        coinsManager = new CoinsManager(500);
+        // INFLAÇÃO AJUSTADA: Começa apenas com 200 moedas
+        coinsManager = new CoinsManager(200);
         mapHandler = new MapHandler("mapa.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(mapHandler.getTiledMap());
         towerManager = new TowerManager();
@@ -124,7 +122,6 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        // 1. CHECAGEM DE DERROTA
         if (lifeManager.getVidasAtuais() <= 0) {
             game.fadeToMusic(null);
             game.setScreen(new GameOverScreen(game));
@@ -132,10 +129,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
             return;
         }
 
-        // 2. NOVA CHECAGEM DE VITÓRIA
         if (waveManager.isGameWon()) {
             game.fadeToMusic(null);
-            game.setScreen(new WinScreen(game)); // Redireciona para a tela que criamos
+            game.setScreen(new WinScreen(game));
             this.dispose();
             return;
         }

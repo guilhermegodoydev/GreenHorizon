@@ -12,11 +12,15 @@ public class WaveManager {
     private final int TOTAL_WAVES = 10;
     private int inimigosRestantesParaSpawnar = 0;
     private float spawnTimer = 0;
-    private final float SPAWN_DELAY = 1.0f;
 
     public WaveManager(EnemyManager enemyManager) {
         this.enemyManager = enemyManager;
         this.waveTimer = 10f;
+    }
+
+    // NOVA LÓGICA DE PRESSÃO: O tempo de spawn diminui a cada wave
+    private float getDynamicSpawnDelay() {
+        return Math.max(0.5f, 1.0f - (currentWave * 0.05f));
     }
 
     public void update(float delta) {
@@ -31,18 +35,17 @@ public class WaveManager {
             if (inimigosRestantesParaSpawnar > 0) {
                 spawnTimer -= delta;
                 if (spawnTimer <= 0) {
-                    // INTELIGÊNCIA DA WAVE
                     String tipoInimigo = "GAS";
 
-                    // A partir da Wave 4, 30% de chance de nascer uma SACOLA
                     if (currentWave >= 4 && Math.random() <= 0.3f) {
                         tipoInimigo = "SACOLA";
                     }
 
-                    // Passamos a currentWave para o inimigo saber quanto de vida bônus ele tem
                     enemyManager.spawnEnemy(tipoInimigo, currentWave);
                     inimigosRestantesParaSpawnar--;
-                    spawnTimer = SPAWN_DELAY;
+
+                    // Aplica o delay dinâmico e mais rápido!
+                    spawnTimer = getDynamicSpawnDelay();
                 }
             }
 
@@ -61,9 +64,10 @@ public class WaveManager {
         waveActive = true;
         currentWave++;
 
-        // Aumentando exponencialmente o número de inimigos para pressionar o jogador
         this.inimigosRestantesParaSpawnar = 5 + (currentWave * 3);
-        this.spawnTimer = 1.0f;
+
+        // Aplica o delay dinâmico no primeiro inimigo
+        this.spawnTimer = getDynamicSpawnDelay();
     }
 
     public boolean isGameWon() {

@@ -10,24 +10,21 @@ public class EnemyPlasticBag extends EnemyBase {
 
     public EnemyPlasticBag(Array<Vector2> waypoints) {
         super(waypoints);
-        this.texture = Assets.getTexture("gas.png"); // Placeholder
-        this.speed = 50f; // Muito mais lento que o Gás
-        this.health = 100; // 5x mais vida
-        this.reward = 35; // Recompensa gorda
+        this.texture = Assets.getTexture("gas.png");
+        this.speed = 50f;
+        this.health = 100;
+        this.reward = 20; // RECOMPENSA REDUZIDA (era 35)
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        // Lógica de Feedback Visual (Piscar Vermelho)
         if (blinkTimer > 0) {
             batch.setColor(Color.RED);
         } else {
-            batch.setColor(Color.LIGHT_GRAY); // A cor Graybox da Sacola
+            batch.setColor(Color.LIGHT_GRAY);
         }
 
         batch.draw(texture, position.x - texture.getWidth()/2f, position.y - texture.getHeight()/2f);
-
-        // Reseta a cor para não pintar o resto do jogo de cinza
         batch.setColor(Color.WHITE);
     }
 

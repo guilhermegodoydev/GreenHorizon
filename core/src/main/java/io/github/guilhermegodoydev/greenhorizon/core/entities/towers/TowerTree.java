@@ -15,7 +15,7 @@ public class TowerTree extends TowerBase {
             new Sprite(Assets.getTexture("torre_arvore_nivel1.png")),
             x,
             y,
-            10f, // DANO NÍVEL 1: 10
+            10f,
             80f,
             1.2f,
             slot
@@ -30,20 +30,20 @@ public class TowerTree extends TowerBase {
 
     @Override
     public int getCustoUpgrade() {
-        if (nivel == 1) return 30;
-        if (nivel == 2) return 60;
+        if (nivel == 1) return 50; // NOVO PREÇO LV2
+        if (nivel == 2) return 100; // NOVO PREÇO LV3
         return 9999;
     }
 
     @Override
     public void aplicarMelhoriaStatus() {
-        this.range += 10f; // Aumenta o alcance
+        this.range += 10f;
 
         if (this.nivel == 2) {
-            this.damage = 15f; // DANO NÍVEL 2: 15
+            this.damage = 15f;
             this.sprite.setRegion(Assets.getTexture("torre_arvore_nivel2.png"));
         } else if (this.nivel == 3) {
-            this.damage = 25f; // DANO NÍVEL 3: 25
+            this.damage = 25f;
             this.sprite.setRegion(Assets.getTexture("torre_arvore_nivel3.png"));
         }
 
