@@ -66,4 +66,8 @@ public abstract class EnemyBase {
     public Vector2 getPosition() { return position; }
     public int getReward() { return reward; }
     public int getHealth() { return health; }
+
+    // --- NOVOS GETTERS PARA A IA DA TORRE ---
+    public int getCurrentWaypointIndex() { return currentWaypointIndex; }
+    public Array<Vector2> getWaypoints() { return waypoints; }
 }

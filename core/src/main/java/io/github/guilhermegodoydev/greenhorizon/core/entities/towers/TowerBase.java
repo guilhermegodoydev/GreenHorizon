@@ -33,7 +33,6 @@ public abstract class TowerBase {
         this.sprite.setPosition(x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);
     }
 
-    // ATUALIZADO: Agora o método recebe delta, a lista de inimigos e a lista de projéteis
     public void update(float delta, Array<EnemyBase> enemies, Array<Projectile> projectiles) {
         cooldownTimer += delta;
         if (cooldownTimer >= fireRate) {
@@ -45,13 +44,33 @@ public abstract class TowerBase {
         }
     }
 
+    // --- NOVA LÓGICA DE MIRA: TARGET FIRST ---
     private EnemyBase findTarget(Array<EnemyBase> enemies) {
+        EnemyBase bestTarget = null;
+        float furthestProgress = -1;
+
         for (EnemyBase enemy : enemies) {
+            // Só analisa inimigos que estão ativos e dentro do alcance circular da torre
             if (enemy.isActive() && position.dst(enemy.getPosition()) <= range) {
-                return enemy;
+
+                // Evita crash caso o inimigo já tenha chegado no último waypoint
+                if (enemy.getCurrentWaypointIndex() < enemy.getWaypoints().size) {
+
+                    Vector2 nextWaypoint = enemy.getWaypoints().get(enemy.getCurrentWaypointIndex());
+                    float distanceToNext = enemy.getPosition().dst(nextWaypoint);
+
+                    // Cálculo de progresso: O índice do waypoint tem um peso gigante (1000)
+                    // Subtraímos a distância até ele (quem está mais perto do waypoint tem um progresso maior)
+                    float progress = (enemy.getCurrentWaypointIndex() * 1000) - distanceToNext;
+
+                    if (progress > furthestProgress) {
+                        furthestProgress = progress;
+                        bestTarget = enemy;
+                    }
+                }
             }
         }
-        return null;
+        return bestTarget;
     }
 
     public abstract void attack(EnemyBase target, Array<Projectile> projectiles);
