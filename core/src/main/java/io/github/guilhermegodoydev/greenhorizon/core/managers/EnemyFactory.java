@@ -9,6 +9,8 @@ public class EnemyFactory {
         switch (type.toUpperCase()) {
             case "GAS":
                 return new EnemyGas(waypoints);
+            case "SACOLA":
+                return new EnemyPlasticBag(waypoints);
             default:
                 return null;
         }

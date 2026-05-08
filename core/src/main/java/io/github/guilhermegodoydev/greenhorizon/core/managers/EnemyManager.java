@@ -17,12 +17,17 @@ public class EnemyManager {
         this.enemies = new Array<>();
         this.waypoints = waypoints;
         this.lifeManager = lifeManager;
-        this.coinsManager = coinsManager; // Inicializa aqui
+        this.coinsManager = coinsManager;
     }
 
-    public void spawnEnemy(String type) {
+    // AGORA RECEBE A WAVE ATUAL PARA CALCULAR O HP
+    public void spawnEnemy(String type, int currentWave) {
         EnemyBase newEnemy = EnemyFactory.createEnemy(type, waypoints);
         if (newEnemy != null) {
+            // A MÁGICA DO BALANCEAMENTO: +15% de HP a cada Wave
+            float hpMultiplier = 1f + ((currentWave - 1) * 0.15f);
+            newEnemy.setHealth((int) (newEnemy.getHealth() * hpMultiplier));
+
             enemies.add(newEnemy);
         }
     }
@@ -35,13 +40,9 @@ public class EnemyManager {
             if (!e.isActive()) {
                 Vector2 lastWaypoint = waypoints.get(waypoints.size - 1);
 
-                // LÓGICA DE RECOMPENSA:
-                // Se ele morreu (vida <= 0) E NÃO chegou ao fim do mapa
                 if (e.getHealth() <= 0 && e.getPosition().dst(lastWaypoint) > 10f) {
                     coinsManager.acrescentar(e.getReward());
-                }
-                // LÓGICA DE PERDA DE VIDA (Sua lógica atual melhorada)
-                else if (!e.isDanoCausado() && e.getPosition().dst(lastWaypoint) < 10f) {
+                } else if (!e.isDanoCausado() && e.getPosition().dst(lastWaypoint) < 10f) {
                     e.setDanoCausado(true);
                     lifeManager.perderVida(1);
                 }

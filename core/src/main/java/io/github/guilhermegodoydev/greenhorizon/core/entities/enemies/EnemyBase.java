@@ -16,6 +16,9 @@ public abstract class EnemyBase {
     private boolean danoCausado = false;
     protected int reward;
 
+    // NOVA VARIÁVEL: Controla o tempo que o inimigo fica vermelho
+    protected float blinkTimer = 0f;
+
     public boolean isDanoCausado() { return danoCausado; }
     public void setDanoCausado(boolean danoCausado) { this.danoCausado = danoCausado; }
 
@@ -25,6 +28,11 @@ public abstract class EnemyBase {
     }
 
     public void update(float delta) {
+        // Lógica do blink: diminui o timer se for maior que zero
+        if (blinkTimer > 0) {
+            blinkTimer -= delta;
+        }
+
         if (currentWaypointIndex < waypoints.size) {
             Vector2 target = waypoints.get(currentWaypointIndex);
             Vector2 direction = target.cpy().sub(position).nor();
@@ -44,12 +52,12 @@ public abstract class EnemyBase {
 
     public void takeDamage(int damage) {
         this.health -= damage;
+        this.blinkTimer = 0.15f; // PISCA POR 0.15 SEGUNDOS
+
         if (this.health <= 0) {
             this.health = 0;
             this.active = false; // Isso fará com que o EnemyManager o remova no próximo update
             System.out.println(this.getClass().getSimpleName() + " foi destruído!");
-
-            // Aqui você pode adicionar lógica de recompensa depois, ex: coinsManager.add(10);
         }
     }
 
