@@ -6,7 +6,8 @@ import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerSolar; // IMPORT NOVO
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerSolar;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerWind; // IMPORT DA EÓLICA ADICIONADO AQUI!
 import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
@@ -39,10 +40,10 @@ public class TowerManager {
 
             if (tipo.equalsIgnoreCase("Arvore")) {
                 newTower = new TowerTree(slot.getCenterX(), slot.getCenterY(), slot);
-            }
-            // ADICIONADO: Construtor da Torre Solar
-            else if (tipo.equalsIgnoreCase("Solar")) {
+            } else if (tipo.equalsIgnoreCase("Solar")) {
                 newTower = new TowerSolar(slot.getCenterX(), slot.getCenterY(), slot);
+            } else if (tipo.equalsIgnoreCase("Eolica")) {
+                newTower = new TowerWind(slot.getCenterX(), slot.getCenterY(), slot);
             }
 
             if (newTower != null) {
@@ -50,12 +51,11 @@ public class TowerManager {
                 slot.setOccupied(true);
                 System.out.println("Torre " + tipo + " construída! Custo: " + custo);
             }
-        } catch(InsufficientFundsException e ) {
+        } catch (InsufficientFundsException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    // ATUALIZADO: Agora recebe e repassa o CoinsManager
     public void update(float delta, Array<EnemyBase> enemies, CoinsManager coinsManager) {
         for (TowerBase tower : towers) {
             tower.update(delta, enemies, projectiles, coinsManager);
