@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerSolar; // IMPORT ADICIONADO
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
@@ -82,7 +83,15 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 TowerSlot slot = (TowerSlot) data[0];
                 String tipo = (String) data[1];
 
-                int custo = tipo.equalsIgnoreCase("Arvore") ? TowerTree.CUSTO : 100;
+                // AJUSTE: Identifica qual torre está sendo construída para cobrar o valor correto
+                int custo;
+                if (tipo.equalsIgnoreCase("Arvore")) {
+                    custo = TowerTree.CUSTO;
+                } else if (tipo.equalsIgnoreCase("Solar")) {
+                    custo = TowerSolar.CUSTO;
+                } else {
+                    custo = 100; // Fallback para segurança
+                }
 
                 if (coinsManager.getSaldoAtual() >= custo) {
                     towerManager.buildTower(slot, tipo, custo, coinsManager);
@@ -138,7 +147,8 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
         if (!paused) {
             camera.update();
-            towerManager.update(delta, enemyManager.getEnemies());
+            // AJUSTE CRUCIAL: Passando o coinsManager para as torres poderem gerar dinheiro
+            towerManager.update(delta, enemyManager.getEnemies(), coinsManager);
             waveManager.update(delta);
             enemyManager.update(delta);
         }

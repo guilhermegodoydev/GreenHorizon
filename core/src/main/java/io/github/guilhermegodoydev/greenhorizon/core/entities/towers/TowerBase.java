@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
+import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager; // IMPORT NECESSÁRIO
 
 public abstract class TowerBase {
     protected Sprite sprite;
@@ -33,7 +34,13 @@ public abstract class TowerBase {
         this.sprite.setPosition(x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);
     }
 
-    public void update(float delta, Array<EnemyBase> enemies, Array<Projectile> projectiles) {
+    // MÉTODO NOVO: Define se a torre procura alvos e atira (padrão: sim)
+    public boolean isAtacante() { return true; }
+
+    // ATUALIZADO: Recebe o CoinsManager para torres que geram dinheiro
+    public void update(float delta, Array<EnemyBase> enemies, Array<Projectile> projectiles, CoinsManager coinsManager) {
+        if (!isAtacante()) return; // Torres passivas (como a Solar) sobresscrevem esse método
+
         cooldownTimer += delta;
         if (cooldownTimer >= fireRate) {
             EnemyBase target = findTarget(enemies);
@@ -44,23 +51,15 @@ public abstract class TowerBase {
         }
     }
 
-    // --- NOVA LÓGICA DE MIRA: TARGET FIRST ---
     private EnemyBase findTarget(Array<EnemyBase> enemies) {
         EnemyBase bestTarget = null;
         float furthestProgress = -1;
 
         for (EnemyBase enemy : enemies) {
-            // Só analisa inimigos que estão ativos e dentro do alcance circular da torre
             if (enemy.isActive() && position.dst(enemy.getPosition()) <= range) {
-
-                // Evita crash caso o inimigo já tenha chegado no último waypoint
                 if (enemy.getCurrentWaypointIndex() < enemy.getWaypoints().size) {
-
                     Vector2 nextWaypoint = enemy.getWaypoints().get(enemy.getCurrentWaypointIndex());
                     float distanceToNext = enemy.getPosition().dst(nextWaypoint);
-
-                    // Cálculo de progresso: O índice do waypoint tem um peso gigante (1000)
-                    // Subtraímos a distância até ele (quem está mais perto do waypoint tem um progresso maior)
                     float progress = (enemy.getCurrentWaypointIndex() * 1000) - distanceToNext;
 
                     if (progress > furthestProgress) {
