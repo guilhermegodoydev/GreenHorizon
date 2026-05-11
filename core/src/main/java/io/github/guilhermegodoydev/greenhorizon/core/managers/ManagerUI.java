@@ -132,7 +132,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         btnStartWave = criarBotaoComHover("botao_start.png", "botao_start_hover.png");
 
         float btnWidth = btnStartWave.getWidth() > 0 ? btnStartWave.getWidth() : 100;
-        btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 15, 60);
+        btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 98, 216);
 
         btnStartWave.addListener(new ClickListener() {
             @Override
@@ -146,7 +146,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
     private void criarBotaoEngrenagem() {
         btnPause = criarBotaoComHover("botao_pause.png", "botao_pause_hover.png");
-        btnPause.setPosition(stage.getViewport().getWorldWidth() - 50, stage.getViewport().getWorldHeight() - 40);
+        btnPause.setPosition(stage.getViewport().getWorldWidth() - 51, stage.getViewport().getWorldHeight() - 33);
 
         btnPause.addListener(new ClickListener() {
             @Override
