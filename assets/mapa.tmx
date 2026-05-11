@@ -35,15 +35,18 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="SlotsTorres" visible="0">
-  <object id="33" name="slot1" type="slot" x="32" y="160" width="15.75" height="15.875"/>
-  <object id="34" name="slot2" type="slot" x="144" y="160" width="15.6667" height="15.3333"/>
-  <object id="35" name="slot3" type="slot" x="143.667" y="112.333" width="16.6667" height="15.6667"/>
-  <object id="41" name="slot4" type="slot" x="160" y="79.6667" width="16.6667" height="15.6667"/>
-  <object id="42" name="slot5" type="slot" x="208" y="95.6667" width="15.3333" height="15.6667"/>
-  <object id="43" name="slot6" type="slot" x="192" y="144" width="15.6667" height="15.3333"/>
-  <object id="44" name="slot7" type="slot" x="160.333" y="208" width="15.3333" height="15.3333"/>
-  <object id="45" name="slot8" type="slot" x="208" y="208.667" width="16.3333" height="14.6667"/>
-  <object id="46" name="slot9" type="slot" x="240" y="208.333" width="15.6667" height="16"/>
-  <object id="47" name="slot10" type="slot" x="272" y="176" width="16.6667" height="14.6667"/>
+  <object id="33" name="slot1" type="slot" x="32" y="128" width="15.75" height="15.875"/>
+  <object id="34" name="slot2" type="slot" x="96" y="160" width="15.6667" height="15.3333"/>
+  <object id="35" name="slot3" type="slot" x="144" y="144" width="16.6667" height="15.6667"/>
+  <object id="41" name="slot4" type="slot" x="144" y="96" width="16.6667" height="15.6667"/>
+  <object id="42" name="slot5" type="slot" x="176" y="80" width="15.3333" height="15.6667"/>
+  <object id="43" name="slot6" type="slot" x="208" y="112" width="15.6667" height="15.3333"/>
+  <object id="44" name="slot7" type="slot" x="176" y="112" width="15.3333" height="15.3333"/>
+  <object id="45" name="slot8" type="slot" x="160" y="176" width="16.3333" height="14.6667"/>
+  <object id="46" name="slot9" type="slot" x="208" y="176" width="15.6667" height="16"/>
+  <object id="47" name="slot10" type="slot" x="290" y="176" width="16.6667" height="14.6667"/>
+   <object id="48" name="slot11" type="slot" x="176" y="208" width="16.6667" height="14.6667"/>
+   <object id="48" name="slot12" type="slot" x="256" y="208" width="16.6667" height="14.6667"/>
+   <object id="48" name="slot13" type="slot" x="240" y="160" width="16.6667" height="14.6667"/>
  </objectgroup>
 </map>
