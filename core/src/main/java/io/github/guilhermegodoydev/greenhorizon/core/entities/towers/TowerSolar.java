@@ -20,7 +20,7 @@ public class TowerSolar extends TowerBase {
 
     public TowerSolar(float x, float y, TowerSlot slot) {
         super(
-            new Sprite(Assets.getTexture("torre_arvore_nivel1.png")), // Placeholder
+            new Sprite(Assets.getTexture("torre_solar_nivel1.png")), // Placeholder
             x,
             y,
             0f, // Sem dano
@@ -66,10 +66,15 @@ public class TowerSolar extends TowerBase {
         if (this.nivel == 2) {
             this.moneyAmount = 25;
             this.productionInterval = 8f;
+            this.sprite.setRegion(Assets.getTexture("torre_solar_nivel2.png"));
         } else if (this.nivel == 3) {
             this.moneyAmount = 50;
             this.productionInterval = 6f;
+            this.sprite.setRegion(Assets.getTexture("torre_solar_nivel3.png"));
         }
+
+        this.sprite.setSize(this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
+
     }
 
     @Override
