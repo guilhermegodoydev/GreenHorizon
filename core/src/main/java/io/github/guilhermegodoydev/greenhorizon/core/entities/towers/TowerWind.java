@@ -16,7 +16,7 @@ public class TowerWind extends TowerBase {
 
     public TowerWind(float x, float y, TowerSlot slot) {
         super(
-            new Sprite(Assets.getTexture("torre_arvore_nivel1.png")),
+            new Sprite(Assets.getTexture("torre_eolica_nivel1.png")),
             x, y, 0f,
             120f, // Alcance grande!
             0f, slot
@@ -47,10 +47,15 @@ public class TowerWind extends TowerBase {
         if (nivel == 2) {
             this.slowFactor = 0.45f;
             this.range += 20f;
+            this.sprite.setRegion(Assets.getTexture("torre_eolica_nivel2.png"));
         } else if (nivel == 3) {
             this.slowFactor = 0.3f;
             this.range += 30f;
+            this.sprite.setRegion(Assets.getTexture("torre_eolica_nivel3.png"));
         }
+
+        this.sprite.setSize(this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
+
     }
 
     @Override
