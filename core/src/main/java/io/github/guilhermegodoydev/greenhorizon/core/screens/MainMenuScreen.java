@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import io.github.guilhermegodoydev.greenhorizon.Main;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.AnimatedImage;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;

@@ -1,12 +1,11 @@
-package io.github.guilhermegodoydev.greenhorizon.core.entities.towers;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.EnemyBase;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 
 public abstract class AttackTower extends TowerBase {
     private float damage;

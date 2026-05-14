@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.core.managers;
+package io.github.guilhermegodoydev.greenhorizon.core.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;

@@ -1,15 +1,12 @@
-package io.github.guilhermegodoydev.greenhorizon.core.managers;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerSolar;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerWind;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.EnemyBase;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.Projectile;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 
 public class TowerManager {

@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.core.entities.enemies;
+package io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;

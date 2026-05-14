@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.core.ui.menu;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower.ui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public abstract class MenuBase extends Table {

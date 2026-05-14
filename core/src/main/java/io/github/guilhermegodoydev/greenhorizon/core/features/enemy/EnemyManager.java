@@ -1,11 +1,11 @@
-package io.github.guilhermegodoydev.greenhorizon.core.managers;
+package io.github.guilhermegodoydev.greenhorizon.core.features.enemy;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.EnemyBase;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.LifeManager;
 
 public class EnemyManager {
     private Array<EnemyBase> enemies;

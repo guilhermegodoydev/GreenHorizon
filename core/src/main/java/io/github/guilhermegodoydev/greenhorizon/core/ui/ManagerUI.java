@@ -1,15 +1,12 @@
-package io.github.guilhermegodoydev.greenhorizon.core.managers;
+package io.github.guilhermegodoydev.greenhorizon.core.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -18,23 +15,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.guilhermegodoydev.greenhorizon.Main;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.WaveManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.ui.TowerSelectionListener;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.GameScreen;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.MainMenuScreen;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.SettingsScreen;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.ConstructionMenu;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.HealthDisplay;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.menu.TowerActionMenu;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
-import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.ui.ConstructionMenu;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.ui.TowerActionMenu;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.CoinsDisplay;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.LifeManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 
 public class ManagerUI implements TowerSelectionListener, Disposable {

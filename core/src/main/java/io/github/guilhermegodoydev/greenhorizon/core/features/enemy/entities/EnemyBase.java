@@ -1,4 +1,4 @@
-package io.github.guilhermegodoydev.greenhorizon.core.entities.enemies;
+package io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.MainMenuScreen;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class Main extends Game {

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 
 public class CoinsDisplay extends Actor {
     private final Texture barTexture;

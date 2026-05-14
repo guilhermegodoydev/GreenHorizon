@@ -1,14 +1,13 @@
-package io.github.guilhermegodoydev.greenhorizon.core.entities.towers;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles.Projectile;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.EnemyBase;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
-import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 
 public class TowerSolar extends TowerBase {
     public static final int COST = 150;

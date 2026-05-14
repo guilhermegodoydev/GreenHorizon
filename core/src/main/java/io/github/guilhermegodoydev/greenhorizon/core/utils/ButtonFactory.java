@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.guilhermegodoydev.greenhorizon.Main;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 
 public class ButtonFactory {
 

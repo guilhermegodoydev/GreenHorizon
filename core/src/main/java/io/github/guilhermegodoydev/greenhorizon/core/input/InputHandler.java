@@ -4,11 +4,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.TowerManager;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.TowerManager;
 import io.github.guilhermegodoydev.greenhorizon.core.map.MapHandler;
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.ManagerUI;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
+import io.github.guilhermegodoydev.greenhorizon.core.ui.ManagerUI;
+import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.screens.GameScreen;
 
 public class InputHandler extends InputAdapter {

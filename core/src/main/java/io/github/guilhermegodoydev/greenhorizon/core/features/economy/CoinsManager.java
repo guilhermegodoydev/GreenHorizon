@@ -1,7 +1,7 @@
-package io.github.guilhermegodoydev.greenhorizon.core.itens;
+package io.github.guilhermegodoydev.greenhorizon.core.features.economy;
 
 import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFundsException;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class CoinsManager {

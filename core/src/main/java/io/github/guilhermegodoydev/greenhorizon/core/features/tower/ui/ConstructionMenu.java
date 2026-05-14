@@ -1,8 +1,7 @@
-package io.github.guilhermegodoydev.greenhorizon.core.ui.menu;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 
 public class ConstructionMenu extends MenuBase {
     public ConstructionMenu(TowerSelectionListener listener) {

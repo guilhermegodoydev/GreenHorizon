@@ -1,7 +1,7 @@
-package io.github.guilhermegodoydev.greenhorizon.core.managers;
+package io.github.guilhermegodoydev.greenhorizon.core.features.enemy;
 
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
-import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.SettingsManager;
 
 public class WaveManager {
     private final EnemyManager enemyManager;

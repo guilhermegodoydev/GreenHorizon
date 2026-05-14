@@ -1,9 +1,9 @@
-package io.github.guilhermegodoydev.greenhorizon.core.entities.projectiles;
+package io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.enemies.EnemyBase;
+import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.EnemyBase;
 
 public class Projectile {
     private Sprite sprite;
