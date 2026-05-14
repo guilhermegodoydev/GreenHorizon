@@ -14,8 +14,4 @@ public class EnemyGas extends EnemyBase {
         setReward(8);
     }
 
-    @Override
-    protected void reachedEnd() {
-        System.out.println("The polluting gas reached the city!");
-    }
 }

@@ -34,8 +34,4 @@ public class CoinsManager {
         return currentBalance;
     }
 
-    public void setCurrentBalance(int newBalance) {
-        this.currentBalance = newBalance;
-        System.out.println("Balance set to: " + currentBalance);
-    }
 }

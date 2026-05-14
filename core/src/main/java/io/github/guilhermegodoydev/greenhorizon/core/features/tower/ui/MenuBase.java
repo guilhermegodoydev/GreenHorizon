@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public abstract class MenuBase extends Table {
-    protected TowerSelectionListener listener;
-    protected BitmapFont menuFont;
+    protected final TowerSelectionListener listener;
+    protected final BitmapFont menuFont;
 
     public MenuBase(TowerSelectionListener listener, String backgroundPath) {
         this.listener = listener;

@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class EnemyBase {
-    private Vector2 position;
+    private final Vector2 position;
     private Texture texture;
     private float speed;
     private int health;
     private int currentWaypointIndex = 0;
-    private Array<Vector2> waypoints;
+    private final Array<Vector2> waypoints;
     private boolean active = true;
     private boolean damageDealt = false;
     private int reward;
@@ -67,8 +67,6 @@ public abstract class EnemyBase {
 
         batch.setColor(Color.WHITE);
     }
-
-    protected abstract void reachedEnd();
 
     public void takeDamage(int damage) {
         this.health -= damage;

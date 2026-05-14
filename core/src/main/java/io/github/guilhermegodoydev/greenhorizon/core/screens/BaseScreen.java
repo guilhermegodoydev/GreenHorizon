@@ -8,8 +8,8 @@ import io.github.guilhermegodoydev.greenhorizon.Main;
 
 public abstract class BaseScreen implements Screen {
     protected final Main game;
-    protected OrthographicCamera camera;
-    protected FitViewport viewport;
+    protected final OrthographicCamera camera;
+    protected final FitViewport viewport;
 
     public BaseScreen(Main game) {
         this.game = game;

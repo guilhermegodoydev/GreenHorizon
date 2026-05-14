@@ -8,10 +8,10 @@ import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManag
 import io.github.guilhermegodoydev.greenhorizon.core.features.economy.LifeManager;
 
 public class EnemyManager {
-    private Array<EnemyBase> enemies;
-    private Array<Vector2> waypoints;
-    private LifeManager lifeManager;
-    private CoinsManager coinsManager;
+    private final Array<EnemyBase> enemies;
+    private final Array<Vector2> waypoints;
+    private final LifeManager lifeManager;
+    private final CoinsManager coinsManager;
 
     public EnemyManager(Array<Vector2> waypoints, LifeManager lifeManager, CoinsManager coinsManager) {
         this.enemies = new Array<>();

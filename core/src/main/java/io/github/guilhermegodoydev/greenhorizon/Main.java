@@ -18,7 +18,6 @@ public class Main extends Game {
     private Music currentMusic;
     private float targetVolume = 0f;
     private float currentVolume = 0f;
-    private final float fadeSpeed = 0.8f;
     private String nextMusicPath = null;
     private String currentMusicPath = null;
 
@@ -105,6 +104,7 @@ public class Main extends Game {
         if (currentVolume != targetVolume) {
             float delta = Gdx.graphics.getDeltaTime();
 
+            float fadeSpeed = 0.8f;
             if (currentVolume < targetVolume) {
                 currentVolume += fadeSpeed * delta;
                 if (currentVolume > targetVolume) currentVolume = targetVolume;

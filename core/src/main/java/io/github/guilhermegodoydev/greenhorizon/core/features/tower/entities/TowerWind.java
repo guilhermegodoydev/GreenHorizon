@@ -55,7 +55,4 @@ public class TowerWind extends TowerBase {
         batch.setColor(Color.WHITE);
     }
 
-    public float getRange() {
-        return range;
-    }
 }

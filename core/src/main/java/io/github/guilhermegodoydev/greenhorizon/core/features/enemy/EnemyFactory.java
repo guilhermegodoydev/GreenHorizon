@@ -8,13 +8,10 @@ import io.github.guilhermegodoydev.greenhorizon.core.features.enemy.entities.Ene
 
 public class EnemyFactory {
     public static EnemyBase createEnemy(String type, Array<Vector2> waypoints) {
-        switch (type.toUpperCase()) {
-            case "GAS":
-                return new EnemyGas(waypoints);
-            case "BAG":
-                return new EnemyPlasticBag(waypoints);
-            default:
-                return null;
-        }
+        return switch (type.toUpperCase()) {
+            case "GAS" -> new EnemyGas(waypoints);
+            case "BAG" -> new EnemyPlasticBag(waypoints);
+            default -> null;
+        };
     }
 }

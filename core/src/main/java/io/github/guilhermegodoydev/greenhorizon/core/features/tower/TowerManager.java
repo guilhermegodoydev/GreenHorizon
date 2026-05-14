@@ -10,8 +10,8 @@ import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManag
 import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 
 public class TowerManager {
-    private Array<TowerBase> towers;
-    private Array<Projectile> projectiles;
+    private final Array<TowerBase> towers;
+    private final Array<Projectile> projectiles;
 
     public TowerManager() {
         this.towers = new Array<>();

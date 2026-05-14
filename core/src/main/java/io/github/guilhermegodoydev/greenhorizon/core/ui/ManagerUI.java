@@ -38,15 +38,15 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     private final ConstructionMenu constructionMenu;
     private final TowerActionMenu actionMenu;
     private final GameEventListener eventListener;
-    private WaveManager waveManager;
+    private final WaveManager waveManager;
     private ImageButton btnStartWave;
-    private Texture blackBackground;
+    private final Texture blackBackground;
 
     private final BitmapFont uiFont;
     private final GlyphLayout layout = new GlyphLayout();
 
     private Table pauseTable;
-    private GameScreen gameScreen;
+    private final GameScreen gameScreen;
     private TowerSlot targetSlot;
     private TowerBase selectedTower;
 

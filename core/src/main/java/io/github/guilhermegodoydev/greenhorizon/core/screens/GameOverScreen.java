@@ -33,9 +33,7 @@ public class GameOverScreen extends BaseScreen {
         TextureRegion[][] tmp = TextureRegion.split(animTexture, animTexture.getWidth() / frameCols, animTexture.getHeight());
 
         TextureRegion[] frames = new TextureRegion[frameCols];
-        for (int i = 0; i < frameCols; i++) {
-            frames[i] = tmp[0][i];
-        }
+        System.arraycopy(tmp[0], 0, frames, 0, frameCols);
 
         Animation<TextureRegion> gameOverAnimation = new Animation<>(0.15f, frames);
         gameOverAnimation.setPlayMode(Animation.PlayMode.LOOP);

@@ -13,9 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class MapHandler {
-    private TiledMap tiledMap;
+    private final TiledMap tiledMap;
     private final Array<TowerSlot> slots;
-    private final String OBJECT_LAYER_NAME = "TowerSlots";
     private final Texture slotTexture;
 
     public MapHandler(String path) {
@@ -26,6 +25,7 @@ public class MapHandler {
     }
 
     private void loadSlots() {
+        String OBJECT_LAYER_NAME = "TowerSlots";
         if (tiledMap.getLayers().get(OBJECT_LAYER_NAME) == null) {
             System.err.println("ERROR: Object layer '" + OBJECT_LAYER_NAME + "' not found in Tiled!");
             return;

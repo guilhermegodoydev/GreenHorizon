@@ -9,9 +9,9 @@ import io.github.guilhermegodoydev.greenhorizon.core.map.TowerSlot;
 import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManager;
 
 public abstract class TowerBase {
-    private Sprite sprite;
-    private Vector2 position;
-    private TowerSlot currentSlot;
+    private final Sprite sprite;
+    private final Vector2 position;
+    private final TowerSlot currentSlot;
     private int sellValue;
     private int level = 1;
     public static final int MAX_LEVEL = 3;

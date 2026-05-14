@@ -5,26 +5,20 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class LifeManager {
     private int currentLives;
-    private int maxLives;
 
     public LifeManager(int initialLives) {
-        this.maxLives = initialLives;
-        this.currentLives = maxLives;
+        this.currentLives = initialLives;
     }
 
     public void loseLife(int amount) {
-        try {
-            currentLives -= amount;
-            Assets.getSound("sfx/hit.wav").play(SettingsManager.getSfxVolume());
-            System.out.println("An enemy passed! Remaining lives: " + currentLives);
+        currentLives -= amount;
+        Assets.getSound("sfx/hit.wav").play(SettingsManager.getSfxVolume());
+        System.out.println("An enemy passed! Remaining lives: " + currentLives);
 
-            if (currentLives <= 0) {
-                currentLives = 0;
-                Assets.getSound("sfx/gameOver.wav").play(SettingsManager.getSfxVolume());
-                triggerGameOver();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (currentLives <= 0) {
+            currentLives = 0;
+            Assets.getSound("sfx/gameOver.wav").play(SettingsManager.getSfxVolume());
+            triggerGameOver();
         }
     }
 

@@ -8,7 +8,4 @@ public class InsufficientFundsException extends Exception {
         this.errorCode = errorCode;
     }
 
-    public int getErrorCode() {
-        return errorCode;
-    }
 }

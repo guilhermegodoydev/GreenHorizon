@@ -10,7 +10,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.features.economy.CoinsManag
 public abstract class AttackTower extends TowerBase {
     private float damage;
     private float range;
-    private float fireRate;
+    private final float fireRate;
     private float cooldownTimer;
 
     public AttackTower(Sprite sprite, float x, float y, float damage, float range, float fireRate, TowerSlot slot) {
@@ -60,6 +60,5 @@ public abstract class AttackTower extends TowerBase {
     public void setDamage(float damage) { this.damage = damage; }
     public float getRange() { return range; }
     public void setRange(float range) { this.range = range; }
-    public float getFireRate() { return fireRate; }
-    public void setFireRate(float fireRate) { this.fireRate = fireRate; }
+
 }

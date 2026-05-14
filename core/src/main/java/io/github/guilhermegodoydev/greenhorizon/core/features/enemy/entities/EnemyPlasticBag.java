@@ -14,8 +14,4 @@ public class EnemyPlasticBag extends EnemyBase {
         setReward(20);
     }
 
-    @Override
-    protected void reachedEnd() {
-        System.out.println("A Plastic Bag polluted the city!");
-    }
 }

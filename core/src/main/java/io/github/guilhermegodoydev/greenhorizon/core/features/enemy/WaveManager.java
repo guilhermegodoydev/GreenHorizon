@@ -6,7 +6,6 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.SettingsManager;
 public class WaveManager {
     private final EnemyManager enemyManager;
     private float waveTimer;
-    private final float TIME_BETWEEN_WAVES = 20f;
     private int currentWave = 0;
     private boolean waveActive = false;
 
@@ -51,7 +50,7 @@ public class WaveManager {
             if (remainingEnemiesToSpawn == 0 && enemyManager.getEnemies().size == 0) {
                 waveActive = false;
                 if (currentWave < TOTAL_WAVES) {
-                    waveTimer = TIME_BETWEEN_WAVES;
+                    waveTimer = 20f;
                 }
             }
         }
@@ -73,7 +72,7 @@ public class WaveManager {
 
     public int getCurrentWave() { return currentWave; }
     public int getTotalWaves() { return TOTAL_WAVES; }
-    public void setWaveActive(boolean active) { this.waveActive = active; }
+
     public boolean isWaveActive() { return waveActive; }
     public float getWaveTimer() { return waveTimer; }
 }

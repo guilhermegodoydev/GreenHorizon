@@ -12,12 +12,12 @@ import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.Tow
 import io.github.guilhermegodoydev.greenhorizon.core.screens.GameScreen;
 
 public class InputHandler extends InputAdapter {
-    private Viewport viewport;
-    private MapHandler mapHandler;
-    private Vector3 touchPoint;
-    private ManagerUI managerUI;
-    private TowerManager towerManager;
-    private GameScreen gameScreen;
+    private final Viewport viewport;
+    private final MapHandler mapHandler;
+    private final Vector3 touchPoint;
+    private final ManagerUI managerUI;
+    private final TowerManager towerManager;
+    private final GameScreen gameScreen;
 
     public InputHandler(Viewport viewport, MapHandler mapHandler, ManagerUI managerUI, TowerManager towerManager, GameScreen gameScreen) {
         this.viewport = viewport;
@@ -46,7 +46,7 @@ public class InputHandler extends InputAdapter {
         touchPoint.set(screenX, screenY, 0);
         viewport.unproject(touchPoint);
 
-        boolean menuWasOpen = managerUI.isVisible();
+        managerUI.isVisible();
 
         TowerSlot slot = mapHandler.getClickedSlot(touchPoint.x, touchPoint.y);
 

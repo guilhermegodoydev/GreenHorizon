@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.guilhermegodoydev.greenhorizon.core.features.tower.entities.TowerBase;
 
 public class TowerActionMenu extends MenuBase {
-    private Label lblUpgradeCost;
-    private Label lblSellValue;
+    private final Label lblUpgradeCost;
+    private final Label lblSellValue;
 
     public TowerActionMenu(TowerSelectionListener listener) {
         super(listener, "background_menu.png");

@@ -31,9 +31,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     private final LifeManager lifeManager;
     private final CoinsManager coinsManager;
     private boolean paused = false;
-    private InputMultiplexer multiplexer;
-    private EnemyManager enemyManager;
-    private WaveManager waveManager;
+    private final InputMultiplexer multiplexer;
+    private final EnemyManager enemyManager;
+    private final WaveManager waveManager;
 
     public GameScreen(Main game) {
         super(game);
@@ -77,9 +77,9 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
     @Override
     public void onEvent(GameEvent event) {
-        switch (event.type) {
+        switch (event.type()) {
             case BUILD_TOWER:
-                Object[] data = (Object[]) event.data;
+                Object[] data = (Object[]) event.data();
                 TowerSlot slot = (TowerSlot) data[0];
                 String type = (String) data[1];
 
@@ -94,16 +94,14 @@ public class GameScreen extends BaseScreen implements GameEventListener {
                 break;
 
             case SELL_TOWER:
-                if (event.data instanceof TowerBase) {
-                    TowerBase tower = (TowerBase) event.data;
+                if (event.data() instanceof TowerBase tower) {
                     coinsManager.add(tower.getSellValue());
                     towerManager.sellTower(tower);
                 }
                 break;
 
             case UPGRADE_TOWER:
-                if (event.data instanceof TowerBase) {
-                    TowerBase tower = (TowerBase) event.data;
+                if (event.data() instanceof TowerBase tower) {
 
                     if (coinsManager.getCurrentBalance() >= tower.getUpgradeCost()) {
                         towerManager.upgradeTower(tower, coinsManager);

@@ -20,7 +20,10 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 public class MainMenuScreen extends BaseScreen {
     private final Stage stage;
 
-    private Texture layerSky, layerRoad, layerBushes, layerAllBuildings;
+    private final Texture layerSky;
+    private final Texture layerRoad;
+    private final Texture layerBushes;
+    private final Texture layerAllBuildings;
     private float currentOffsetX = 0;
     private float currentOffsetY = 0;
 
@@ -49,7 +52,7 @@ public class MainMenuScreen extends BaseScreen {
             titleSpriteSheet.getWidth() / frameCols, titleSpriteSheet.getHeight());
 
         TextureRegion[] titleFrames = new TextureRegion[frameCols];
-        for (int j = 0; j < frameCols; j++) titleFrames[j] = tmp[0][j];
+        System.arraycopy(tmp[0], 0, titleFrames, 0, frameCols);
 
         Animation<TextureRegion> titleAnimation = new Animation<>(0.35f, titleFrames);
         AnimatedImage animatedTitle = new AnimatedImage(titleAnimation);

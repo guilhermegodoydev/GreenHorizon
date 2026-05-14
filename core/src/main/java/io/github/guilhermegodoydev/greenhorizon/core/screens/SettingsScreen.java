@@ -16,13 +16,11 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 
 public class SettingsScreen extends BaseScreen {
     private final Stage stage;
-    private Label musicLabel;
-    private Label sfxLabel;
-    private final com.badlogic.gdx.Screen previousScreen;
+    private final Label musicLabel;
+    private final Label sfxLabel;
 
     public SettingsScreen(final Main game, com.badlogic.gdx.Screen previousScreen) {
         super(game);
-        this.previousScreen = previousScreen;
 
         stage = new Stage(viewport, game.batch);
         Gdx.input.setInputProcessor(stage);
