@@ -115,7 +115,9 @@ O projeto utiliza o Gradle Wrapper para garantir consistência entre ambientes d
 
 Este projeto é um artefato acadêmico desenvolvido para fins de avaliação.
 
-Desenvolvido por: **Matheus Melo & Guilherme Godoy** 
+Desenvolvido por: **Matheus Melo & Guilherme Godoy**
+
+Testes e parte Escrita: **Guilherme Gamito**
 
 Instituição: Universidade Paulista - Disciplina de APS.
 
