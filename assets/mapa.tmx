@@ -34,7 +34,7 @@
    <polyline points="0,0 137,0 136.5,-80.5 231.5,-80 232,16 183,16 182.5,49 320.5,49.5"/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="SlotsTorres" visible="0">
+ <objectgroup id="9" name="TowerSlots" visible="0">
   <object id="33" name="slot1" type="slot" x="32" y="128" width="15.75" height="15.875"/>
   <object id="34" name="slot2" type="slot" x="96" y="160" width="15.6667" height="15.3333"/>
   <object id="35" name="slot3" type="slot" x="144" y="144" width="16.6667" height="15.6667"/>

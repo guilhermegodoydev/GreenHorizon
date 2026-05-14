@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerSolar;
-import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerWind; // IMPORT DA EÓLICA ADICIONADO
+import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerWind;
 import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerTree;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEvent;
 import io.github.guilhermegodoydev.greenhorizon.core.events.GameEventListener;
@@ -81,22 +81,12 @@ public class GameScreen extends BaseScreen implements GameEventListener {
             case BUILD_TOWER:
                 Object[] data = (Object[]) event.data;
                 TowerSlot slot = (TowerSlot) data[0];
-                String tipo = (String) data[1];
+                String type = (String) data[1];
 
-                // AJUSTE: Identifica qual torre está sendo construída para cobrar o valor correto
-                int custo;
-                if (tipo.equalsIgnoreCase("Arvore")) {
-                    custo = TowerTree.CUSTO;
-                } else if (tipo.equalsIgnoreCase("Solar")) {
-                    custo = TowerSolar.CUSTO;
-                } else if (tipo.equalsIgnoreCase("Eolica")) { // ADICIONADO A LÓGICA DA EÓLICA
-                    custo = TowerWind.CUSTO;
-                } else {
-                    custo = 100; // Fallback para segurança
-                }
+                int cost = getTowerCost(type);
 
-                if (coinsManager.getSaldoAtual() >= custo) {
-                    towerManager.buildTower(slot, tipo, custo, coinsManager);
+                if (coinsManager.getCurrentBalance() >= cost) {
+                    towerManager.buildTower(slot, type, cost, coinsManager);
                     Assets.getSound("sfx/plant.wav").play(SettingsManager.getSfxVolume());
                 } else {
                     Assets.getSound("sfx/nofundssound.wav").play(SettingsManager.getSfxVolume());
@@ -105,24 +95,35 @@ public class GameScreen extends BaseScreen implements GameEventListener {
 
             case SELL_TOWER:
                 if (event.data instanceof TowerBase) {
-                    TowerBase torre = (TowerBase) event.data;
-                    coinsManager.acrescentar(torre.getValorVenda());
-                    towerManager.sellTower(torre);
+                    TowerBase tower = (TowerBase) event.data;
+                    coinsManager.add(tower.getSellValue());
+                    towerManager.sellTower(tower);
                 }
                 break;
 
             case UPGRADE_TOWER:
                 if (event.data instanceof TowerBase) {
-                    TowerBase torre = (TowerBase) event.data;
+                    TowerBase tower = (TowerBase) event.data;
 
-                    if (coinsManager.getSaldoAtual() >= torre.getCustoUpgrade()) {
-                        towerManager.upgradeTower(torre, coinsManager);
+                    if (coinsManager.getCurrentBalance() >= tower.getUpgradeCost()) {
+                        towerManager.upgradeTower(tower, coinsManager);
                     } else {
                         Assets.getSound("sfx/nofundssound.wav").play(SettingsManager.getSfxVolume());
                     }
                 }
                 break;
         }
+    }
+
+    private int getTowerCost(String type) {
+        if (type.equalsIgnoreCase("Tree")) {
+            return TowerTree.COST;
+        } else if (type.equalsIgnoreCase("Solar")) {
+            return TowerSolar.COST;
+        } else if (type.equalsIgnoreCase("Wind")) {
+            return TowerWind.COST;
+        }
+        return 100;
     }
 
     public Main getGame() {
@@ -133,7 +134,7 @@ public class GameScreen extends BaseScreen implements GameEventListener {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        if (lifeManager.getVidasAtuais() <= 0) {
+        if (lifeManager.getCurrentLives() <= 0) {
             game.fadeToMusic(null);
             game.setScreen(new GameOverScreen(game));
             this.dispose();

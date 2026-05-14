@@ -34,5 +34,4 @@ public class TowerSlot {
     public Rectangle getBounds() {
         return bounds;
     }
-
 }

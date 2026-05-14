@@ -9,14 +9,9 @@ import com.badlogic.gdx.audio.Sound;
 
 public class Assets {
     private static final ObjectMap<String, Texture> textures = new ObjectMap<>();
-
     private static final ObjectMap<String, Sound> sounds = new ObjectMap<>();
     private static final ObjectMap<String, Music> musics = new ObjectMap<>();
 
-    /**
-     * Retorna a textura do caminho especificado.
-     * Se ela não estiver na memória, carrega e aplica o filtro Nearest.
-     */
     public static Texture getTexture(String path) {
         if (!textures.containsKey(path)) {
             Texture tex = new Texture(path);
@@ -28,7 +23,6 @@ public class Assets {
 
     public static Sound getSound(String path) {
         if (!sounds.containsKey(path)) {
-            // Como é Resource Root, o Gdx.files.internal acha pelo nome direto
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
             sounds.put(path, sound);
         }
@@ -43,10 +37,6 @@ public class Assets {
         return musics.get(path);
     }
 
-    /**
-     * Limpa todas as texturas da memória.
-     * Deve ser chamado no dispose() da classe Main.
-     */
     public static void dispose() {
         for (Texture tex : textures.values()) {
             tex.dispose();

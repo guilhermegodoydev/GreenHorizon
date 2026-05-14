@@ -3,29 +3,26 @@ package io.github.guilhermegodoydev.greenhorizon.core.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
-import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 
 public class SettingsScreen extends BaseScreen {
     private final Stage stage;
     private Label musicLabel;
     private Label sfxLabel;
-    private final com.badlogic.gdx.Screen telaAnterior;
+    private final com.badlogic.gdx.Screen previousScreen;
 
-    public SettingsScreen(final Main game, com.badlogic.gdx.Screen telaAnterior) {
+    public SettingsScreen(final Main game, com.badlogic.gdx.Screen previousScreen) {
         super(game);
-        this.telaAnterior = telaAnterior;
+        this.previousScreen = previousScreen;
 
         stage = new Stage(viewport, game.batch);
         Gdx.input.setInputProcessor(stage);
@@ -36,15 +33,15 @@ public class SettingsScreen extends BaseScreen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        ImageButton btnMusicMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir_hover.png");
-        ImageButton btnMusicPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar_hover.png");
+        ImageButton btnMusicMinus = ButtonFactory.createHoverButton("botao_diminuir.png", "botao_diminuir_hover.png");
+        ImageButton btnMusicPlus = ButtonFactory.createHoverButton("botao_aumentar.png", "botao_aumentar_hover.png");
 
-        musicLabel = new Label("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
+        musicLabel = new Label("Music: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%", labelStyle);
 
         btnMusicMinus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() - 0.1f);
-                atualizarTextos();
+                updateTexts();
                 game.syncConfigVolume();
             }
         });
@@ -52,35 +49,35 @@ public class SettingsScreen extends BaseScreen {
         btnMusicPlus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setMusicVolume(SettingsManager.getMusicVolume() + 0.1f);
-                atualizarTextos();
+                updateTexts();
                 game.syncConfigVolume();
             }
         });
 
-        ImageButton btnSfxMinus = criarBotaoComHover("botao_diminuir.png", "botao_diminuir_hover.png");
-        ImageButton btnSfxPlus = criarBotaoComHover("botao_aumentar.png", "botao_aumentar_hover.png");
+        ImageButton btnSfxMinus = ButtonFactory.createHoverButton("botao_diminuir.png", "botao_diminuir_hover.png");
+        ImageButton btnSfxPlus = ButtonFactory.createHoverButton("botao_aumentar.png", "botao_aumentar_hover.png");
 
-        sfxLabel = new Label("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
+        sfxLabel = new Label("SFX: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%", labelStyle);
 
         btnSfxMinus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setSfxVolume(SettingsManager.getSfxVolume() - 0.1f);
-                atualizarTextos();
+                updateTexts();
             }
         });
 
         btnSfxPlus.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 SettingsManager.setSfxVolume(SettingsManager.getSfxVolume() + 0.1f);
-                atualizarTextos();
+                updateTexts();
             }
         });
 
-        ImageButton btnBack = criarBotaoComHover("botao_voltar.png", "botao_voltar_hover.png");
+        ImageButton btnBack = ButtonFactory.createHoverButton("botao_voltar.png", "botao_voltar_hover.png");
         btnBack.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.graphics.setCursor(Main.cursorPadrao); // Segurança extra
-                game.setScreen(telaAnterior);
+                Gdx.graphics.setCursor(Main.defaultCursor);
+                game.setScreen(previousScreen);
             }
         });
 
@@ -95,44 +92,9 @@ public class SettingsScreen extends BaseScreen {
         table.add(btnBack).colspan(3).padTop(30);
     }
 
-    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER E CLIQUE
-    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
-        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
-
-        final ImageButton btn = new ImageButton(style);
-
-        btn.addListener(new InputListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (pointer == -1 && btn.isTouchable()) {
-                    Gdx.graphics.setCursor(Main.cursorClick); // Troca para a mão
-                    Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
-                }
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if (pointer == -1) {
-                    Gdx.graphics.setCursor(Main.cursorPadrao); // Volta ao normal
-                }
-            }
-        });
-
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
-            }
-        });
-
-        return btn;
-    }
-
-    private void atualizarTextos() {
-        musicLabel.setText("Musica: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%");
-        sfxLabel.setText("Efeitos: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%");
+    private void updateTexts() {
+        musicLabel.setText("Music: " + Math.round(SettingsManager.getMusicVolume() * 100) + "%");
+        sfxLabel.setText("SFX: " + Math.round(SettingsManager.getSfxVolume() * 100) + "%");
     }
 
     @Override

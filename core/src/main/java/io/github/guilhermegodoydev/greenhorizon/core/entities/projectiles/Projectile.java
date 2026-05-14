@@ -27,18 +27,15 @@ public class Projectile {
             return;
         }
 
-        // Movimentação em direção ao inimigo
         Vector2 direction = target.getPosition().cpy().sub(position).nor();
         position.add(direction.scl(speed * delta));
 
-        // Rotação do sprite (opcional para dar efeito visual)
         sprite.setRotation(direction.angleDeg());
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
 
-        // Verificação de colisão (Ajuste o valor 8f de acordo com o tamanho do seu inimigo)
         if (position.dst(target.getPosition()) < 8f) {
-            target.takeDamage((int) damage); // Aplica o dano
-            active = false; // O projétil some após atingir
+            target.takeDamage((int) damage);
+            active = false;
         }
     }
 

@@ -35,6 +35,7 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Utils;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.LifeManager;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.CoinsDisplay;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 
 public class ManagerUI implements TowerSelectionListener, Disposable {
     private final Stage stage;
@@ -52,8 +53,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
     private Table pauseTable;
     private GameScreen gameScreen;
-    private TowerSlot slotAlvo;
-    private TowerBase torreSelecionada;
+    private TowerSlot targetSlot;
+    private TowerBase selectedTower;
 
     private ImageButton btnPause;
 
@@ -64,7 +65,6 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         this.gameScreen = gameScreen;
 
         this.uiFont = new BitmapFont();
-        // REDUÇÃO DRÁSTICA NA ESCALA DA FONTE DO PAINEL (de 0.7f para 0.45f)
         this.uiFont.getData().setScale(0.45f);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -73,12 +73,12 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         this.blackBackground = new Texture(pixmap);
         pixmap.dispose();
 
-        float topo = viewport.getWorldHeight();
+        float top = viewport.getWorldHeight();
 
-        this.healthDisplay = new HealthDisplay(lifeManager, 15, topo - 30);
+        this.healthDisplay = new HealthDisplay(lifeManager, 15, top - 30);
         this.healthDisplay.setScale(0.7f);
 
-        this.coinsDisplay = new CoinsDisplay(coinsManager, 15, topo - 55);
+        this.coinsDisplay = new CoinsDisplay(coinsManager, 15, top - 55);
         this.coinsDisplay.setScale(0.7f);
 
         this.actionMenu = new TowerActionMenu(this);
@@ -89,47 +89,13 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.addActor(constructionMenu);
         stage.addActor(actionMenu);
 
-        criarBotaoEngrenagem();
-        criarMenuPausa();
-        criarBotaoStartWave();
+        createPauseButton();
+        createPauseMenu();
+        createStartWaveButton();
     }
 
-    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
-        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
-
-        final ImageButton btn = new ImageButton(style);
-
-        btn.addListener(new InputListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (pointer == -1 && btn.isTouchable()) {
-                    Gdx.graphics.setCursor(Main.cursorClick);
-                    Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
-                }
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if (pointer == -1) {
-                    Gdx.graphics.setCursor(Main.cursorPadrao);
-                }
-            }
-        });
-
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
-            }
-        });
-
-        return btn;
-    }
-
-    private void criarBotaoStartWave() {
-        btnStartWave = criarBotaoComHover("botao_start.png", "botao_start_hover.png");
+    private void createStartWaveButton() {
+        btnStartWave = ButtonFactory.createHoverButton("botao_start.png", "botao_start_hover.png");
 
         float btnWidth = btnStartWave.getWidth() > 0 ? btnStartWave.getWidth() : 100;
         btnStartWave.setPosition(stage.getViewport().getWorldWidth() - btnWidth - 98, 216);
@@ -144,8 +110,8 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.addActor(btnStartWave);
     }
 
-    private void criarBotaoEngrenagem() {
-        btnPause = criarBotaoComHover("botao_pause.png", "botao_pause_hover.png");
+    private void createPauseButton() {
+        btnPause = ButtonFactory.createHoverButton("botao_pause.png", "botao_pause_hover.png");
         btnPause.setPosition(stage.getViewport().getWorldWidth() - 51, stage.getViewport().getWorldHeight() - 33);
 
         btnPause.addListener(new ClickListener() {
@@ -157,7 +123,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         stage.addActor(btnPause);
     }
 
-    private void criarMenuPausa() {
+    private void createPauseMenu() {
         pauseTable = new Table();
         pauseTable.setFillParent(true);
         pauseTable.setVisible(false);
@@ -168,37 +134,37 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         pauseTable.setBackground(new TextureRegionDrawable(new Texture(bgPixmap)));
         bgPixmap.dispose();
 
-        ImageButton btnContinuar = criarBotaoComHover("botao_continuar.png", "botao_continuar_hover.png");
-        btnContinuar.addListener(new ClickListener() {
+        ImageButton btnContinue = ButtonFactory.createHoverButton("botao_continuar.png", "botao_continuar_hover.png");
+        btnContinue.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.togglePause();
             }
         });
 
-        ImageButton btnConfig = criarBotaoComHover("botao_configuracoes.png", "botao_configuracoes_hover.png");
+        ImageButton btnConfig = ButtonFactory.createHoverButton("botao_configuracoes.png", "botao_configuracoes_hover.png");
         btnConfig.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new SettingsScreen(gameScreen.getGame(), gameScreen));
             }
         });
 
-        ImageButton btnSair = criarBotaoComHover("botao_sair.png", "botao_sair_hover.png");
-        btnSair.addListener(new ClickListener() {
+        ImageButton btnExit = ButtonFactory.createHoverButton("botao_sair.png", "botao_sair_hover.png");
+        btnExit.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.getGame().setScreen(new MainMenuScreen(gameScreen.getGame()));
             }
         });
 
-        pauseTable.add(btnContinuar).pad(5).row();
+        pauseTable.add(btnContinue).pad(5).row();
         pauseTable.add(btnConfig).pad(5).row();
-        pauseTable.add(btnSair).pad(5);
+        pauseTable.add(btnExit).pad(5);
 
         stage.addActor(pauseTable);
     }
 
-    public void setPauseVisible(boolean visivel) {
-        pauseTable.setVisible(visivel);
-        if (visivel) {
+    public void setPauseVisible(boolean visible) {
+        pauseTable.setVisible(visible);
+        if (visible) {
             pauseTable.toFront();
             btnPause.setTouchable(Touchable.disabled);
         } else {
@@ -207,49 +173,49 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
     }
 
     @Override
-    public void onTowerSelected(String tipo) {
-        if (tipo.equals("Vender")) {
-            eventListener.onEvent(new GameEvent(GameEvent.Type.SELL_TOWER, torreSelecionada));
-        } else if (tipo.equals("Upgrade")) {
-            eventListener.onEvent(new GameEvent(GameEvent.Type.UPGRADE_TOWER, torreSelecionada));
+    public void onTowerSelected(String type) {
+        if (type.equals("Sell")) {
+            eventListener.onEvent(new GameEvent(GameEvent.Type.SELL_TOWER, selectedTower));
+        } else if (type.equals("Upgrade")) {
+            eventListener.onEvent(new GameEvent(GameEvent.Type.UPGRADE_TOWER, selectedTower));
         } else {
-            Object[] dadosConstrucao = { slotAlvo, tipo };
-            eventListener.onEvent(new GameEvent(GameEvent.Type.BUILD_TOWER, dadosConstrucao));
+            Object[] buildData = { targetSlot, type };
+            eventListener.onEvent(new GameEvent(GameEvent.Type.BUILD_TOWER, buildData));
         }
-        fecharTodosMenus();
+        closeAllMenus();
     }
 
-    public void abrirMenuAcao(TowerBase torre) {
-        this.torreSelecionada = torre;
-        actionMenu.atualizarValores(torre);
-        fecharTodosMenus();
-        Utils.setCenteredPosition(actionMenu, torre.getPosition().x, torre.getPosition().y + 8);
+    public void openActionMenu(TowerBase tower) {
+        this.selectedTower = tower;
+        actionMenu.updateValues(tower);
+        closeAllMenus();
+        Utils.setCenteredPosition(actionMenu, tower.getPosition().x, tower.getPosition().y + 8);
         actionMenu.setVisible(true);
     }
 
-    public void abrirMenu(TowerSlot slot) {
-        this.slotAlvo = slot;
-        fecharTodosMenus();
+    public void openMenu(TowerSlot slot) {
+        this.targetSlot = slot;
+        closeAllMenus();
         Utils.setCenteredPosition(constructionMenu, slot.getCenterX(), slot.getBounds().y + slot.getBounds().height);
         constructionMenu.setVisible(true);
     }
 
-    public void fecharTodosMenus() {
+    public void closeAllMenus() {
         constructionMenu.setVisible(false);
         actionMenu.setVisible(false);
     }
 
     public void render(float delta) {
-        boolean pausado = pauseTable.isVisible();
+        boolean paused = pauseTable.isVisible();
 
         if (btnStartWave != null) {
-            btnStartWave.setVisible(!waveManager.isWaveActive() && !pausado);
+            btnStartWave.setVisible(!waveManager.isWaveActive() && !paused);
         }
 
         stage.act(delta);
         stage.draw();
 
-        if (!pausado) {
+        if (!paused) {
             stage.getBatch().begin();
 
             boolean isWaveActive = waveManager.isWaveActive();
@@ -259,27 +225,22 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
             float centerX = stage.getViewport().getWorldWidth() / 2f;
 
-            // CAIXA MINIMIZADA (Muito menor que antes)
-            float bgWidth = 90f; // Antes era 150f
-            float bgHeight = isWaveActive ? 16f : 30f; // Antes era 25/45
+            float bgWidth = 90f;
+            float bgHeight = isWaveActive ? 16f : 30f;
 
             float bgX = Math.round(centerX - (bgWidth / 2f));
-            float bgY = Math.round(stage.getViewport().getWorldHeight() - bgHeight - 5f); // Mais colado no topo
+            float bgY = Math.round(stage.getViewport().getWorldHeight() - bgHeight - 5f);
 
-            // Desenha o fundo
             stage.getBatch().draw(blackBackground, bgX, bgY, bgWidth, bgHeight);
 
-            // Texto da Wave
             layout.setText(uiFont, waveText);
             float waveTextX = Math.round(centerX - (layout.width / 2f));
-            // Ajuste vertical milimétrico para caber na nova caixinha
             float waveTextY = isWaveActive ? Math.round(bgY + 12) : Math.round(bgY + bgHeight - 4);
             uiFont.draw(stage.getBatch(), waveText, waveTextX, waveTextY);
 
-            // Texto do Timer
             if (!isWaveActive) {
                 int timerValue = (int)waveManager.getWaveTimer();
-                String timerText = "INICIA EM: " + timerValue + "s";
+                String timerText = "STARTS IN: " + timerValue + "s";
 
                 if (timerValue <= 5) {
                     uiFont.setColor(Color.RED);
@@ -289,7 +250,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
 
                 layout.setText(uiFont, timerText);
                 float timerTextX = Math.round(centerX - (layout.width / 2f));
-                float timerTextY = Math.round(bgY + 11); // Colado na base da caixinha
+                float timerTextY = Math.round(bgY + 11);
 
                 uiFont.draw(stage.getBatch(), timerText, timerTextX, timerTextY);
                 uiFont.setColor(Color.WHITE);
@@ -308,7 +269,7 @@ public class ManagerUI implements TowerSelectionListener, Disposable {
         blackBackground.dispose();
     }
 
-    public boolean isVisivel() {
+    public boolean isVisible() {
         return constructionMenu.isVisible() || actionMenu.isVisible();
     }
 

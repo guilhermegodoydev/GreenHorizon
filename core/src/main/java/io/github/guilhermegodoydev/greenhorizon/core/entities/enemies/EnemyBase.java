@@ -1,24 +1,23 @@
 package io.github.guilhermegodoydev.greenhorizon.core.entities.enemies;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class EnemyBase {
-    protected Vector2 position;
-    protected Texture texture;
-    protected float speed;
-    protected int health;
-    protected int currentWaypointIndex = 0;
-    protected Array<Vector2> waypoints;
-    protected boolean active = true;
-    private boolean danoCausado = false;
-    protected int reward;
-    protected float blinkTimer = 0f;
-
-    // NOVO: Multiplicador de velocidade
-    protected float slowMultiplier = 1.0f;
+    private Vector2 position;
+    private Texture texture;
+    private float speed;
+    private int health;
+    private int currentWaypointIndex = 0;
+    private Array<Vector2> waypoints;
+    private boolean active = true;
+    private boolean damageDealt = false;
+    private int reward;
+    private float blinkTimer = 0f;
+    private float slowMultiplier = 1.0f;
 
     public EnemyBase(Array<Vector2> waypoints) {
         this.waypoints = waypoints;
@@ -34,7 +33,6 @@ public abstract class EnemyBase {
             Vector2 target = waypoints.get(currentWaypointIndex);
             Vector2 direction = target.cpy().sub(position).nor();
 
-            // APLICA A LENTIDÃO AQUI
             float currentSpeed = speed * slowMultiplier;
             position.add(direction.scl(currentSpeed * delta));
 
@@ -45,18 +43,31 @@ public abstract class EnemyBase {
             active = false;
         }
 
-        // RESET DO SLOW: Garante que ele volte ao normal se sair do raio da torre
         slowMultiplier = 1.0f;
     }
 
-    // NOVO: Método que as torres chamam para aplicar lentidão
     public void applySlow(float factor) {
         if (factor < slowMultiplier) {
             this.slowMultiplier = factor;
         }
     }
 
-    public abstract void render(SpriteBatch batch);
+    public void render(SpriteBatch batch) {
+        if (texture == null) return;
+
+        if (blinkTimer > 0) {
+            batch.setColor(Color.RED);
+        } else {
+            batch.setColor(Color.WHITE);
+        }
+
+        float width = texture.getWidth();
+        float height = texture.getHeight();
+        batch.draw(texture, position.x - width / 2f, position.y - height / 2f, width, height);
+
+        batch.setColor(Color.WHITE);
+    }
+
     protected abstract void reachedEnd();
 
     public void takeDamage(int damage) {
@@ -66,12 +77,12 @@ public abstract class EnemyBase {
         if (this.health <= 0) {
             this.health = 0;
             this.active = false;
-            System.out.println(this.getClass().getSimpleName() + " foi destruído!");
+            System.out.println(this.getClass().getSimpleName() + " was destroyed!");
         }
     }
 
-    public boolean isDanoCausado() { return danoCausado; }
-    public void setDanoCausado(boolean danoCausado) { this.danoCausado = danoCausado; }
+    public boolean isDamageDealt() { return damageDealt; }
+    public void setDamageDealt(boolean damageDealt) { this.damageDealt = damageDealt; }
     public boolean isActive() { return active; }
     public void setHealth(int health) { this.health = health; }
     public Vector2 getPosition() { return position; }
@@ -79,4 +90,8 @@ public abstract class EnemyBase {
     public int getHealth() { return health; }
     public int getCurrentWaypointIndex() { return currentWaypointIndex; }
     public Array<Vector2> getWaypoints() { return waypoints; }
+
+    protected void setTexture(Texture texture) { this.texture = texture; }
+    protected void setSpeed(float speed) { this.speed = speed; }
+    protected void setReward(int reward) { this.reward = reward; }
 }

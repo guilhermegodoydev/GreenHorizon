@@ -11,57 +11,52 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 import io.github.guilhermegodoydev.greenhorizon.core.itens.CoinsManager;
 
 public class TowerWind extends TowerBase {
-    public static final int CUSTO = 100;
-    private float slowFactor = 0.6f; // Deixa o inimigo com 60% da velocidade (40% mais lento)
+    public static final int COST = 100;
+    private float slowFactor = 0.6f;
+    private float range = 120f;
 
     public TowerWind(float x, float y, TowerSlot slot) {
-        super(
-            new Sprite(Assets.getTexture("torre_eolica_nivel1.png")),
-            x, y, 0f,
-            120f, // Alcance grande!
-            0f, slot
-        );
-        this.valorVenda = 50;
+        super(new Sprite(Assets.getTexture("torre_eolica_nivel1.png")), x, y, slot);
+        setSellValue(50);
     }
-
-    @Override
-    public boolean isAtacante() { return false; }
 
     @Override
     public void update(float delta, Array<EnemyBase> enemies, Array<Projectile> projectiles, CoinsManager coinsManager) {
         for (EnemyBase enemy : enemies) {
-            if (enemy.isActive() && position.dst(enemy.getPosition()) <= range) {
+            if (enemy.isActive() && getPosition().dst(enemy.getPosition()) <= range) {
                 enemy.applySlow(slowFactor);
             }
         }
     }
 
     @Override
-    public void attack(EnemyBase target, Array<Projectile> projectiles) {}
+    public int getUpgradeCost() {
+        return (getLevel() == 1) ? 60 : 100;
+    }
 
     @Override
-    public int getCustoUpgrade() { return (nivel == 1) ? 60 : 100; }
-
-    @Override
-    public void aplicarMelhoriaStatus() {
-        if (nivel == 2) {
+    public void applyStatusUpgrade() {
+        if (getLevel() == 2) {
             this.slowFactor = 0.45f;
             this.range += 20f;
-            this.sprite.setRegion(Assets.getTexture("torre_eolica_nivel2.png"));
-        } else if (nivel == 3) {
+            getSprite().setRegion(Assets.getTexture("torre_eolica_nivel2.png"));
+        } else if (getLevel() == 3) {
             this.slowFactor = 0.3f;
             this.range += 30f;
-            this.sprite.setRegion(Assets.getTexture("torre_eolica_nivel3.png"));
+            getSprite().setRegion(Assets.getTexture("torre_eolica_nivel3.png"));
         }
 
-        this.sprite.setSize(this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
-
+        getSprite().setSize(getSprite().getRegionWidth(), getSprite().getRegionHeight());
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.setColor(Color.CYAN); // Grayboxing azul para Vento/Gelo
+        batch.setColor(Color.CYAN);
         super.render(batch);
         batch.setColor(Color.WHITE);
+    }
+
+    public float getRange() {
+        return range;
     }
 }

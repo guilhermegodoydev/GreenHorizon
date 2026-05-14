@@ -11,15 +11,15 @@ public class ConstructionMenu extends MenuBase {
         Label.LabelStyle estiloVerde = new Label.LabelStyle(menuFont, Color.LIME);
 
         // BOTÃO ÁRVORE
-        adicionarBotao("menuBtnArvore.png", "Arvore").colspan(2).center();
+        addButton("menuBtnArvore.png", "Tree").colspan(2).center();
         this.row();
         // PREÇO ÁRVORE (Exatamente embaixo)
         this.add(new Label("$50", estiloVerde)).colspan(2).center().padBottom(2);
         this.row();
 
         // BOTÕES EÓLICA E SOLAR
-        adicionarBotao("menuBtnEolica.png", "Eolica").left().expandX();
-        adicionarBotao("menuBtnSolar.png", "Solar").right().expandX();
+        addButton("menuBtnEolica.png", "Wind").left().expandX();
+        addButton("menuBtnSolar.png", "Solar").right().expandX();
         this.row();
 
         // PREÇOS EÓLICA E SOLAR

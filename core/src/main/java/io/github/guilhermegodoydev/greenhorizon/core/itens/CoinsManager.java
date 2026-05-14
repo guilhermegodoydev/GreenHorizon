@@ -4,62 +4,38 @@ import io.github.guilhermegodoydev.greenhorizon.core.exceptions.InsufficientFund
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
-
 public class CoinsManager {
-    private int saldoAtual;
+    private int currentBalance;
 
-    /**
-     * Construtor que define o saldo inicial de moedas.
-     * @param moedainiciais Quantidade de moedas com que o jogo começa
-     */
-    public CoinsManager(int moedainiciais) {
-        this.saldoAtual = moedainiciais;
-        System.out.println("CoinsManager iniciado com " + moedainiciais + " moedas");
+    public CoinsManager(int initialCoins) {
+        this.currentBalance = initialCoins;
+        System.out.println("CoinsManager started with " + initialCoins + " coins");
     }
 
-    /**
-     * Adiciona moedas ao saldo (quando inimigos são derrotados, torres vendidas, etc).
-     * @param valor Quantidade de moedas a adicionar
-     */
-    public void acrescentar(int valor) {
-        this.saldoAtual += valor;
+    public void add(int amount) {
+        this.currentBalance += amount;
         Assets.getSound("sfx/getCoin.wav").play(SettingsManager.getSfxVolume());
-
-        System.out.println("Moedas adicionadas! Novo saldo: " + saldoAtual);
+        System.out.println("Coins added! New balance: " + currentBalance);
     }
 
-    /**
-     * Remove moedas do saldo (quando torres são construídas).
-     * Lança InsufficientFundsException se não houver saldo suficiente.
-     * @param valor Quantidade de moedas a remover
-     * @throws InsufficientFundsException Se o saldo for insuficiente
-     */
-    public void remover(int valor) throws InsufficientFundsException {
-        if (saldoAtual < valor) {
+    public void remove(int amount) throws InsufficientFundsException {
+        if (currentBalance < amount) {
             throw new InsufficientFundsException(
-                "Saldo insuficiente! Necessário: " + valor + ", Disponível: " + saldoAtual,
+                "Insufficient funds! Required: " + amount + ", Available: " + currentBalance,
                 1001
             );
         }
-        this.saldoAtual -= valor;
+        this.currentBalance -= amount;
         Assets.getSound("sfx/payCoin.wav").play(SettingsManager.getSfxVolume());
-
-        System.out.println("Moedas removidas! Novo saldo: " + saldoAtual);
+        System.out.println("Coins removed! New balance: " + currentBalance);
     }
 
-    /**
-     * Retorna o saldo atual de moedas.
-     */
-    public int getSaldoAtual() {
-        return saldoAtual;
+    public int getCurrentBalance() {
+        return currentBalance;
     }
 
-    /**
-     * Define manualmente o saldo de moedas (útil para testes ou eventos especiais).
-     * @param novoSaldo O novo saldo
-     */
-    public void setSaldoAtual(int novoSaldo) {
-        this.saldoAtual = novoSaldo;
-        System.out.println("Saldo definido para: " + saldoAtual);
+    public void setCurrentBalance(int newBalance) {
+        this.currentBalance = newBalance;
+        System.out.println("Balance set to: " + currentBalance);
     }
 }

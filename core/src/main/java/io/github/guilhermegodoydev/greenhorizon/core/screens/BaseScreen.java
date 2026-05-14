@@ -23,7 +23,7 @@ public abstract class BaseScreen implements Screen {
     }
 
     @Override public void show() {}
-    @Override public void hide() { Gdx.graphics.setCursor(Main.cursorPadrao); }
+    @Override public void hide() { Gdx.graphics.setCursor(Main.defaultCursor); }
     @Override public void pause() {}
     @Override public void resume() {}
 

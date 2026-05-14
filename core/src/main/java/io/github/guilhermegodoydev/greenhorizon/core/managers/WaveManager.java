@@ -1,6 +1,7 @@
 package io.github.guilhermegodoydev.greenhorizon.core.managers;
 
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 
 public class WaveManager {
     private final EnemyManager enemyManager;
@@ -10,7 +11,7 @@ public class WaveManager {
     private boolean waveActive = false;
 
     private final int TOTAL_WAVES = 10;
-    private int inimigosRestantesParaSpawnar = 0;
+    private int remainingEnemiesToSpawn = 0;
     private float spawnTimer = 0;
 
     public WaveManager(EnemyManager enemyManager) {
@@ -18,7 +19,6 @@ public class WaveManager {
         this.waveTimer = 10f;
     }
 
-    // NOVA LÓGICA DE PRESSÃO: O tempo de spawn diminui a cada wave
     private float getDynamicSpawnDelay() {
         return Math.max(0.5f, 1.0f - (currentWave * 0.05f));
     }
@@ -32,24 +32,23 @@ public class WaveManager {
                 }
             }
         } else {
-            if (inimigosRestantesParaSpawnar > 0) {
+            if (remainingEnemiesToSpawn > 0) {
                 spawnTimer -= delta;
                 if (spawnTimer <= 0) {
-                    String tipoInimigo = "GAS";
+                    String enemyType = "GAS";
 
                     if (currentWave >= 4 && Math.random() <= 0.3f) {
-                        tipoInimigo = "SACOLA";
+                        enemyType = "BAG";
                     }
 
-                    enemyManager.spawnEnemy(tipoInimigo, currentWave);
-                    inimigosRestantesParaSpawnar--;
+                    enemyManager.spawnEnemy(enemyType, currentWave);
+                    remainingEnemiesToSpawn--;
 
-                    // Aplica o delay dinâmico e mais rápido!
                     spawnTimer = getDynamicSpawnDelay();
                 }
             }
 
-            if (inimigosRestantesParaSpawnar == 0 && enemyManager.getEnemies().size == 0) {
+            if (remainingEnemiesToSpawn == 0 && enemyManager.getEnemies().size == 0) {
                 waveActive = false;
                 if (currentWave < TOTAL_WAVES) {
                     waveTimer = TIME_BETWEEN_WAVES;
@@ -64,9 +63,7 @@ public class WaveManager {
         waveActive = true;
         currentWave++;
 
-        this.inimigosRestantesParaSpawnar = 5 + (currentWave * 3);
-
-        // Aplica o delay dinâmico no primeiro inimigo
+        this.remainingEnemiesToSpawn = 5 + (currentWave * 3);
         this.spawnTimer = getDynamicSpawnDelay();
     }
 

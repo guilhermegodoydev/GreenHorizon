@@ -5,19 +5,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import io.github.guilhermegodoydev.greenhorizon.Main;
 import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.AnimatedImage;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
+import io.github.guilhermegodoydev.greenhorizon.core.utils.ButtonFactory;
 
 public class MainMenuScreen extends BaseScreen {
     private final Stage stage;
@@ -40,60 +38,23 @@ public class MainMenuScreen extends BaseScreen {
         setupUI();
     }
 
-    // MÉTODO UTILITÁRIO PARA CRIAR BOTÕES COM HOVER E CLIQUE
-    private ImageButton criarBotaoComHover(String imgNormal, String imgHover) {
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.up = new TextureRegionDrawable(Assets.getTexture(imgNormal));
-        style.over = new TextureRegionDrawable(Assets.getTexture(imgHover));
-
-        final ImageButton btn = new ImageButton(style);
-
-        btn.addListener(new InputListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (pointer == -1 && btn.isTouchable()) {
-                    Gdx.graphics.setCursor(Main.cursorClick); // TROCA AQUI
-                    Assets.getSound("sfx/menubuttonhover.wav").play(SettingsManager.getSfxVolume());
-                }
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if (pointer == -1) {
-                    Gdx.graphics.setCursor(Main.cursorPadrao); // RESET AQUI
-                }
-            }
-        });
-
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Antes de mudar de tela, forçamos o reset para evitar a "inversão"
-                Gdx.graphics.setCursor(Main.cursorPadrao);
-                Assets.getSound("sfx/clickbuttonUI.wav").play(SettingsManager.getSfxVolume());
-            }
-        });
-
-        return btn;
-    }
-
     private void setupUI() {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
-        Texture tituloSpriteSheet = Assets.getTexture("titulo_animado.png");
-        int FRAME_COLS = 8;
-        TextureRegion[][] tmp = TextureRegion.split(tituloSpriteSheet,
-            tituloSpriteSheet.getWidth() / FRAME_COLS, tituloSpriteSheet.getHeight());
+        Texture titleSpriteSheet = Assets.getTexture("titulo_animado.png");
+        int frameCols = 8;
+        TextureRegion[][] tmp = TextureRegion.split(titleSpriteSheet,
+            titleSpriteSheet.getWidth() / frameCols, titleSpriteSheet.getHeight());
 
-        TextureRegion[] titleFrames = new TextureRegion[FRAME_COLS];
-        for (int j = 0; j < FRAME_COLS; j++) titleFrames[j] = tmp[0][j];
+        TextureRegion[] titleFrames = new TextureRegion[frameCols];
+        for (int j = 0; j < frameCols; j++) titleFrames[j] = tmp[0][j];
 
         Animation<TextureRegion> titleAnimation = new Animation<>(0.35f, titleFrames);
         AnimatedImage animatedTitle = new AnimatedImage(titleAnimation);
 
-        ImageButton btnPlay = criarBotaoComHover("botao_jogar.png", "botao_jogar_hover.png");
+        ImageButton btnPlay = ButtonFactory.createHoverButton("botao_jogar.png", "botao_jogar_hover.png");
         btnPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -101,7 +62,7 @@ public class MainMenuScreen extends BaseScreen {
             }
         });
 
-        ImageButton btnConfig = criarBotaoComHover("botao_configuracoes.png", "botao_configuracoes_hover.png");
+        ImageButton btnConfig = ButtonFactory.createHoverButton("botao_configuracoes.png", "botao_configuracoes_hover.png");
         btnConfig.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -134,15 +95,15 @@ public class MainMenuScreen extends BaseScreen {
         game.batch.draw(layerAllBuildings, 0, horizonY, viewport.getWorldWidth(), skyHeight);
         game.batch.draw(layerRoad, 0, 0, viewport.getWorldWidth(), horizonY);
 
-        float margemSegurancaY = -15;
-        float forcaMovimentoY = 8f;
+        float safetyMarginY = -15;
+        float movementForceY = 8f;
 
-        float arbustoPosX = Math.round(-50 + (currentOffsetX * 20f));
-        float arbustoPosY = Math.round(margemSegurancaY + (currentOffsetY * forcaMovimentoY));
+        float bushPosX = Math.round(-50 + (currentOffsetX * 20f));
+        float bushPosY = Math.round(safetyMarginY + (currentOffsetY * movementForceY));
 
         game.batch.draw(layerBushes,
-            arbustoPosX,
-            arbustoPosY,
+            bushPosX,
+            bushPosY,
             viewport.getWorldWidth() + 100,
             horizonY + 25
         );
@@ -155,7 +116,7 @@ public class MainMenuScreen extends BaseScreen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        Gdx.graphics.setCursor(Main.cursorPadrao);
+        Gdx.graphics.setCursor(Main.defaultCursor);
 
         if (!introPlayed) {
             Assets.getSound("sfx/mainmenurootsgrowingsound.wav").play(SettingsManager.getSfxVolume());

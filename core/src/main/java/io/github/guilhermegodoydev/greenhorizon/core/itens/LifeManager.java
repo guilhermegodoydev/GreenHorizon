@@ -4,37 +4,35 @@ import io.github.guilhermegodoydev.greenhorizon.core.managers.SettingsManager;
 import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public class LifeManager {
-    private int vidasAtuais;
-    private int vidasMaximas;
+    private int currentLives;
+    private int maxLives;
 
-    // construtor que define com quantas  vidas a base começa
-    public LifeManager(int vidasIniciais) {
-        this.vidasMaximas = vidasIniciais;
-        this.vidasAtuais = vidasMaximas;
+    public LifeManager(int initialLives) {
+        this.maxLives = initialLives;
+        this.currentLives = maxLives;
     }
 
-    // metodo para quando um inimigo passar pelas torres
-    public void perderVida(int quantidade) {
+    public void loseLife(int amount) {
         try {
-            vidasAtuais -= quantidade;
+            currentLives -= amount;
             Assets.getSound("sfx/hit.wav").play(SettingsManager.getSfxVolume());
-            System.out.println("Passou um inimigo! Vidas restantes: " + vidasAtuais);
+            System.out.println("An enemy passed! Remaining lives: " + currentLives);
 
-            if (vidasAtuais <= 0) {
-                vidasAtuais = 0;
+            if (currentLives <= 0) {
+                currentLives = 0;
                 Assets.getSound("sfx/gameOver.wav").play(SettingsManager.getSfxVolume());
-                darGameOver();
+                triggerGameOver();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    // metodo que vai ser chamado qunado zerar a vida
-    public void darGameOver() {
-        System.out.println("Game Over! A base foi destruida");
+
+    public void triggerGameOver() {
+        System.out.println("Game Over! The base was destroyed");
     }
-    // metodo para a gente pegar a vida e desenhar na tela depois
-    public int getVidasAtuais() {
-        return vidasAtuais;
+
+    public int getCurrentLives() {
+        return currentLives;
     }
 }

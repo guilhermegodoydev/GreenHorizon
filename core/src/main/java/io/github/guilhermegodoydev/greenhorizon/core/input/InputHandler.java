@@ -17,7 +17,7 @@ public class InputHandler extends InputAdapter {
     private Vector3 touchPoint;
     private ManagerUI managerUI;
     private TowerManager towerManager;
-    private GameScreen gameScreen; // Referência da tela do jogo
+    private GameScreen gameScreen;
 
     public InputHandler(Viewport viewport, MapHandler mapHandler, ManagerUI managerUI, TowerManager towerManager, GameScreen gameScreen) {
         this.viewport = viewport;
@@ -25,22 +25,20 @@ public class InputHandler extends InputAdapter {
         this.touchPoint = new Vector3();
         this.managerUI = managerUI;
         this.towerManager = towerManager;
-        this.gameScreen = gameScreen; // Atribui a referência
+        this.gameScreen = gameScreen;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        // Verifica se a tecla pressionada foi o ESC
         if (keycode == Input.Keys.ESCAPE) {
             gameScreen.togglePause();
-            return true; // Indica que o evento foi tratado
+            return true;
         }
-        return false; // Passa o evento adiante caso não seja o ESC
+        return false;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // A Barreira: Se o jogo estiver pausado, consome o clique imediatamente e não interage com o mapa
         if (gameScreen.isPaused()) {
             return true;
         }
@@ -48,20 +46,19 @@ public class InputHandler extends InputAdapter {
         touchPoint.set(screenX, screenY, 0);
         viewport.unproject(touchPoint);
 
-        boolean menuEstavaAberto = managerUI.isVisivel();
+        boolean menuWasOpen = managerUI.isVisible();
 
         TowerSlot slot = mapHandler.getClickedSlot(touchPoint.x, touchPoint.y);
 
         if (slot != null) {
             if (slot.isOccupied()) {
-                // Busca a torre naquela posição e abre o menu de ação
-                TowerBase torre = towerManager.getTowerAt(slot.getCenterX(), slot.getCenterY());
-                managerUI.abrirMenuAcao(torre);
+                TowerBase tower = towerManager.getTowerAt(slot.getCenterX(), slot.getCenterY());
+                managerUI.openActionMenu(tower);
             } else {
-                managerUI.abrirMenu(slot);
+                managerUI.openMenu(slot);
             }
         } else {
-            managerUI.fecharTodosMenus();
+            managerUI.closeAllMenus();
         }
 
         return true;

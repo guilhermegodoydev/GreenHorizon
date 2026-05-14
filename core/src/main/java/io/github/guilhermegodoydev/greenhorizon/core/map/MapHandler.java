@@ -15,21 +15,19 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 public class MapHandler {
     private TiledMap tiledMap;
     private final Array<TowerSlot> slots;
-    private final String OBJECT_LAYER_NAME = "SlotsTorres";
+    private final String OBJECT_LAYER_NAME = "TowerSlots";
     private final Texture slotTexture;
 
     public MapHandler(String path) {
         this.tiledMap = new TmxMapLoader().load(path);
         this.slots = new Array<>();
-
         this.slotTexture = Assets.getTexture("slot_base.png");
-
         loadSlots();
     }
 
     private void loadSlots() {
         if (tiledMap.getLayers().get(OBJECT_LAYER_NAME) == null) {
-            System.err.println("ERRO: Camada de objetos '" + OBJECT_LAYER_NAME + "' não encontrada no Tiled!");
+            System.err.println("ERROR: Object layer '" + OBJECT_LAYER_NAME + "' not found in Tiled!");
             return;
         }
 
@@ -66,13 +64,22 @@ public class MapHandler {
     public Array<Vector2> getWaypoints() {
         Array<Vector2> points = new Array<>();
         if (tiledMap.getLayers().get("WayPoints") != null) {
-            MapObject path = tiledMap.getLayers().get("WayPoints").getObjects().get("rota");
+            MapObject path = tiledMap.getLayers().get("WayPoints").getObjects().get("route");
+
+            if (path == null) {
+                path = tiledMap.getLayers().get("WayPoints").getObjects().get("rota");
+            }
+
             if (path instanceof PolylineMapObject) {
                 float[] vertices = ((PolylineMapObject) path).getPolyline().getTransformedVertices();
                 for (int i = 0; i < vertices.length; i += 2) {
                     points.add(new Vector2(vertices[i], vertices[i + 1]));
                 }
+            } else {
+                System.err.println("ERROR: Polyline object 'route' or 'rota' not found in WayPoints layer!");
             }
+        } else {
+            System.err.println("ERROR: Map layer 'WayPoints' not found!");
         }
         return points;
     }

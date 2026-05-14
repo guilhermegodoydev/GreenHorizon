@@ -6,48 +6,43 @@ import io.github.guilhermegodoydev.greenhorizon.core.entities.towers.TowerBase;
 import io.github.guilhermegodoydev.greenhorizon.core.ui.TowerSelectionListener;
 
 public class TowerActionMenu extends MenuBase {
-    private Label lblCustoUpgrade;
-    private Label lblValorVenda;
+    private Label lblUpgradeCost;
+    private Label lblSellValue;
 
     public TowerActionMenu(TowerSelectionListener listener) {
         super(listener, "background_menu.png");
 
-        Label.LabelStyle estiloBranco = new Label.LabelStyle(menuFont, Color.WHITE);
-        Label.LabelStyle estiloOuro = new Label.LabelStyle(menuFont, Color.GOLD);
+        Label.LabelStyle whiteStyle = new Label.LabelStyle(menuFont, Color.WHITE);
+        Label.LabelStyle goldStyle = new Label.LabelStyle(menuFont, Color.GOLD);
 
-        lblCustoUpgrade = new Label("", estiloBranco);
-        lblValorVenda = new Label("", estiloOuro);
+        lblUpgradeCost = new Label("", whiteStyle);
+        lblSellValue = new Label("", goldStyle);
 
-        // BOTÃO UPGRADE
-        adicionarBotao("menuBtnUpgrade.png", "Upgrade").colspan(2).center();
-        this.row();
-        // LABEL UPGRADE/MAX
-        this.add(lblCustoUpgrade).colspan(2).center().padBottom(2);
+        addButton("menuBtnUpgrade.png", "Upgrade").colspan(2).center();
         this.row();
 
-        // BOTÕES INFO E VENDER (O "i" voltou!)
-        adicionarBotao("menuBtnInfo.png", "Info").left().expandX();
-        adicionarBotao("menuBtnVender.png", "Vender").right().expandX();
+        this.add(lblUpgradeCost).colspan(2).center().padBottom(2);
         this.row();
 
-        // VALOR DE VENDA (Embaixo do botão de lixo)
-        this.add().expandX(); // Espaço vazio embaixo do info
-        this.add(lblValorVenda).right().expandX().padRight(2);
+        addButton("menuBtnInfo.png", "Info").left().expandX();
+        addButton("menuBtnVender.png", "Sell").right().expandX();
+        this.row();
+
+        this.add().expandX();
+        this.add(lblSellValue).right().expandX().padRight(2);
 
         this.pack();
     }
 
-    public void atualizarValores(TowerBase torre) {
-        // Atualiza a venda
-        lblValorVenda.setText("+$" + torre.getValorVenda());
+    public void updateValues(TowerBase tower) {
+        lblSellValue.setText("+$" + tower.getSellValue());
 
-        // Lógica do Upgrade + MAX que você gostou
-        if (torre.getNivel() < TowerBase.NIVEL_MAXIMO) {
-            lblCustoUpgrade.setText("-$" + torre.getCustoUpgrade());
-            lblCustoUpgrade.setColor(Color.WHITE);
+        if (tower.getLevel() < TowerBase.MAX_LEVEL) {
+            lblUpgradeCost.setText("-$" + tower.getUpgradeCost());
+            lblUpgradeCost.setColor(Color.WHITE);
         } else {
-            lblCustoUpgrade.setText("MAX");
-            lblCustoUpgrade.setColor(Color.GOLD);
+            lblUpgradeCost.setText("MAX");
+            lblUpgradeCost.setColor(Color.GOLD);
         }
     }
 }

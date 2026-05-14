@@ -12,27 +12,30 @@ import io.github.guilhermegodoydev.greenhorizon.core.utils.Assets;
 
 public abstract class MenuBase extends Table {
     protected TowerSelectionListener listener;
-    protected BitmapFont menuFont; // Fonte para os preços
+    protected BitmapFont menuFont;
 
     public MenuBase(TowerSelectionListener listener, String backgroundPath) {
         this.listener = listener;
         this.setVisible(false);
         this.setBackground(new TextureRegionDrawable(Assets.getTexture(backgroundPath)));
 
-        // Fonte pequena para não matar o visual
         this.menuFont = new BitmapFont();
         this.menuFont.getData().setScale(0.40f);
     }
 
-    protected Cell<ImageButton> adicionarBotao(String path, final String comando) {
-        ImageButton botao = new ImageButton(new TextureRegionDrawable(Assets.getTexture(path)));
-        botao.addListener(new ClickListener() {
+    protected Cell<ImageButton> addButton(String path, final String command) {
+        ImageButton button = new ImageButton(new TextureRegionDrawable(Assets.getTexture(path)));
+
+        button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (listener != null) listener.onTowerSelected(comando);
+                if (listener != null) {
+                    listener.onTowerSelected(command);
+                }
                 setVisible(false);
             }
         });
-        return this.add(botao).size(16, 16);
+
+        return this.add(button).size(16, 16);
     }
 }
