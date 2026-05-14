@@ -1,5 +1,6 @@
 # 🌿 Green Horizon
 
+
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![LibGDX](https://img.shields.io/badge/LibGDX-e22d2f?style=for-the-badge&logo=libgdx&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
@@ -9,6 +10,10 @@
 **Green Horizon** é um motor de estratégia em tempo real (Eco-Strategy/Tower Defense) desenvolvido em Java utilizando o framework LibGDX. O projeto simula um ecossistema urbano onde o jogador deve gerenciar o avanço da poluição através de infraestruturas verdes e energias renováveis.
 
 Este software foi desenvolvido como parte da **APS (Atividade Prática Supervisionada)** acadêmica, focando na aplicação de padrões de projeto, gerenciamento de ciclo de vida de ativos e arquitetura de sistemas desacoplados.
+
+---
+# 🎮 Jogue agora!
+[Download](https://github.com/matheusmmls/GreenHorizon/releases/download/v1.0.0/GreenHorizon-1.0.0.jar)
 
 ---
 
